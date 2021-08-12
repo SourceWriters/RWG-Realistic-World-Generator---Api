@@ -37,13 +37,13 @@ public interface IBlockData {
         return getNamespace().equalsIgnoreCase("minecraft");
     }
     
-    default IBlockData setSyncNeeded(boolean state) {
-        getProperties().set(IProperty.of("sync", true));
+    default IBlockData setConversionPossible(boolean state) {
+        getProperties().set(IProperty.of("data_conversion", state));
         return this;
     }
 
-    default boolean isSyncNeeded() {
-        IProperty<Boolean> property = getProperties().find("sync").cast(boolean.class);
+    default boolean isConversionPossible() {
+        IProperty<Boolean> property = getProperties().find("data_conversion").cast(boolean.class);
         return property.isPresent() ? property.getValue() : false;
     }
 
