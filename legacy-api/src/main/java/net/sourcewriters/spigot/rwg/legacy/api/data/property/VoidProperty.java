@@ -15,6 +15,11 @@ class VoidProperty implements IProperty {
 	public Object getValue() {
 		return null;
 	}
+    
+    @Override
+    public Object getValueOr(Object fallback) {
+        return fallback;
+    }
 
 	@Override
 	public String getKey() {

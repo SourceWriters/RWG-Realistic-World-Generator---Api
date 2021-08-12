@@ -19,6 +19,11 @@ class PrimitiveProperty<E> implements IProperty<E> {
 	public E getValue() {
 		return value;
 	}
+	
+	@Override
+	public E getValueOr(E fallback) {
+	    return value == null ? fallback : value;
+	}
 
 	@Override
 	public String getKey() {

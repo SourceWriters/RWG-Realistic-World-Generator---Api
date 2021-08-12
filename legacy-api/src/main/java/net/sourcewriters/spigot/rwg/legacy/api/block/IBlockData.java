@@ -1,5 +1,6 @@
 package net.sourcewriters.spigot.rwg.legacy.api.block;
 
+import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
 
 import net.sourcewriters.spigot.rwg.legacy.api.data.property.IProperties;
@@ -22,11 +23,19 @@ public interface IBlockData {
 
     @NonNull
     String asString();
-    
+
+    @NonNull
+    Material getMaterial();
+
+    @NonNull
     BlockData asBukkit();
 
     @NonNull
     BlockStateEditor asEditor();
+    
+    default boolean isMinecraft() {
+        return getNamespace().equalsIgnoreCase("minecraft");
+    }
 
     default boolean isSyncNeeded() {
         IProperty<Boolean> property = getProperties().find("sync").cast(boolean.class);

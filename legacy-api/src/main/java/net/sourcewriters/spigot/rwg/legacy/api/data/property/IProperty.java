@@ -7,6 +7,8 @@ import com.syntaxphoenix.syntaxapi.utils.java.Primitives;
 public interface IProperty<E> {
 
 	E getValue();
+	
+	E getValueOr(E fallback);
 
 	String getKey();
 

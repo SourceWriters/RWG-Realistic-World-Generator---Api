@@ -2,6 +2,7 @@ package net.sourcewriters.spigot.rwg.legacy.api.block.impl;
 
 import java.util.Objects;
 
+import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
 
 import net.sourcewriters.spigot.rwg.legacy.api.block.BlockStateEditor;
@@ -40,6 +41,12 @@ public class MinecraftBlockData extends BaseBlockData {
     @Override
     public String getKey() {
         return key;
+    }
+
+    @NonNull
+    @Override
+    public Material getMaterial() {
+        return data.getMaterial();
     }
 
     @NonNull

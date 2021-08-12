@@ -2,6 +2,8 @@ package net.sourcewriters.spigot.rwg.legacy.api.block.impl;
 
 import java.util.Objects;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
 
 import net.sourcewriters.spigot.rwg.legacy.api.block.BlockStateEditor;
@@ -11,6 +13,8 @@ import net.sourcewriters.spigot.rwg.legacy.api.util.annotation.unsafe.UnsafeStat
 import net.sourcewriters.spigot.rwg.legacy.api.util.data.JsonIO;
 
 public class CustomBlockData extends BaseBlockData {
+    
+    private static final BlockData AIR = Bukkit.createBlockData(Material.AIR);
 
     private final String namespace;
     private final String id;
@@ -42,13 +46,20 @@ public class CustomBlockData extends BaseBlockData {
 
     @NonNull
     @Override
+    public Material getMaterial() {
+        return Material.AIR;
+    }
+
+    @NonNull
+    @Override
     public final String asString() {
         return key + JsonIO.toString(properties);
     }
-    
+
+    @NonNull
     @Override
     public BlockData asBukkit() {
-        return null;
+        return AIR;
     }
 
     @NonNull
