@@ -9,6 +9,13 @@ public interface IBlockDataLoaderManager {
 
     boolean register(@NonNull BlockDataLoader loader);
 
+    default boolean register(boolean expression, @NonNull BlockDataLoader loader) {
+        if (!expression) {
+            return false;
+        }
+        return register(loader);
+    }
+
     boolean unregister(long id);
 
     boolean has(long id);

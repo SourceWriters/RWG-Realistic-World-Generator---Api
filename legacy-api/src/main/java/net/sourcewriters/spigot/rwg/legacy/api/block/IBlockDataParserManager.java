@@ -8,6 +8,13 @@ public interface IBlockDataParserManager {
 
     boolean register(@NonNull BlockDataParser parser);
 
+    default boolean register(boolean expression, @NonNull BlockDataParser parser) {
+        if (!expression) {
+            return false;
+        }
+        return register(parser);
+    }
+
     boolean unregister(long id);
 
     boolean has(long id);

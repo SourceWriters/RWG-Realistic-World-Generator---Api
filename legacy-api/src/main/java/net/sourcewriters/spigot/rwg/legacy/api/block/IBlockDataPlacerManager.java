@@ -10,15 +10,22 @@ import com.syntaxphoenix.syntaxapi.random.RandomNumberGenerator;
 import net.sourcewriters.spigot.rwg.legacy.api.util.annotation.source.NonNull;
 
 public interface IBlockDataPlacerManager {
-    
-    boolean register(@NonNull BlockDataPlacer handler);
+
+    boolean register(@NonNull BlockDataPlacer placer);
+
+    default boolean register(boolean expression, @NonNull BlockDataPlacer placer) {
+        if (!expression) {
+            return false;
+        }
+        return register(placer);
+    }
 
     boolean unregister(long id);
 
     boolean has(long id);
 
     BlockDataPlacer get(long id);
-    
+
     int getPosition(long id);
 
     default boolean setBlock(@NonNull Location location, @NonNull IBlockData data, @NonNull RandomNumberGenerator random) {
@@ -28,5 +35,5 @@ public interface IBlockDataPlacerManager {
     boolean setBlock(@NonNull Block block, @NonNull IBlockData data, @NonNull RandomNumberGenerator random);
 
     boolean injectData(@NonNull IBlockData data);
-    
+
 }
