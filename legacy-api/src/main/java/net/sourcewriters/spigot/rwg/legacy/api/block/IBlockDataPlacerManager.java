@@ -1,6 +1,7 @@
 package net.sourcewriters.spigot.rwg.legacy.api.block;
 
 import java.util.Objects;
+import java.util.function.Supplier;
 
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -13,11 +14,11 @@ public interface IBlockDataPlacerManager {
 
     boolean register(@NonNull BlockDataPlacer placer);
 
-    default boolean register(boolean expression, @NonNull BlockDataPlacer placer) {
+    default boolean register(boolean expression, @NonNull Supplier<BlockDataPlacer> placer) {
         if (!expression) {
             return false;
         }
-        return register(placer);
+        return register(placer.get());
     }
 
     boolean unregister(long id);

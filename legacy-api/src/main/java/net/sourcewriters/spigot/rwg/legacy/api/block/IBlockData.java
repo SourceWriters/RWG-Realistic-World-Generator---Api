@@ -36,6 +36,11 @@ public interface IBlockData {
     default boolean isMinecraft() {
         return getNamespace().equalsIgnoreCase("minecraft");
     }
+    
+    default IBlockData setSyncNeeded(boolean state) {
+        getProperties().set(IProperty.of("sync", true));
+        return this;
+    }
 
     default boolean isSyncNeeded() {
         IProperty<Boolean> property = getProperties().find("sync").cast(boolean.class);

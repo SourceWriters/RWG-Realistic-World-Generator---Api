@@ -4,11 +4,9 @@ import java.util.Objects;
 
 import org.bukkit.plugin.Plugin;
 
-import com.google.common.base.Preconditions;
 import com.syntaxphoenix.syntaxapi.logging.LogTypeId;
 
 import net.sourcewriters.spigot.rwg.legacy.api.RealisticWorldGenerator;
-import net.sourcewriters.spigot.rwg.legacy.api.compatibility.plugin.IPluginPackage;
 import net.sourcewriters.spigot.rwg.legacy.api.util.annotation.source.NonNull;
 
 public abstract class CompatibilityAddon {
@@ -16,23 +14,26 @@ public abstract class CompatibilityAddon {
     private final boolean external;
     private final Plugin owner;
     private final IPluginPackage plugin;
-
+    
     private final String id;
 
-    public CompatibilityAddon(ICompatibilityManager manager, Plugin owner, String name) {
+    public CompatibilityAddon(ICompatibilityManager manager, Plugin owner, IPluginPackage target) {
         Objects.requireNonNull(manager, "ICompatibilityManager can't be null!");
         Objects.requireNonNull(owner, "Plugin can't be null!");
-        Objects.requireNonNull(name, "Target plugin name can't be null!");
-        Preconditions.checkArgument(name.isBlank(), "Target plugin name can't be empty!");
+        Objects.requireNonNull(target, "Target plugin name can't be null!");
         this.external = manager.isExternal(owner);
+        this.plugin = target;
         this.owner = owner;
-        this.id = owner.getName() + "-" + name;
-        Preconditions.checkArgument(manager.register(this), "Unable to register CompatibilityAddon '" + id + "'!");
-        this.plugin = manager.getPackage(name);
+        this.id = owner.getName() + '-' + target.getName();
     }
 
     public final boolean isExternal() {
         return external;
+    }
+    
+    @NonNull
+    public final String getId() {
+        return id;
     }
 
     @NonNull
@@ -45,26 +46,25 @@ public abstract class CompatibilityAddon {
         return plugin;
     }
 
-    @NonNull
-    public final String getId() {
-        return id;
-    }
-
-    public final void enable(RealisticWorldGenerator realisticApi) {
+    public final boolean enable(RealisticWorldGenerator realisticApi) {
         try {
             onEnable(realisticApi, plugin);
+            return true;
         } catch (Exception exception) {
-            realisticApi.getLogger().log(LogTypeId.ERROR, "Failed to enable CompatibilityAddon '" + id + "'!");
+            realisticApi.getLogger().log(LogTypeId.ERROR, "Failed to enable CompatibilityAddon of '" + owner.getName() + "' for '" + plugin.getName() + "'!");
             realisticApi.getLogger().log(LogTypeId.ERROR, exception);
+            return false;
         }
     }
 
-    public final void disable(RealisticWorldGenerator realisticApi) {
+    public final boolean disable(RealisticWorldGenerator realisticApi) {
         try {
             onDisable(realisticApi, plugin);
+            return true;
         } catch (Exception exception) {
-            realisticApi.getLogger().log(LogTypeId.ERROR, "Failed to disable CompatibilityAddon '" + id + "'!");
+            realisticApi.getLogger().log(LogTypeId.ERROR, "Failed to disable CompatibilityAddon of '" + owner.getName() + "' for '" + plugin.getName() + "'!");
             realisticApi.getLogger().log(LogTypeId.ERROR, exception);
+            return false;
         }
     }
 

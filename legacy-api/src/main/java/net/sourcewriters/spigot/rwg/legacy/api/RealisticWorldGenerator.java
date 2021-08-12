@@ -43,9 +43,9 @@ public abstract class RealisticWorldGenerator {
     @Unsafe
     public abstract ISchematicStorage getSchematicStorage(); // Planned for future update
 
-    @Unsafe
-    public abstract ICompatibilityManager getCompatibilityManager(); // Planned for future update
-
+    @NonNull
+    public abstract ICompatibilityManager getCompatibilityManager(); // Added
+    
     @NonNull
     public abstract ILogger getLogger(); // Added
 

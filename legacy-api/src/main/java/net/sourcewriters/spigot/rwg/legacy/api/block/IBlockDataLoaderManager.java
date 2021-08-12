@@ -1,5 +1,7 @@
 package net.sourcewriters.spigot.rwg.legacy.api.block;
 
+import java.util.function.Supplier;
+
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 
@@ -9,11 +11,11 @@ public interface IBlockDataLoaderManager {
 
     boolean register(@NonNull BlockDataLoader loader);
 
-    default boolean register(boolean expression, @NonNull BlockDataLoader loader) {
+    default boolean register(boolean expression, @NonNull Supplier<BlockDataLoader> loader) {
         if (!expression) {
             return false;
         }
-        return register(loader);
+        return register(loader.get());
     }
 
     boolean unregister(long id);

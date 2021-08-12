@@ -1,4 +1,4 @@
-package net.sourcewriters.spigot.rwg.legacy.api.compatibility.plugin;
+package net.sourcewriters.spigot.rwg.legacy.api.compatibility;
 
 import org.bukkit.plugin.Plugin;
 
@@ -12,15 +12,18 @@ public interface IPluginPackage {
     public String getName();
 
     public Plugin getPlugin();
+    
+    public boolean isEnabled();
+    
+    public boolean hasParsedVersion();
 
-    public Version getVersion();
-
-    @NonNull
-    public String getVersionRaw();
+    public Version getParsedVersion();
+    
+    public String getVersion();
 
     public default boolean isFromPlugin(Class<?> clazz) {
         Plugin plugin = getPlugin();
-        if (!plugin.isEnabled()) {
+        if (!isEnabled()) {
             return false;
         }
         return clazz.getClassLoader().equals(plugin.getClass().getClassLoader());

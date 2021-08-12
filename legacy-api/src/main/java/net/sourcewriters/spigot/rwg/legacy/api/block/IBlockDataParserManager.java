@@ -1,5 +1,7 @@
 package net.sourcewriters.spigot.rwg.legacy.api.block;
 
+import java.util.function.Supplier;
+
 import com.syntaxphoenix.syntaxapi.nbt.NbtCompound;
 
 import net.sourcewriters.spigot.rwg.legacy.api.util.annotation.source.NonNull;
@@ -8,11 +10,11 @@ public interface IBlockDataParserManager {
 
     boolean register(@NonNull BlockDataParser parser);
 
-    default boolean register(boolean expression, @NonNull BlockDataParser parser) {
+    default boolean register(boolean expression, @NonNull Supplier<BlockDataParser> parser) {
         if (!expression) {
             return false;
         }
-        return register(parser);
+        return register(parser.get());
     }
 
     boolean unregister(long id);
