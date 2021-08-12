@@ -35,6 +35,4 @@ public interface IBlockDataPlacerManager {
 
     boolean setBlock(@NonNull Block block, @NonNull IBlockData data, @NonNull RandomNumberGenerator random);
 
-    boolean injectData(@NonNull IBlockData data);
-
 }

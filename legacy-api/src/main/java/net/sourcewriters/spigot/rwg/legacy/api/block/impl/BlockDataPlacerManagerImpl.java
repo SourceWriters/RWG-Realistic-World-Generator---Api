@@ -102,27 +102,4 @@ public class BlockDataPlacerManagerImpl implements IBlockDataPlacerManager {
         return false;
     }
 
-    @Override
-    public boolean injectData(@NonNull IBlockData data) {
-        Objects.requireNonNull(data, "IBlockData can't be null!");
-        String namespace = data.getNamespace();
-        List<Long> list = order.get(namespace);
-        if (list == null) {
-            logger.log(LogTypeId.WARNING, "Can't inject data into namespace '" + namespace + "', no BlockPlacer available!");
-            return false;
-        }
-        int size = list.size();
-        for (int index = size - 1; index >= 0; index--) {
-            BlockDataPlacer placer = placers.get(list.get(index));
-            if (!placer.owns(data)) {
-                continue;
-            }
-            boolean output = placer.injectData(data);
-            if (output) {
-                return output;
-            }
-        }
-        return false;
-    }
-
 }

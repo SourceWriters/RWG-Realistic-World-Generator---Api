@@ -31,7 +31,7 @@ public abstract class RealisticWorldGenerator {
     @NonNull
     public abstract IBlockAccess getBlockAccess(); // Added
 
-    @Unsafe
+    @NonNull
     public abstract IChestStorage getChestStorage(); // Planned for future update
 
     @NonNull

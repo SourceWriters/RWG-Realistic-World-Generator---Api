@@ -19,11 +19,6 @@ public class DefaultMinecraftPlacer extends BlockDataPlacer {
     }
 
     @Override
-    public boolean owns(IBlockData data) {
-        return true;
-    }
-
-    @Override
     public boolean placeBlock(Location location, Block block, IBlockData data, RandomNumberGenerator random, MinecraftVersion minecraft,
         ServerVersion server) {
         BlockData bukkit = data.asBukkit();
@@ -31,11 +26,6 @@ public class DefaultMinecraftPlacer extends BlockDataPlacer {
             return false;
         }
         block.setBlockData(bukkit);
-        return true;
-    }
-
-    @Override
-    public boolean injectData(IBlockData data) {
         return true;
     }
 

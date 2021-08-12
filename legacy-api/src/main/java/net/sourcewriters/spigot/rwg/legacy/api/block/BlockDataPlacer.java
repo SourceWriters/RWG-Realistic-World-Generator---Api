@@ -29,7 +29,7 @@ public abstract class BlockDataPlacer {
     public final long getId() {
         return id;
     }
-    
+
     @NonNull
     public final Plugin getPlugin() {
         return plugin;
@@ -40,11 +40,11 @@ public abstract class BlockDataPlacer {
         return namespace;
     }
 
-    public abstract boolean owns(@NonNull IBlockData data);
+    public boolean owns(@NonNull IBlockData data) {
+        return true;
+    }
 
     public abstract boolean placeBlock(@NonNull Location location, @NonNull Block block, @NonNull IBlockData data,
         @NonNull RandomNumberGenerator random, @NonNull MinecraftVersion minecraft, @NonNull ServerVersion server);
-
-    public abstract boolean injectData(@NonNull IBlockData data);
 
 }
