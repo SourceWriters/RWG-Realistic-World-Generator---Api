@@ -26,12 +26,12 @@ public abstract class MaterialRestrictedBlockDataPlacer extends BlockDataPlacer 
         return materials.contains(material) ? whitelist : !whitelist;
     }
 
-    protected abstract boolean internalOwns(@NonNull IBlockData data);
+    protected boolean internalOwns(@NonNull IBlockData data) {
+        return true;
+    }
 
     protected abstract boolean internalPlace(@NonNull Location location, @NonNull Block block, @NonNull IBlockData data,
         @NonNull RandomNumberGenerator random, @NonNull MinecraftVersion minecraft, @NonNull ServerVersion server);
-
-    protected abstract boolean internalInject(@NonNull IBlockData data);
 
     public final boolean owns(@NonNull IBlockData data) {
         if (!isWhitelisted(data.getMaterial())) {
@@ -46,13 +46,6 @@ public abstract class MaterialRestrictedBlockDataPlacer extends BlockDataPlacer 
             return false;
         }
         return internalPlace(location, block, data, random, minecraft, server);
-    }
-
-    public final boolean injectData(@NonNull IBlockData data) {
-        if (!isWhitelisted(data.getMaterial())) {
-            return false;
-        }
-        return internalInject(data);
     }
 
 }

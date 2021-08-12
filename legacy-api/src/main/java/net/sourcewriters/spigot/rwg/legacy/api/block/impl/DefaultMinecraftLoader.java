@@ -16,7 +16,7 @@ public final class DefaultMinecraftLoader extends BlockDataLoader {
 
     @Override
     public IBlockData load(IBlockAccess access, Block block, BlockData blockData) {
-        return access.dataOf(blockData);
+        return access.dataOf(blockData).setConversionPossible(true);
     }
 
 }

@@ -28,6 +28,8 @@ public interface IBlockDataPlacerManager {
     BlockDataPlacer get(long id);
 
     int getPosition(long id);
+    
+    BlockDataPlacer getOwner(@NonNull IBlockData data);
 
     default boolean setBlock(@NonNull Location location, @NonNull IBlockData data, @NonNull RandomNumberGenerator random) {
         return setBlock(Objects.requireNonNull(location, "Location can't be null").getBlock(), data, random);

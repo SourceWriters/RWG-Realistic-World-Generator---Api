@@ -22,13 +22,13 @@ public abstract class MaterialRestrictedBlockDataLoader extends BlockDataLoader 
         return materials.contains(material) ? whitelist : !whitelist;
     }
 
-    protected abstract IBlockData internalLoad(@NonNull Block block, @NonNull BlockData blockData);
+    protected abstract IBlockData internalLoad(@NonNull IBlockAccess access, @NonNull Block block, @NonNull BlockData blockData);
 
-    public final IBlockData load(@NonNull Block block, @NonNull BlockData blockData) {
+    public final IBlockData load(@NonNull IBlockAccess access, @NonNull Block block, @NonNull BlockData blockData) {
         if (!isWhitelisted(blockData.getMaterial())) {
             return null;
         }
-        return internalLoad(block, blockData);
+        return internalLoad(access, block, blockData);
     }
 
 }

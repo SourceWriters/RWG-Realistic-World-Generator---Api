@@ -76,6 +76,25 @@ public class BlockDataPlacerManagerImpl implements IBlockDataPlacerManager {
     }
 
     @Override
+    public BlockDataPlacer getOwner(IBlockData data) {
+        Objects.requireNonNull(data, "IBlockData can't be null!");
+        String namespace = data.getNamespace();
+        List<Long> list = order.get(namespace);
+        if (list == null) {
+            return null;
+        }
+        int size = list.size();
+        for (int index = size - 1; index >= 0; index--) {
+            BlockDataPlacer placer = placers.get(list.get(index));
+            if (!placer.owns(data)) {
+                continue;
+            }
+            return placer;
+        }
+        return null;
+    }
+
+    @Override
     public boolean setBlock(@NonNull Block block, @NonNull IBlockData data, @NonNull RandomNumberGenerator random) {
         Objects.requireNonNull(block, "Block can't be null!");
         Objects.requireNonNull(data, "IBlockData can't be null!");
