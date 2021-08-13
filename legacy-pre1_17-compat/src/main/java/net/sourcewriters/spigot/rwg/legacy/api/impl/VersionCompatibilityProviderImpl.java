@@ -19,7 +19,7 @@ import net.sourcewriters.spigot.rwg.legacy.api.impl.version.VersionAccessImpl;
 import net.sourcewriters.spigot.rwg.legacy.api.impl.version.data.*;
 import net.sourcewriters.spigot.rwg.legacy.api.version.IVersionAccess;
 
-public abstract class RealisticWorldGeneratorCore extends RealisticWorldGenerator {
+public abstract class VersionCompatibilityProviderImpl extends RealisticWorldGenerator {
 
     private final ILogger logger;
 
@@ -28,7 +28,7 @@ public abstract class RealisticWorldGeneratorCore extends RealisticWorldGenerato
 
     private final DataFixHandlerImpl dataFixHandler;
 
-    public RealisticWorldGeneratorCore(Plugin plugin, ILogger logger) {
+    public VersionCompatibilityProviderImpl(Plugin plugin, ILogger logger) {
         super(plugin);
         this.logger = logger;
         this.dataFixHandler = new DataFixHandlerImpl();
