@@ -2,10 +2,10 @@ package net.sourcewriters.spigot.rwg.legacy.api.impl.version;
 
 import com.syntaxphoenix.syntaxapi.logging.ILogger;
 
-import net.sourcewriters.spigot.rwg.legacy.api.impl.handle.GlobalLookup;
-import net.sourcewriters.spigot.rwg.legacy.api.impl.nms.NmsBiomeAccessImpl;
-import net.sourcewriters.spigot.rwg.legacy.api.impl.nms.NmsNbtAccessImpl;
-import net.sourcewriters.spigot.rwg.legacy.api.impl.nms.NmsWorldAccessImpl;
+import net.sourcewriters.spigot.rwg.legacy.api.impl.version.handle.GlobalLookup;
+import net.sourcewriters.spigot.rwg.legacy.api.impl.version.nms.NmsBiomeAccessImpl;
+import net.sourcewriters.spigot.rwg.legacy.api.impl.version.nms.NmsNbtAccessImpl;
+import net.sourcewriters.spigot.rwg.legacy.api.impl.version.nms.NmsWorldAccessImpl;
 import net.sourcewriters.spigot.rwg.legacy.api.version.INmsAccess;
 import net.sourcewriters.spigot.rwg.legacy.api.version.handle.ClassLookupProvider;
 import net.sourcewriters.spigot.rwg.legacy.api.version.nms.INmsBiomeAccess;

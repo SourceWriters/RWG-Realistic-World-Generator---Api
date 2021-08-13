@@ -1,4 +1,4 @@
-package net.sourcewriters.spigot.rwg.legacy.api.impl.version.data;
+package net.sourcewriters.spigot.rwg.legacy.api.impl.data;
 
 import org.bukkit.plugin.Plugin;
 

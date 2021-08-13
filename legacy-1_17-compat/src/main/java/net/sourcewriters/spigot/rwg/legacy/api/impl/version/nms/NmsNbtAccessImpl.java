@@ -1,4 +1,4 @@
-package net.sourcewriters.spigot.rwg.legacy.api.impl.nms;
+package net.sourcewriters.spigot.rwg.legacy.api.impl.version.nms;
 
 import org.bukkit.craftbukkit.v1_17_R1.inventory.CraftItemStack;
 

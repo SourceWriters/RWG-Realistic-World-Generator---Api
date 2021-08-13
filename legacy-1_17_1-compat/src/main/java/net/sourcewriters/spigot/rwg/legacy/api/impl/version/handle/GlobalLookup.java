@@ -1,4 +1,4 @@
-package net.sourcewriters.spigot.rwg.legacy.api.impl.handle;
+package net.sourcewriters.spigot.rwg.legacy.api.impl.version.handle;
 
 import org.bukkit.craftbukkit.v1_17_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_17_R1.block.CraftBlockEntityState;
