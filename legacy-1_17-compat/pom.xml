@@ -2,18 +2,20 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>net.sourcewriters.spigot.rwg</groupId>
-		<artifactId>legacy-vcompat</artifactId>
-		<version>1.0.0</version>
-	</parent>
+	<groupId>net.sourcewriters.spigot.rwg</groupId>
 	<artifactId>legacy-1_17-compat</artifactId>
+	<version>1.0.0</version>
+
+	<properties>
+		<api.version>1.2.1</api.version>
+	</properties>
 
 	<dependencies>
 		<dependency>
 			<groupId>net.sourcewriters.spigot.rwg</groupId>
 			<artifactId>legacy-api</artifactId>
-			<version>1.2.1</version>
+			<version>${api.version}</version>
+			<scope>provided</scope>
 		</dependency>
 
 		<!-- Minecraft -->
@@ -62,6 +64,64 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.8.1</version>
+				<configuration>
+					<source>16</source>
+					<target>16</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.22.2</version>
+			</plugin>
+			<plugin>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>2.22.2</version>
+			</plugin>
 		</plugins>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
 	</build>
+
+	<profiles>
+		<profile>
+			<id>publish</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+				<property>
+					<name>publish</name>
+					<value>true</value>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>net.sourcewriters.maven</groupId>
+						<artifactId>publishapi</artifactId>
+						<version>1.0.0</version>
+						<executions>
+							<execution>
+								<phase>install</phase>
+								<goals>
+									<goal>publishApi</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<apiToken>${env.API_TOKEN}</apiToken>
+							<apiSecret>${env.API_SECRET}</apiSecret>
+							<apiHost>${env.API_HOST}</apiHost>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>
