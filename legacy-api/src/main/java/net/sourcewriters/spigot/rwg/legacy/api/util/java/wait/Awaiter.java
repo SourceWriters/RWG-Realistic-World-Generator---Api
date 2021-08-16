@@ -11,14 +11,20 @@ import com.syntaxphoenix.syntaxapi.utils.java.tools.Container;
 public final class Awaiter<T> {
 
 	private static final Map<Class<?>, WaitFunction<?>> FUNCTIONS = Collections.synchronizedMap(new HashMap<>());
-
+	
+	public static Awaiter<?> of(Object waited) {
+        Class<?> waitClazz = waited.getClass();
+	    for(Class<?> clazz : FUNCTIONS.keySet()) {
+	        if(clazz.isAssignableFrom(waitClazz)) {
+	            return build(waited, clazz);
+	        }
+	    }
+	    return null;
+	}
+	
 	@SuppressWarnings("unchecked")
-	public static <T> Awaiter<T> of(T waited) {
-		Class<?> clazz = waited.getClass();
-		if (!FUNCTIONS.containsKey(clazz)) {
-			return null;
-		}
-		return new Awaiter<>(waited, (WaitFunction<T>) FUNCTIONS.get(clazz));
+    private static <E> Awaiter<E> build(Object obj, Class<E> clazz) {
+	    return new Awaiter<>(clazz.cast(obj), (WaitFunction<E>) FUNCTIONS.get(clazz));
 	}
 
 	public static <E> void register(Class<E> clazz, WaitFunction<E> function) {
