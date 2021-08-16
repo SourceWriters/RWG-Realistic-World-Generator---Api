@@ -5,8 +5,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Future;
 
-import com.syntaxphoenix.syntaxapi.utils.general.Status;
 import com.syntaxphoenix.syntaxapi.utils.java.tools.Container;
+
+import net.sourcewriters.spigot.rwg.legacy.api.util.java.Status;
 
 public final class Awaiter<T> {
 
@@ -35,6 +36,7 @@ public final class Awaiter<T> {
 	}
 
 	static {
+		register(com.syntaxphoenix.syntaxapi.utils.general.Status.class, WaitFunction.SYNTAX_STATUS);
 		register(Status.class, WaitFunction.STATUS);
 		register(Future.class, WaitFunction.FUTURE);
 	}
