@@ -124,9 +124,13 @@ public class ClassLookup {
         }
         MethodHandle handle = constructors.computeIfAbsent("$base#empty", (ignore) -> {
             try {
-                return LOOKUP.unreflectConstructor(owner.getConstructor());
-            } catch (IllegalAccessException | NoSuchMethodException | SecurityException e) {
-                return null;
+                return privateLookup.unreflectConstructor(owner.getConstructor());
+            } catch (IllegalAccessException | NoSuchMethodException | SecurityException ign0) {
+                try {
+                    return privateLookup.unreflectConstructor(owner.getDeclaredConstructor());
+                } catch (IllegalAccessException | NoSuchMethodException | SecurityException ign1) {
+                    return null;
+                }
             }
         });
         if (handle == null) {
@@ -366,18 +370,18 @@ public class ClassLookup {
             if (!access) {
                 method.setAccessible(true);
             }
-            MethodHandle out = LOOKUP.unreflect(method);
+            MethodHandle out = privateLookup.unreflect(method);
             if (!access) {
                 method.setAccessible(false);
             }
             return out;
         }
         if (method.trySetAccessible()) {
-            MethodHandle out = LOOKUP.unreflect(method);
+            MethodHandle out = privateLookup.unreflect(method);
             method.setAccessible(false);
             return out;
         }
-        return LOOKUP.unreflect(method);
+        return privateLookup.unreflect(method);
     }
 
     private MethodHandle unreflect(Constructor<?> constructor) throws IllegalAccessException {
@@ -385,7 +389,7 @@ public class ClassLookup {
         if (!access) {
             constructor.setAccessible(true);
         }
-        MethodHandle out = LOOKUP.unreflectConstructor(constructor);
+        MethodHandle out = privateLookup.unreflectConstructor(constructor);
         if (!access) {
             constructor.setAccessible(false);
         }

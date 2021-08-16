@@ -3,7 +3,6 @@ package net.sourcewriters.spigot.rwg.legacy.api.util.java;
 import java.lang.reflect.Constructor;
 import java.util.Optional;
 
-import com.syntaxphoenix.syntaxapi.reflection.ClassCache;
 import com.syntaxphoenix.syntaxapi.utils.java.Arrays;
 
 import net.sourcewriters.spigot.rwg.legacy.api.version.handle.ClassLookup;
@@ -18,9 +17,9 @@ public final class InstanceBuilder {
         ServerVersion server = Versions.getServer();
         int major = server.getMajor();
         Optional<Class<?>> optional = Optional.empty();
-        String base = abstraction.getPackageName() + "." + abstraction.getSimpleName();
+        String base = abstraction.getPackageName() + "." + abstraction.getSimpleName() + major + "_";
         for (int minor = server.getMinor(); minor >= 13; minor--) {
-            optional = ClassCache.getOptionalClass(base + major + '_' + minor).filter(abstraction::isAssignableFrom);
+            optional = loadClass(abstraction, base + minor).filter(abstraction::isAssignableFrom);
             if (optional.isPresent()) {
                 break;
             }
@@ -42,8 +41,7 @@ public final class InstanceBuilder {
         ServerVersion server = Versions.getServer();
         int major = server.getMajor();
         int minor = server.getMinor();
-        Optional<Class<?>> optional = ClassCache
-            .getOptionalClass(abstraction.getPackageName() + "." + abstraction.getSimpleName() + major + '_' + minor)
+        Optional<Class<?>> optional = loadClass(abstraction, abstraction.getPackageName() + "." + abstraction.getSimpleName() + major + "_" + minor)
             .filter(abstraction::isAssignableFrom);
         if (optional.isEmpty()) {
             return Optional.empty();
@@ -57,7 +55,15 @@ public final class InstanceBuilder {
         lookup.delete();
         return Optional.of(abstraction.cast(object));
     }
-    
+
+    private static Optional<Class<?>> loadClass(Class<?> search, String name) {
+        try {
+            return Optional.ofNullable(Class.forName(name, true, search.getClassLoader()));
+        } catch (ClassNotFoundException e) {
+            return Optional.empty();
+        }
+    }
+
     public static <T> T create(Class<T> clazz, Object... arguments) throws Exception {
         Constructor<?>[] constructors = Arrays.merge(Constructor[]::new, clazz.getConstructors(), clazz.getDeclaredConstructors());
         Class<?>[] classes = new Class<?>[arguments.length];
@@ -88,22 +94,22 @@ public final class InstanceBuilder {
                     tmpArgs++;
                 }
             }
-            if(tmpArgs != count) {
+            if (tmpArgs != count) {
                 continue;
             }
             argIdx = tmpIdx;
             args = tmpArgs;
             builder = constructor;
         }
-        if(builder == null) {
+        if (builder == null) {
             return null;
         }
-        if(args == 0) {
+        if (args == 0) {
             return clazz.cast(builder.newInstance());
         }
         Object[] parameters = new Object[args];
-        for(int idx = 0; idx < max; idx++) {
-            if(argIdx[idx] == -1) {
+        for (int idx = 0; idx < max; idx++) {
+            if (argIdx[idx] == -1) {
                 continue;
             }
             parameters[argIdx[idx]] = arguments[idx];

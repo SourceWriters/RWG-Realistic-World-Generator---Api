@@ -1,24 +1,37 @@
 package net.sourcewriters.spigot.rwg.legacy.api.schematic;
 
+import java.util.concurrent.Future;
+
+import org.bukkit.Location;
+
+import com.syntaxphoenix.syntaxapi.random.RandomNumberGenerator;
+
 import net.sourcewriters.spigot.rwg.legacy.api.util.annotation.source.NonNull;
 import net.sourcewriters.spigot.rwg.legacy.api.util.annotation.unsafe.Unsafe;
+import net.sourcewriters.spigot.rwg.legacy.api.util.annotation.unsafe.UnsafeStatus;
 
-@Unsafe
+@Unsafe(status = UnsafeStatus.SUBJECT_TO_CHANGE, useable = true)
 public interface ISchematicStorage {
+
+    ISchematic get(String name);
+
+    boolean has(String name);
+    
+    int amount();
     
     @NonNull
-    public ISchematic create(ISchematicBuilder builder);
-
-    public boolean add(ISchematic schematic);
-
-    public ISchematic get(String name);
-
-    public boolean has(String name);
+    String[] getNames();
     
     @NonNull
-    public String[] getNames();
-    
+    ISchematic[] getSchematics();
+
     @NonNull
-    public ISchematic[] getSchematics();
+    Future<?> paste(ISchematic schmeatic, Location location);
+
+    @NonNull
+    Future<?> paste(ISchematic schmeatic, Location location, RandomNumberGenerator random);
+
+    @NonNull
+    ISchematicLoader getLoader();
 
 }

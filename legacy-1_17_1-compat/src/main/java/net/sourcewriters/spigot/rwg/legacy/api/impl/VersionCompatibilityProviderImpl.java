@@ -17,8 +17,6 @@ import net.sourcewriters.spigot.rwg.legacy.api.block.impl.DefaultMinecraftPlacer
 import net.sourcewriters.spigot.rwg.legacy.api.data.argument.IArgumentMap;
 import net.sourcewriters.spigot.rwg.legacy.api.data.fix.IDataFixHandler;
 import net.sourcewriters.spigot.rwg.legacy.api.data.fix.impl.DataFixHandlerImpl;
-import net.sourcewriters.spigot.rwg.legacy.api.impl.data.ForwardFixer1_14;
-import net.sourcewriters.spigot.rwg.legacy.api.impl.data.ForwardFixer1_16;
 import net.sourcewriters.spigot.rwg.legacy.api.impl.version.VersionAccessImpl;
 import net.sourcewriters.spigot.rwg.legacy.api.version.IVersionAccess;
 
@@ -36,11 +34,7 @@ public class VersionCompatibilityProviderImpl extends VersionCompatibilityProvid
     @Override
     public void setup(RealisticWorldGenerator api, Plugin plugin, ILogger logger) {
         
-        IDataFixHandler dataFixHandler = api.getDataFixHandler();
         IBlockAccess blockAccess = api.getBlockAccess();
-
-        dataFixHandler.register(new ForwardFixer1_14(plugin));
-        dataFixHandler.register(new ForwardFixer1_16(plugin));
 
         IBlockDataLoaderManager loaderManager = blockAccess.getLoaderManager();
         loaderManager.register(new DefaultMinecraftLoader(plugin));

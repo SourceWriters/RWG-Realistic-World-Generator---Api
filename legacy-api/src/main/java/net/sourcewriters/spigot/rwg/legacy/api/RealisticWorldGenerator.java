@@ -13,7 +13,6 @@ import net.sourcewriters.spigot.rwg.legacy.api.compatibility.ICompatibilityManag
 import net.sourcewriters.spigot.rwg.legacy.api.data.fix.IDataFixHandler;
 import net.sourcewriters.spigot.rwg.legacy.api.schematic.ISchematicStorage;
 import net.sourcewriters.spigot.rwg.legacy.api.util.annotation.source.NonNull;
-import net.sourcewriters.spigot.rwg.legacy.api.util.annotation.unsafe.Unsafe;
 import net.sourcewriters.spigot.rwg.legacy.api.version.IVersionAccess;
 
 public abstract class RealisticWorldGenerator {
@@ -29,24 +28,24 @@ public abstract class RealisticWorldGenerator {
     }
 
     @NonNull
-    public abstract IBlockAccess getBlockAccess(); // Added
+    public abstract IBlockAccess getBlockAccess();
 
     @NonNull
-    public abstract IChestStorage getChestStorage(); // Planned for future update
+    public abstract IChestStorage getChestStorage();
 
     @NonNull
-    public abstract IVersionAccess getVersionAccess(); // Added
+    public abstract IVersionAccess getVersionAccess();
 
     @NonNull
-    public abstract IDataFixHandler getDataFixHandler(); // Added
-
-    @Unsafe
-    public abstract ISchematicStorage getSchematicStorage(); // Planned for future update
+    public abstract IDataFixHandler getDataFixHandler();
 
     @NonNull
-    public abstract ICompatibilityManager getCompatibilityManager(); // Added
+    public abstract ISchematicStorage getSchematicStorage();
+
+    @NonNull
+    public abstract ICompatibilityManager getCompatibilityManager();
     
     @NonNull
-    public abstract ILogger getLogger(); // Added
+    public abstract ILogger getLogger();
 
 }

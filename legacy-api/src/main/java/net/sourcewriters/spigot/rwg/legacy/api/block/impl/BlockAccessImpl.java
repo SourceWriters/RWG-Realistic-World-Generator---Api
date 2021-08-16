@@ -85,7 +85,7 @@ public class BlockAccessImpl implements IBlockAccess {
         if (editor.getNamespace().equalsIgnoreCase("minecraft")) {
             fixHandler.apply(editor);
             try {
-                IBlockData data = dataOf(Bukkit.createBlockData(rawData));
+                IBlockData data = dataOf(Bukkit.createBlockData(editor.asBlockData()));
                 if (!editor.hasProperties()) {
                     return data;
                 }

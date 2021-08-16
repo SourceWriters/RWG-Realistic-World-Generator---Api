@@ -28,21 +28,27 @@ public class BlockStateEditor {
             id = parts[0];
             String[] tmp = parts[1].split("\\]", 2);
             properties = !tmp[1].isBlank() ? tmp[1] : null;
-            parts = tmp[0].substring(0, parts[1].length() - 1).split(",");
+            parts = tmp[0].split(",");
             for (String part : parts) {
                 String[] state = part.trim().split("=");
                 states.put(state[0], state[1]);
             }
-        } else {
-            id = parts[1];
-            properties = null;
+            return;
         }
+        if (parts[1].contains("?")) {
+            parts = parts[1].split("?", 2);
+            id = parts[0];
+            properties = '?' + parts[1];
+            return;
+        }
+        id = parts[1];
+        properties = null;
     }
-    
+
     public String getProperties() {
         return properties;
     }
-    
+
     public boolean hasProperties() {
         return properties != null;
     }
