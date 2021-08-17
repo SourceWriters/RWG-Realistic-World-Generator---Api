@@ -38,13 +38,18 @@ public interface IBlockData {
     }
 
     default IBlockData setConversionPossible(boolean state) {
-        getProperties().set(IProperty.of("data_conversion", state));
+        IProperties properties = getProperties();
+        if (state) {
+            properties.remove("data_conversion");
+            return this;
+        }
+        properties.set(IProperty.of("data_conversion", false));
         return this;
     }
 
     default boolean isConversionPossible() {
         IProperty<Boolean> property = getProperties().find("data_conversion").cast(boolean.class);
-        return property.isPresent() ? property.getValue() : false;
+        return property.isPresent() ? property.getValue() : true;
     }
 
     default boolean isSame(Object obj) {

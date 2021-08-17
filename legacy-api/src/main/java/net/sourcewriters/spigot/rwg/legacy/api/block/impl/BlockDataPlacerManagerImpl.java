@@ -26,6 +26,9 @@ public class BlockDataPlacerManagerImpl implements IBlockDataPlacerManager {
 
     private final ILogger logger;
 
+    private final MinecraftVersion minecraft = Versions.getMinecraft();
+    private final ServerVersion server = Versions.getServer();
+
     public BlockDataPlacerManagerImpl(ILogger logger) {
         this.logger = logger;
     }
@@ -57,7 +60,7 @@ public class BlockDataPlacerManagerImpl implements IBlockDataPlacerManager {
 
     @Override
     public boolean has(long id) {
-        return placers.contains(id);
+        return placers.containsKey(id);
     }
 
     @Override
@@ -105,17 +108,14 @@ public class BlockDataPlacerManagerImpl implements IBlockDataPlacerManager {
             logger.log(LogTypeId.WARNING, "Can't setBlock for namespace '" + namespace + "', no BlockPlacer available!");
             return false;
         }
-        MinecraftVersion minecraft = Versions.getMinecraft();
-        ServerVersion server = Versions.getServer();
         int size = list.size();
         for (int index = size - 1; index >= 0; index--) {
             BlockDataPlacer placer = placers.get(list.get(index));
             if (!placer.owns(data)) {
                 continue;
             }
-            boolean output = placer.placeBlock(block.getLocation(), block, data, random, minecraft, server);
-            if (output) {
-                return output;
+            if (placer.placeBlock(block.getLocation(), block, data, random, minecraft, server)) {
+                return true;
             }
         }
         return false;

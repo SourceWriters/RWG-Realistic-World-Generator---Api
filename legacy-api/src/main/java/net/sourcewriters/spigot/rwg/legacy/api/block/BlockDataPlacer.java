@@ -1,11 +1,13 @@
 package net.sourcewriters.spigot.rwg.legacy.api.block;
 
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.plugin.Plugin;
 
+import com.google.common.base.Preconditions;
 import com.syntaxphoenix.syntaxapi.random.RandomNumberGenerator;
 
 import net.sourcewriters.spigot.rwg.legacy.api.util.annotation.source.NonNull;
@@ -13,6 +15,8 @@ import net.sourcewriters.spigot.rwg.legacy.api.version.util.MinecraftVersion;
 import net.sourcewriters.spigot.rwg.legacy.api.version.util.ServerVersion;
 
 public abstract class BlockDataPlacer {
+    
+    private static final AtomicLong GLOBAL_ID = new AtomicLong(0);
 
     protected final long id;
 
@@ -21,8 +25,10 @@ public abstract class BlockDataPlacer {
 
     public BlockDataPlacer(@NonNull Plugin plugin, @NonNull String namespace) {
         this.plugin = Objects.requireNonNull(plugin, "Plugin can't be null!");
-        this.namespace = Objects.requireNonNull(namespace, "String namespace can't be null!");
-        this.id = plugin.getName().hashCode() + (namespace.hashCode() * 32);
+        Objects.requireNonNull(namespace, "String namespace can't be null!");
+        Preconditions.checkArgument(!namespace.isBlank(), "String namespace can't be empty!");
+        this.namespace = namespace;
+        this.id = GLOBAL_ID.getAndIncrement();
     }
 
     @NonNull

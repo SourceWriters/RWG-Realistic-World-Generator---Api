@@ -27,8 +27,8 @@ public class DefaultMinecraftParser extends BlockDataParser {
         for (String key : states.getKeys()) {
             builder.append(key).append('=').append(states.getString(key)).append(',');
         }
-        String state = builder.substring(0, builder.length() - 1) + ']';
-        IBlockData data = access.dataOf("minecraft:" + id + state).setConversionPossible(true);
+        String state = builder.substring(0, builder.length() == 1 ? 1 : builder.length() - 1) + ']';
+        IBlockData data = access.dataOf("minecraft:" + id + state);
         if (data == null || !compound.hasKey("properties", NbtType.COMPOUND)) {
             return data;
         }

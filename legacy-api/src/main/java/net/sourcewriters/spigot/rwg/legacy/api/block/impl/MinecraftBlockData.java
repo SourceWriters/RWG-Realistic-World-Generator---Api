@@ -7,7 +7,6 @@ import org.bukkit.block.data.BlockData;
 
 import net.sourcewriters.spigot.rwg.legacy.api.block.BlockStateEditor;
 import net.sourcewriters.spigot.rwg.legacy.api.util.annotation.source.NonNull;
-import net.sourcewriters.spigot.rwg.legacy.api.util.data.JsonIO;
 
 public class MinecraftBlockData extends BaseBlockData {
 
@@ -54,11 +53,10 @@ public class MinecraftBlockData extends BaseBlockData {
     public BlockData asBukkit() {
         return data;
     }
-
-    @NonNull
+    
     @Override
-    public final String asString() {
-        return data.getAsString() + JsonIO.toString(properties);
+    protected String dataString() {
+        return data.getAsString();
     }
 
     @NonNull

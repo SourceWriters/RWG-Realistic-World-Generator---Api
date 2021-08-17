@@ -10,7 +10,6 @@ import net.sourcewriters.spigot.rwg.legacy.api.block.BlockStateEditor;
 import net.sourcewriters.spigot.rwg.legacy.api.util.annotation.source.NonNull;
 import net.sourcewriters.spigot.rwg.legacy.api.util.annotation.unsafe.Unsafe;
 import net.sourcewriters.spigot.rwg.legacy.api.util.annotation.unsafe.UnsafeStatus;
-import net.sourcewriters.spigot.rwg.legacy.api.util.data.JsonIO;
 
 public class CustomBlockData extends BaseBlockData {
     
@@ -24,6 +23,7 @@ public class CustomBlockData extends BaseBlockData {
         this.namespace = Objects.requireNonNull(namespace, "String namespace can't be null!");
         this.id = Objects.requireNonNull(id, "String id can't be null!");
         this.key = namespace + ":" + id;
+        setConversionPossible(false);
     }
 
     @NonNull
@@ -49,11 +49,10 @@ public class CustomBlockData extends BaseBlockData {
     public Material getMaterial() {
         return Material.AIR;
     }
-
-    @NonNull
+    
     @Override
-    public final String asString() {
-        return key + JsonIO.toString(properties);
+    protected String dataString() {
+        return key;
     }
 
     @NonNull

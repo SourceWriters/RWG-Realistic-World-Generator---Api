@@ -62,7 +62,7 @@ public class BlockDataParserManagerImpl implements IBlockDataParserManager {
 
     @Override
     public boolean has(long id) {
-        return parsers.contains(id);
+        return parsers.containsKey(id);
     }
 
     @Override
