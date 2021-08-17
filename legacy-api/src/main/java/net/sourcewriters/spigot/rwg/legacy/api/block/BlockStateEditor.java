@@ -36,7 +36,7 @@ public class BlockStateEditor {
             return;
         }
         if (parts[1].contains("?")) {
-            parts = parts[1].split("?", 2);
+            parts = parts[1].split("\\?", 2);
             id = parts[0];
             properties = '?' + parts[1];
             return;

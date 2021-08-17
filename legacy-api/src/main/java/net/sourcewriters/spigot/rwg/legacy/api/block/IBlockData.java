@@ -32,11 +32,11 @@ public interface IBlockData {
 
     @NonNull
     BlockStateEditor asEditor();
-    
+
     default boolean isMinecraft() {
         return getNamespace().equalsIgnoreCase("minecraft");
     }
-    
+
     default IBlockData setConversionPossible(boolean state) {
         getProperties().set(IProperty.of("data_conversion", state));
         return this;
@@ -45,6 +45,14 @@ public interface IBlockData {
     default boolean isConversionPossible() {
         IProperty<Boolean> property = getProperties().find("data_conversion").cast(boolean.class);
         return property.isPresent() ? property.getValue() : false;
+    }
+
+    default boolean isSame(Object obj) {
+        return (obj instanceof IBlockData) ? isSame((IBlockData) obj) : false;
+    }
+
+    default boolean isSame(IBlockData data) {
+        return data != null ? data.asString().equals(asString()) : false;
     }
 
 }

@@ -13,5 +13,10 @@ public abstract class BaseBlockData implements IBlockData {
     public final IProperties getProperties() {
         return properties;
     }
+    
+    @Override
+    public final boolean equals(Object obj) {
+        return isSame(obj);
+    }
 
 }
