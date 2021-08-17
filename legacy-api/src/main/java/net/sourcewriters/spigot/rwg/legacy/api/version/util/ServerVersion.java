@@ -39,7 +39,8 @@ public class ServerVersion extends Version {
     }
 
     public final int asSpecialHash() {
-        return Integer.hashCode(getRefaction()) + Integer.hashCode(getPatch() * 32) + (Integer.hashCode(getMinor()) * 1024) + (Integer.hashCode(getMajor()) * 32768);
+        return Integer.hashCode(getRefaction()) + Integer.hashCode(getPatch() * 32) + (Integer.hashCode(getMinor()) * 1024)
+            + (Integer.hashCode(getMajor()) * 32768);
     }
 
     /*
@@ -181,23 +182,23 @@ public class ServerVersion extends Version {
             return builder.toString();
         };
     }
-    
+
     /*
      * 
      */
-    
+
     public static ServerVersion of(int major) {
         return new ServerVersion(major, 0, 0);
     }
-    
+
     public static ServerVersion of(int major, int minor) {
         return new ServerVersion(major, minor, 0);
     }
-    
+
     public static ServerVersion of(int major, int minor, int patch) {
         return new ServerVersion(major, minor, patch);
     }
-    
+
     public static ServerVersion of(int major, int minor, int patch, int refaction) {
         return new ServerVersion(major, minor, patch, refaction);
     }
@@ -247,7 +248,6 @@ public class ServerVersion extends Version {
                     }
                 }
             } catch (NumberFormatException ex) {
-
             }
             return version;
         }

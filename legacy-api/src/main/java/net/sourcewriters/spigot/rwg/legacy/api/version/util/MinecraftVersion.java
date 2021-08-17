@@ -6,7 +6,7 @@ import com.syntaxphoenix.syntaxapi.version.VersionAnalyzer;
 public class MinecraftVersion extends DefaultVersion {
 
     public static final MinecraftVersion NONE = new MinecraftVersion(false);
-    public static final MinecraftAnalyzer ANALYZER = new MinecraftAnalyzer();
+    private static final MinecraftAnalyzer ANALYZER = new MinecraftAnalyzer();
 
     private final boolean valid;
 
@@ -76,15 +76,15 @@ public class MinecraftVersion extends DefaultVersion {
     /*
      * 
      */
-    
+
     public static MinecraftVersion of(int major) {
         return new MinecraftVersion(major, 0, 0);
     }
-    
+
     public static MinecraftVersion of(int major, int minor) {
         return new MinecraftVersion(major, minor, 0);
     }
-    
+
     public static MinecraftVersion of(int major, int minor, int patch) {
         return new MinecraftVersion(major, minor, patch);
     }
@@ -110,23 +110,19 @@ public class MinecraftVersion extends DefaultVersion {
     public static class MinecraftAnalyzer implements VersionAnalyzer {
         @Override
         public MinecraftVersion analyze(String formatted) {
-            formatted = formatted.startsWith("v") ? formatted.replaceFirst("v", "") : formatted;
+            if(formatted == null) {
+                return MinecraftVersion.NONE;
+            }
+            formatted = formatted.startsWith("v") ? formatted.substring(1) : formatted;
             String[] parts;
-            boolean bukkit = false;
             if (formatted.contains(".")) {
                 parts = formatted.split("\\.");
             } else if (formatted.contains("_")) {
-                bukkit = true;
                 parts = formatted.split("_");
             } else {
                 return MinecraftVersion.NONE;
             }
-            if (bukkit && parts.length == 3) {
-                MinecraftVersion version = new MinecraftVersion();
-                version.setMajor(Integer.parseInt(parts[0]));
-                version.setMinor(Integer.parseInt(parts[1]));
-                return version;
-            } else if (!bukkit && (parts.length == 2 || parts.length == 3)) {
+            if (parts.length == 2 || parts.length == 3) {
                 MinecraftVersion version = new MinecraftVersion();
                 version.setMajor(Integer.parseInt(parts[0]));
                 version.setMinor(Integer.parseInt(parts[1]));
