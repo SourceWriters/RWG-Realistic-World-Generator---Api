@@ -1,6 +1,5 @@
 package net.sourcewriters.spigot.rwg.legacy.api.generator.forward;
 
-import java.util.List;
 import java.util.Random;
 
 import org.bukkit.Chunk;
@@ -11,8 +10,8 @@ public class ForwardPopulator extends BlockPopulator {
 
     private BlockPopulator[] populators = new BlockPopulator[0];
 
-    public void setPopulators(List<BlockPopulator> populators) {
-        this.populators = populators.stream().filter(obj -> obj != null).toArray(BlockPopulator[]::new);
+    void setPopulators(BlockPopulator[] populators) {
+        this.populators = populators;
     }
 
     @Override

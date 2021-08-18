@@ -28,11 +28,7 @@ public final class ForwardGenerator extends ChunkGenerator {
         return generator;
     }
 
-    public final ForwardPopulator getPopulator() {
-        return populator;
-    }
-
-    public final void setPopulators(List<BlockPopulator> populators) {
+    public final void setPopulators(BlockPopulator[] populators) {
         populator.setPopulators(populators);
     }
 
@@ -61,7 +57,9 @@ public final class ForwardGenerator extends ChunkGenerator {
         ArrayList<BlockPopulator> list = new ArrayList<>();
         list.add(populator);
         if (generator != null) {
-            populator.setPopulators(generator.getDefaultPopulators(world));
+            List<BlockPopulator> populators = generator.getDefaultPopulators(world);
+            populator.setPopulators(
+                populators == null ? new BlockPopulator[0] : populators.stream().filter(obj -> obj != null).toArray(BlockPopulator[]::new));
         }
         return list;
     }

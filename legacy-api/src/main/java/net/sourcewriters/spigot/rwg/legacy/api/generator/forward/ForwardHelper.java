@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.function.Function;
 
 import org.bukkit.World;
+import org.bukkit.generator.BlockPopulator;
 import org.bukkit.generator.ChunkGenerator;
 
 import net.sourcewriters.spigot.rwg.legacy.api.generator.IRwgGenerator;
@@ -29,15 +30,15 @@ public final class ForwardHelper {
             return CACHE.get(name).isPresent();
         }
         ClassLookup lookup = CACHE.create(name, clazz);
-        Long identifier = (Long) lookup.searchField("identifier", "identifier", Long.class).getFieldValue(generator, "identifier");
-        boolean valid = identifier != null && identifier == 345679324062398605L;
+        Object object = lookup.searchMethod("id", "getIdentifier").run(generator, "id");
+        boolean valid = (object != null && ((long) object) == 345679324062398605L);
+        LIST.add(name);
         if (!valid) {
             CACHE.delete(name);
-            LIST.add(name);
             return false;
         }
         lookup.searchMethod("set", "setGenerator", ChunkGenerator.class).searchMethod("get", "getGenerator").searchMethod("populators",
-            "setPopulators", List.class);
+            "setPopulators", BlockPopulator[].class);
         return valid;
     }
 
@@ -64,8 +65,15 @@ public final class ForwardHelper {
         ChunkGenerator generator = builder.apply(world);
         ClassLookup lookup = CACHE.get(current.getClass().getName()).orElse(null);
         lookup.run(current, "set", generator);
-        lookup.run(current, "populators", generator.getDefaultPopulators(world));
+        List<BlockPopulator> list = generator.getDefaultPopulators(world);
+        lookup.run(current, "populators", (Object[]) new Object[] {
+            list == null ? new BlockPopulator[0] : list.stream().filter(obj -> obj != null).toArray(BlockPopulator[]::new)
+        });
         return true;
+    }
+
+    public static void clear() {
+        LIST.clear();
     }
 
 }
