@@ -9,6 +9,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.generator.ChunkGenerator;
 
 import com.mojang.authlib.GameProfile;
+import com.syntaxphoenix.syntaxapi.logging.ILogger;
 
 import net.sourcewriters.spigot.rwg.legacy.api.version.handle.ClassLookupProvider;
 import net.sourcewriters.spigot.rwg.legacy.api.version.nms.INmsWorldAccess;
@@ -16,17 +17,17 @@ import net.sourcewriters.spigot.rwg.legacy.api.util.minecraft.ProfileCache;
 import net.sourcewriters.spigot.rwg.legacy.api.util.rwg.RWGEntityType;
 
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.server.level.ServerChunkCache;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.entity.SkullBlockEntity;
 import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
 
 public final class NmsWorldAccessImpl implements INmsWorldAccess {
 
     private final ClassLookupProvider provider;
+    private final ILogger logger;
 
-    public NmsWorldAccessImpl(ClassLookupProvider provider) {
+    public NmsWorldAccessImpl(ILogger logger, ClassLookupProvider provider) {
         this.provider = provider;
+        this.logger = logger;
     }
 
     @Override
@@ -53,10 +54,15 @@ public final class NmsWorldAccessImpl implements INmsWorldAccess {
 
     @Override
     public void setGenerator(World world, ChunkGenerator generator) {
-        ServerLevel server = (ServerLevel) provider.getLookup("cb_world").run(world, "handle");
-        ServerChunkCache source = (ServerChunkCache) server.getChunkSource();
-        Object chunkGenerator = source.getGenerator();
-        provider.getLookup("cb_generator").setFieldValue(chunkGenerator, "generator", generator);
+        if (generator == null || world == null) {
+            return;
+        }
+        logger.log("Couldn't inject generator '" + generator.getClass().getName() + "' into world '" + world.getName()
+            + "' because there is no method to do so in 1.17+ (cause Java 16)");
+//      ServerLevel server = (ServerLevel) provider.getLookup("cb_world").run(world, "handle");
+//      ServerChunkCache source = (ServerChunkCache) server.getChunkSource();
+//      Object chunkGenerator = source.getGenerator();
+//      provider.getLookup("cb_generator").setFieldValue(chunkGenerator, "generator", generator);
     }
 
     @Override

@@ -23,7 +23,7 @@ public final class NmsAccessImpl implements INmsAccess {
     public NmsAccessImpl(ILogger logger) {
         nbtAccess = new NmsNbtAccessImpl();
         biomeAccess = new NmsBiomeAccessImpl(provider);
-        worldAccess = new NmsWorldAccessImpl(provider);
+        worldAccess = new NmsWorldAccessImpl(logger, provider);
     }
 
     @Override
