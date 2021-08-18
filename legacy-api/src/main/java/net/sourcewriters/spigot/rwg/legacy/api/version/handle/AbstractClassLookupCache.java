@@ -49,7 +49,10 @@ public abstract class AbstractClassLookupCache<R extends ClassLookup> {
     }
 
     public void delete(String name) {
-        cache.remove(name);
+        ClassLookup lookup = cache.remove(name);
+        if (lookup != null) {
+            lookup.delete();
+        }
     }
 
     @NonNull

@@ -2,13 +2,11 @@ package net.sourcewriters.spigot.rwg.legacy.api.impl.version.nms;
 
 import java.util.Optional;
 
-import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.block.Skull;
 import org.bukkit.entity.EntityType;
-import org.bukkit.generator.ChunkGenerator;
 
 import com.mojang.authlib.GameProfile;
 import com.syntaxphoenix.syntaxapi.nbt.NbtCompound;
@@ -86,28 +84,6 @@ public final class NmsWorldAccessImpl implements INmsWorldAccess {
         } else {
             spawner.execute(spawnerObject, "load", spawnerCompound);
         }
-
-    }
-
-    @Override
-    public void setGenerator(World world, ChunkGenerator generator) {
-
-        Optional<ClassLookup> option0 = cache.get("cb_world");
-        Optional<ClassLookup> option1 = cache.get("nms_world_server");
-        Optional<ClassLookup> option2 = cache.get("nms_chunk_provider_server");
-        Optional<ClassLookup> option3 = cache.get("cb_generator");
-
-        if (!option0.isPresent() || !option1.isPresent() || !option2.isPresent() || !option3.isPresent()) {
-            return;
-        }
-
-        option0.get().setFieldValue(world, "generator", generator);
-
-        Object worldServer = option0.get().run(world, "handle");
-        Object chunkProvider = option1.get().run(worldServer, "chunkProvider");
-        Object chunkGenerator = option2.get().run(chunkProvider, "generator");
-
-        option3.get().setFieldValue(chunkGenerator, "generator", generator);
 
     }
 

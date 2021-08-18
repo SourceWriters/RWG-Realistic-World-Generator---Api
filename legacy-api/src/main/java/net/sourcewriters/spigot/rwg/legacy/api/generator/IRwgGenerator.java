@@ -1,4 +1,4 @@
-package net.sourcewriters.spigot.rwg.legacy.api.access;
+package net.sourcewriters.spigot.rwg.legacy.api.generator;
 
 import org.bukkit.World;
 

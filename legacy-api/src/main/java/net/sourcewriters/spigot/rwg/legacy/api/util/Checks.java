@@ -11,7 +11,7 @@ import com.syntaxphoenix.syntaxapi.nbt.NbtList;
 import com.syntaxphoenix.syntaxapi.nbt.NbtTag;
 import com.syntaxphoenix.syntaxapi.nbt.NbtType;
 
-import net.sourcewriters.spigot.rwg.legacy.api.access.IRwgGenerator;
+import net.sourcewriters.spigot.rwg.legacy.api.generator.forward.ForwardHelper;
 
 public final class Checks {
 
@@ -22,7 +22,7 @@ public final class Checks {
     }
 
     public static boolean isRwg(ChunkGenerator generator) {
-        return generator != null ? generator instanceof IRwgGenerator : false;
+        return ForwardHelper.isForward(generator);
     }
 
     public static <T> T[] isNotNullOrEmpty(T[] array, String name) {

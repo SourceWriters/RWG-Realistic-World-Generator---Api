@@ -4,7 +4,7 @@ import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
 
-import net.sourcewriters.spigot.rwg.legacy.api.access.IRwgGenerator;
+import net.sourcewriters.spigot.rwg.legacy.api.generator.IRwgGenerator;
 import net.sourcewriters.spigot.rwg.legacy.api.util.Checks;
 import net.sourcewriters.spigot.rwg.legacy.api.util.annotation.source.NonNull;
 import net.sourcewriters.spigot.rwg.legacy.api.util.rwg.SearchBiomeGrid;

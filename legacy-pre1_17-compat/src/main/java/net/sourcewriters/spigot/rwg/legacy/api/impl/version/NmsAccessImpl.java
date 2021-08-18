@@ -14,13 +14,14 @@ import net.sourcewriters.spigot.rwg.legacy.api.version.nms.INmsWorldAccess;
 
 public final class NmsAccessImpl implements INmsAccess {
 
-    private final ClassLookupProvider provider = new ClassLookupProvider(GlobalLookup::setup);
+    private final ClassLookupProvider provider = ClassLookupProvider.DEFAULT;
 
     private final NmsNbtAccessImpl nbtAccess;
     private final NmsBiomeAccessImpl biomeAccess;
     private final NmsWorldAccessImpl worldAccess;
 
     public NmsAccessImpl(ILogger logger) {
+        GlobalLookup.setup(provider);
         nbtAccess = new NmsNbtAccessImpl(provider, logger);
         biomeAccess = new NmsBiomeAccessImpl(provider);
         worldAccess = new NmsWorldAccessImpl(provider, nbtAccess);
