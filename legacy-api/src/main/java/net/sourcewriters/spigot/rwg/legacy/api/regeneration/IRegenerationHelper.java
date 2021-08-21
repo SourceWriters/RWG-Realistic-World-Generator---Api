@@ -3,6 +3,7 @@ package net.sourcewriters.spigot.rwg.legacy.api.regeneration;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 
+import net.sourcewriters.spigot.rwg.legacy.api.util.annotation.source.NonNull;
 import net.sourcewriters.spigot.rwg.legacy.api.util.java.info.IStatus;
 
 public interface IRegenerationHelper {
@@ -14,7 +15,8 @@ public interface IRegenerationHelper {
      * 
      * @return the current status object to keep track of the process
      */
-    IStatus regenerate(Chunk chunk);
+    @NonNull
+    IStatus regenerate(@NonNull Chunk chunk);
 
     /**
      * Regenerates a range of chunks
@@ -31,7 +33,8 @@ public interface IRegenerationHelper {
      *         other one is to keep track how many chunks are done and if the
      *         process is complete.
      */
-    IStatus[] regenerate(Chunk[] chunks);
+    @NonNull
+    IStatus[] regenerate(@NonNull Chunk[] chunks);
 
     /**
      * Gets the chunks between two positions
@@ -41,7 +44,8 @@ public interface IRegenerationHelper {
      * 
      * @return the chunks between the first and second position
      */
-    Chunk[] getChunks(Location first, Location second);
+    @NonNull
+    Chunk[] getChunks(@NonNull Location first, @NonNull Location second);
 
     /**
      * Gets the chunks between two positions and merges them with an existing array
@@ -53,7 +57,8 @@ public interface IRegenerationHelper {
      * 
      * @return the chunks between the first and second position
      */
-    default Chunk[] getChunksAndMerge(Location first, Location second, Chunk... array) {
+    @NonNull
+    default Chunk[] getChunksAndMerge(@NonNull Location first, @NonNull Location second, @NonNull Chunk... array) {
         Chunk[] current = getChunks(first, second);
         Chunk[] output = new Chunk[current.length + array.length];
         System.arraycopy(current, 0, output, 0, current.length);
