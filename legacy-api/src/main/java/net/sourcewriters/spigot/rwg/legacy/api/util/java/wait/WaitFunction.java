@@ -2,14 +2,16 @@ package net.sourcewriters.spigot.rwg.legacy.api.util.java.wait;
 
 import java.util.concurrent.Future;
 
-import net.sourcewriters.spigot.rwg.legacy.api.util.java.Status;
+import com.syntaxphoenix.syntaxapi.utils.general.Status;
+
+import net.sourcewriters.spigot.rwg.legacy.api.util.java.info.IStatus;
 
 @FunctionalInterface
 @SuppressWarnings("rawtypes")
 public interface WaitFunction<E> {
 
-	public static final WaitFunction<com.syntaxphoenix.syntaxapi.utils.general.Status> SYNTAX_STATUS = com.syntaxphoenix.syntaxapi.utils.general.Status::isDone;
-	public static final WaitFunction<Status> STATUS = Status::isDone;
+	public static final WaitFunction<Status> SYNTAX_STATUS = Status::isDone;
+	public static final WaitFunction<IStatus> STATUS = IStatus::isDone;
 	public static final WaitFunction<Future> FUTURE = Future::isDone;
 
 	/*

@@ -11,6 +11,7 @@ import net.sourcewriters.spigot.rwg.legacy.api.block.IBlockAccess;
 import net.sourcewriters.spigot.rwg.legacy.api.chest.IChestStorage;
 import net.sourcewriters.spigot.rwg.legacy.api.compatibility.ICompatibilityManager;
 import net.sourcewriters.spigot.rwg.legacy.api.data.fix.IDataFixHandler;
+import net.sourcewriters.spigot.rwg.legacy.api.regeneration.IRegenerationHelper;
 import net.sourcewriters.spigot.rwg.legacy.api.schematic.ISchematicStorage;
 import net.sourcewriters.spigot.rwg.legacy.api.util.annotation.source.NonNull;
 import net.sourcewriters.spigot.rwg.legacy.api.version.IVersionAccess;
@@ -41,6 +42,9 @@ public abstract class RealisticWorldGenerator {
 
     @NonNull
     public abstract ISchematicStorage getSchematicStorage();
+    
+    @NonNull
+    public abstract IRegenerationHelper getRegenerationHelper();
 
     @NonNull
     public abstract ICompatibilityManager getCompatibilityManager();

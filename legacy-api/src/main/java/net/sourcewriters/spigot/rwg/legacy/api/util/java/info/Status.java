@@ -1,6 +1,9 @@
-package net.sourcewriters.spigot.rwg.legacy.api.util.java;
+package net.sourcewriters.spigot.rwg.legacy.api.util.java.info;
 
-public class Status {
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicLong;
+
+public final class Status implements IStatus {
 
     public static final Status EMPTY = new Status(true);
 
@@ -8,17 +11,15 @@ public class Status {
         return new Status(false);
     };
 
-    private final Object sync = new Object();
+    private final AtomicLong total = new AtomicLong(0);
+    private final AtomicLong marked = new AtomicLong(0);
+    
+    private final AtomicLong failed = new AtomicLong(0);
+    private final AtomicLong success = new AtomicLong(0);
+    private final AtomicLong skipped = new AtomicLong(0);
+    private final AtomicLong cancelled = new AtomicLong(0);
 
-    private int total = 0;
-    private int failed = 0;
-    private int success = 0;
-    private int skipped = 0;
-    private int cancelled = 0;
-
-    private int marked = 0;
-
-    private boolean done = false;
+    private final AtomicBoolean done = new AtomicBoolean();
 
     /**
      * Constructs a Status with an specific done state
@@ -26,9 +27,7 @@ public class Status {
      * @param loaded - defines if it was loaded or not
      */
     private Status(boolean done) {
-        synchronized (sync) {
-            this.done = done;
-        }
+        this.done.set(done);
     }
 
     /**
@@ -36,19 +35,15 @@ public class Status {
      * 
      * @param total - starting total amount of objects to load
      */
-    public Status(int total) {
-        synchronized (sync) {
-            this.total = total;
-        }
+    public Status(long total) {
+        this.total.set(total);
     }
 
     /**
      * Set the loading to done
      */
     public void done() {
-        synchronized (sync) {
-            done = true;
-        }
+        done.getAndSet(true);
     }
 
     /**
@@ -57,7 +52,7 @@ public class Status {
      * @return if loading is done
      */
     public boolean isDone() {
-        return done;
+        return done.get();
     }
 
     /**
@@ -69,9 +64,7 @@ public class Status {
         if (isDone() || !mark()) {
             return false;
         }
-        synchronized (sync) {
-            success++;
-        }
+        success.incrementAndGet();
         return true;
     }
 
@@ -84,9 +77,7 @@ public class Status {
         if (isDone() || !mark()) {
             return false;
         }
-        synchronized (sync) {
-            failed++;
-        }
+        failed.incrementAndGet();
         return true;
     }
 
@@ -99,9 +90,7 @@ public class Status {
         if (isDone() || !mark()) {
             return false;
         }
-        synchronized (sync) {
-            skipped++;
-        }
+        skipped.incrementAndGet();
         return true;
     }
 
@@ -114,9 +103,7 @@ public class Status {
         if (isDone() || !mark()) {
             return false;
         }
-        synchronized (sync) {
-            cancelled++;
-        }
+        cancelled.incrementAndGet();
         return true;
     }
 
@@ -126,12 +113,10 @@ public class Status {
      * @return if it was marked or not
      */
     private boolean mark() {
-        if (marked == total) {
+        if (marked.longValue() == total.longValue()) {
             return false;
         }
-        synchronized (sync) {
-            marked++;
-        }
+        marked.incrementAndGet();
         return true;
     }
 
@@ -147,13 +132,11 @@ public class Status {
      *
      * @param amount - amount to add
      */
-    public void add(int amount) {
+    public void add(long amount) {
         if (isDone()) {
             return;
         }
-        synchronized (sync) {
-            total += amount;
-        }
+        total.addAndGet(amount);
     }
 
     /**
@@ -161,18 +144,16 @@ public class Status {
      * 
      * @param status - LoadingStatus to add
      */
-    public void add(Status status) {
+    public void add(IStatus status) {
         if (isDone()) {
             return;
         }
-        synchronized (sync) {
-            total += status.total;
-            failed += status.failed;
-            marked += status.marked;
-            success += status.success;
-            skipped += status.skipped;
-            cancelled += status.cancelled;
-        }
+        total.addAndGet(status.getTotal());
+        marked.addAndGet(status.getMarked());
+        failed.addAndGet(status.getFailed());
+        success.addAndGet(status.getSuccess());
+        skipped.addAndGet(status.getSkipped());
+        cancelled.addAndGet(status.getCancelled());
     }
 
     /**
@@ -180,8 +161,8 @@ public class Status {
      * 
      * @return the total amount
      */
-    public int getTotal() {
-        return total;
+    public long getTotal() {
+        return total.longValue();
     }
 
     /**
@@ -189,8 +170,8 @@ public class Status {
      * 
      * @return the marked amount
      */
-    public int getMarked() {
-        return marked;
+    public long getMarked() {
+        return marked.longValue();
     }
 
     /**
@@ -198,8 +179,8 @@ public class Status {
      * 
      * @return the failed amount
      */
-    public int getFailed() {
-        return failed;
+    public long getFailed() {
+        return failed.longValue();
     }
 
     /**
@@ -207,8 +188,8 @@ public class Status {
      * 
      * @return the successful amount
      */
-    public int getSuccess() {
-        return success;
+    public long getSuccess() {
+        return success.longValue();
     }
 
     /**
@@ -216,8 +197,8 @@ public class Status {
      * 
      * @return the not loaded amount
      */
-    public int getSkipped() {
-        return skipped;
+    public long getSkipped() {
+        return skipped.longValue();
     }
 
     /**
@@ -225,8 +206,8 @@ public class Status {
      * 
      * @return the cancelled amount
      */
-    public int getCancelled() {
-        return cancelled;
+    public long getCancelled() {
+        return cancelled.longValue();
     }
 
 }
