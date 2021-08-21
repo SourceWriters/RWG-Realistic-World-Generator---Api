@@ -23,6 +23,9 @@ public interface IRegenerationHelper {
      * 
      * @param chunks to be regenerated
      * 
+     *               The chunks have to be in the same world in order for this
+     *               method to work!
+     * 
      * @return the current status objects to keep track of the process
      * 
      *         The status of this method will contain two different status objects.
