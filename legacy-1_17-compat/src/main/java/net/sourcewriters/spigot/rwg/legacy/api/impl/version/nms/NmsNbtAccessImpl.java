@@ -26,7 +26,10 @@ public final class NmsNbtAccessImpl implements INmsNbtAccess {
 
     @Override
     public NbtCompound itemToCompound(org.bukkit.inventory.ItemStack itemStack) {
-        return (NbtCompound) convert(CraftItemStack.asNMSCopy(itemStack).getOrCreateTag());
+        ItemStack stack = CraftItemStack.asNMSCopy(itemStack);
+        CompoundTag tag = new CompoundTag();
+        stack.save(tag);
+        return (NbtCompound) convert(tag);
     }
 
     @Override
