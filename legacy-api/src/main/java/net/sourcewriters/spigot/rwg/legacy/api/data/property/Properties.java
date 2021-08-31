@@ -18,6 +18,9 @@ class Properties implements IProperties {
 
 	@Override
 	public IProperties set(IProperty<?> property) {
+	    if(property == null) {
+	        return this;
+	    }
 		remove(property.getKey());
 		if (property.isPresent()) {
 			properties.add(property);
@@ -35,6 +38,9 @@ class Properties implements IProperties {
 
 	@Override
 	public IProperties add(IProperty<?> property) {
+        if(property == null) {
+            return this;
+        }
 		if (has(property.getKey())) {
 			return this;
 		}

@@ -6,14 +6,20 @@ import java.util.Collections;
 
 import org.bukkit.plugin.Plugin;
 
+import com.syntaxphoenix.syntaxapi.logging.ILogger;
+import com.syntaxphoenix.syntaxapi.logging.LogTypeId;
+
 public abstract class SchematicConverter {
     
     private final long id;
 
+    private final ILogger logger;
+    
     private final Plugin plugin;
     private final ArrayList<String> extensions = new ArrayList<>();
     
-    public SchematicConverter(Plugin plugin, String... extensions) {
+    public SchematicConverter(ILogger logger, Plugin plugin, String... extensions) {
+        this.logger = logger;
         this.plugin = plugin;
         Collections.addAll(this.extensions, extensions);
         this.id = plugin.getName().hashCode() + (extensions.hashCode() * 32);
@@ -44,6 +50,9 @@ public abstract class SchematicConverter {
         try {
             return internalConvert(file);
         } catch (Exception exp) {
+            if(logger != null && logger.getState().extendedInfo()) {
+                logger.log(LogTypeId.DEBUG, exp);
+            }
             return null;
         }
     }
