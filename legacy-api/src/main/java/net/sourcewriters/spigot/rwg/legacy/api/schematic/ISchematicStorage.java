@@ -6,6 +6,7 @@ import org.bukkit.Location;
 
 import com.syntaxphoenix.syntaxapi.random.RandomNumberGenerator;
 
+import net.sourcewriters.spigot.rwg.legacy.api.schematic.update.ISchematicUpdater;
 import net.sourcewriters.spigot.rwg.legacy.api.util.annotation.source.NonNull;
 import net.sourcewriters.spigot.rwg.legacy.api.util.annotation.unsafe.Unsafe;
 import net.sourcewriters.spigot.rwg.legacy.api.util.annotation.unsafe.UnsafeStatus;
@@ -33,5 +34,8 @@ public interface ISchematicStorage {
 
     @NonNull
     ISchematicLoader getLoader();
+    
+    @NonNull
+    ISchematicUpdater getUpdater();
 
 }

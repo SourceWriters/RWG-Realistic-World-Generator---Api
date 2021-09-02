@@ -22,6 +22,8 @@ public interface ICompatibilityManager {
     
     abstract boolean register(@NonNull CompatibilityBlockLoader loader);
     
+    abstract boolean register(@NonNull CompatibilitySchematicUpdate<?> update);
+    
     abstract boolean register(@NonNull CompatibilitySchematicConverter converter);
 
 }
