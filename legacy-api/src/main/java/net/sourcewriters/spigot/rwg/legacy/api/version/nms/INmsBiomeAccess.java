@@ -7,15 +7,15 @@ import org.bukkit.block.Biome;
 import net.sourcewriters.spigot.rwg.legacy.api.generator.IRwgGenerator;
 import net.sourcewriters.spigot.rwg.legacy.api.generator.forward.ForwardHelper;
 import net.sourcewriters.spigot.rwg.legacy.api.util.annotation.source.NonNull;
-import net.sourcewriters.spigot.rwg.legacy.api.util.rwg.grid.IBiomeGrid;
+import net.sourcewriters.spigot.rwg.legacy.api.util.rwg.grid.RwgGrid;
 
 public interface INmsBiomeAccess {
 
-    default IBiomeGrid getBiomeGrid(Chunk chunk) {
+    default RwgGrid getBiomeGrid(Chunk chunk) {
         return getBiomeGridAt(chunk.getWorld(), chunk.getX(), chunk.getZ());
     }
 
-    default IBiomeGrid getBiomeGridAt(World world, int x, int z) {
+    default RwgGrid getBiomeGridAt(World world, int x, int z) {
         IRwgGenerator generator = ForwardHelper.get(world);
         if (generator == null) {
             return null;

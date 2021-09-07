@@ -2,6 +2,7 @@ package net.sourcewriters.spigot.rwg.legacy.api.impl.version.nms;
 
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
+import org.bukkit.craftbukkit.v1_17_R1.CraftWorld;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
@@ -14,18 +15,14 @@ import net.sourcewriters.spigot.rwg.legacy.api.version.nms.INmsBiomeAccess;
 
 public final class NmsBiomeAccessImpl implements INmsBiomeAccess {
 
-    private final ClassLookupProvider provider;
-
-    public NmsBiomeAccessImpl(ClassLookupProvider provider) {
-        this.provider = provider;
-    }
+    public NmsBiomeAccessImpl(ClassLookupProvider _ignore) {}
 
     @Override
     public org.bukkit.block.Biome getBiomeAt(World bukkitWorld, int x, int y, int z) {
         if (bukkitWorld == null) {
             return org.bukkit.block.Biome.THE_VOID;
         }
-        ServerLevel server = (ServerLevel) provider.getLookup("cb_world").run(bukkitWorld, "handle");
+        ServerLevel server = ((CraftWorld) bukkitWorld).getHandle();
         BiomeManager manager = server.getBiomeManager();
         Biome biome = manager.getNoiseBiomeAtPosition(new BlockPos(x, y, z));
         if (biome == null) {
