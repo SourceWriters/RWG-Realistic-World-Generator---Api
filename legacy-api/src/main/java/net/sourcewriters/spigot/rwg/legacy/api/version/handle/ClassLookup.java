@@ -5,11 +5,11 @@ import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodHandles.Lookup;
 import java.lang.invoke.VarHandle;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.Map.Entry;
 import java.util.function.Predicate;
@@ -17,6 +17,11 @@ import java.util.function.Predicate;
 import com.syntaxphoenix.syntaxapi.reflection.ClassCache;
 import com.syntaxphoenix.syntaxapi.reflection.ReflectionTools;
 import com.syntaxphoenix.syntaxapi.utils.java.Arrays;
+
+import net.sourcewriters.spigot.rwg.legacy.api.version.handle.field.IFieldHandle;
+import net.sourcewriters.spigot.rwg.legacy.api.version.handle.field.SafeFieldHandle;
+import net.sourcewriters.spigot.rwg.legacy.api.version.handle.field.UnsafeDeclaredFieldHandle;
+import net.sourcewriters.spigot.rwg.legacy.api.version.handle.field.UnsafeStaticFieldHandle;
 
 public class ClassLookup {
 
@@ -27,7 +32,7 @@ public class ClassLookup {
 
     private final HashMap<String, MethodHandle> constructors = new HashMap<>();
     private final HashMap<String, MethodHandle> methods = new HashMap<>();
-    private final HashMap<String, VarHandle> fields = new HashMap<>();
+    private final HashMap<String, IFieldHandle<?>> fields = new HashMap<>();
 
     protected ClassLookup(String classPath) throws IllegalAccessException {
         this(ClassCache.getClass(classPath));
@@ -78,7 +83,7 @@ public class ClassLookup {
         return methods.values();
     }
 
-    public Collection<VarHandle> getFields() {
+    public Collection<IFieldHandle<?>> getFields() {
         return fields.values();
     }
 
@@ -94,7 +99,7 @@ public class ClassLookup {
         return isValid() ? methods.get(name) : null;
     }
 
-    public VarHandle getField(String name) {
+    public IFieldHandle<?> getField(String name) {
         return isValid() ? fields.get(name) : null;
     }
 
@@ -124,13 +129,9 @@ public class ClassLookup {
         }
         MethodHandle handle = constructors.computeIfAbsent("$base#empty", (ignore) -> {
             try {
-                return privateLookup.unreflectConstructor(owner.getConstructor());
-            } catch (IllegalAccessException | NoSuchMethodException | SecurityException ign0) {
-                try {
-                    return privateLookup.unreflectConstructor(owner.getDeclaredConstructor());
-                } catch (IllegalAccessException | NoSuchMethodException | SecurityException ign1) {
-                    return null;
-                }
+                return LOOKUP.unreflectConstructor(owner.getConstructor());
+            } catch (IllegalAccessException | NoSuchMethodException | SecurityException e) {
+                return null;
             }
         });
         if (handle == null) {
@@ -200,25 +201,25 @@ public class ClassLookup {
      */
 
     public Object getFieldValue(String name) {
-        return isValid() && fields.containsKey(name) ? fields.get(name).get() : null;
+        return isValid() && fields.containsKey(name) ? fields.get(name).getValue() : null;
     }
 
     public Object getFieldValue(Object source, String name) {
-        return isValid() && fields.containsKey(name) ? fields.get(name).get(source) : null;
+        return isValid() && fields.containsKey(name) ? fields.get(name).getValue(source) : null;
     }
 
     public void setFieldValue(String name, Object value) {
         if (!isValid() || !fields.containsKey(name)) {
             return;
         }
-        fields.get(name).set(value);
+        fields.get(name).setValue(value);
     }
 
     public void setFieldValue(Object source, String name, Object value) {
         if (!isValid() || !fields.containsKey(name)) {
             return;
         }
-        fields.get(name).set(source, value);
+        fields.get(name).setValue(source, value);
     }
 
     /*
@@ -339,6 +340,27 @@ public class ClassLookup {
         return predicate.test(this) ? searchField(name, fieldName, type) : this;
     }
 
+    public ClassLookup searchField(String name, String fieldName) {
+        if (hasMethod(name)) {
+            return this;
+        }
+        Field field = null;
+        try {
+            field = owner.getDeclaredField(fieldName);
+        } catch (NoSuchFieldException | SecurityException e) {
+        }
+        if (field == null) {
+            try {
+                field = owner.getField(fieldName);
+            } catch (NoSuchFieldException | SecurityException e) {
+            }
+        }
+        if (field != null) {
+            storeField(name, field);
+        }
+        return this;
+    }
+
     public ClassLookup searchField(String name, String fieldName, Class<?> type) {
         if (hasField(name)) {
             return this;
@@ -355,7 +377,7 @@ public class ClassLookup {
             }
         }
         if (handle != null) {
-            fields.put(name, handle);
+            fields.put(name, new SafeFieldHandle(handle));
         }
         return this;
     }
@@ -364,24 +386,59 @@ public class ClassLookup {
      * 
      */
 
+    private void storeField(String name, Field field) {
+        if (!Modifier.isFinal(field.getModifiers())) {
+            try {
+                fields.put(name, new SafeFieldHandle(unreflect(field)));
+                return;
+            } catch (IllegalAccessException | SecurityException e) {
+            }
+        }
+        if (!Modifier.isStatic(field.getModifiers())) {
+            fields.put(name, new UnsafeDeclaredFieldHandle(field));
+            return;
+        }
+        fields.put(name, new UnsafeStaticFieldHandle(field));
+    }
+
+    private VarHandle unreflect(Field field) throws IllegalAccessException, SecurityException {
+        if (Modifier.isStatic(field.getModifiers())) {
+            boolean access = field.canAccess(null);
+            if (!access) {
+                field.setAccessible(true);
+            }
+            VarHandle out = LOOKUP.unreflectVarHandle(field);
+            if (!access) {
+                field.setAccessible(false);
+            }
+            return out;
+        }
+        if (field.trySetAccessible()) {
+            VarHandle out = LOOKUP.unreflectVarHandle(field);
+            field.setAccessible(false);
+            return out;
+        }
+        return LOOKUP.unreflectVarHandle(field);
+    }
+
     private MethodHandle unreflect(Method method) throws IllegalAccessException, SecurityException {
         if (Modifier.isStatic(method.getModifiers())) {
             boolean access = method.canAccess(null);
             if (!access) {
                 method.setAccessible(true);
             }
-            MethodHandle out = privateLookup.unreflect(method);
+            MethodHandle out = LOOKUP.unreflect(method);
             if (!access) {
                 method.setAccessible(false);
             }
             return out;
         }
         if (method.trySetAccessible()) {
-            MethodHandle out = privateLookup.unreflect(method);
+            MethodHandle out = LOOKUP.unreflect(method);
             method.setAccessible(false);
             return out;
         }
-        return privateLookup.unreflect(method);
+        return LOOKUP.unreflect(method);
     }
 
     private MethodHandle unreflect(Constructor<?> constructor) throws IllegalAccessException {
@@ -389,7 +446,7 @@ public class ClassLookup {
         if (!access) {
             constructor.setAccessible(true);
         }
-        MethodHandle out = privateLookup.unreflectConstructor(constructor);
+        MethodHandle out = LOOKUP.unreflectConstructor(constructor);
         if (!access) {
             constructor.setAccessible(false);
         }
@@ -425,7 +482,6 @@ public class ClassLookup {
      */
 
     public static final ClassLookup of(Class<?> clazz) {
-        Objects.requireNonNull(clazz, "Class can't be null!");
         try {
             return new ClassLookup(clazz);
         } catch (IllegalAccessException e) {
@@ -434,7 +490,6 @@ public class ClassLookup {
     }
 
     public static final ClassLookup of(String path) {
-        Objects.requireNonNull(path, "String path can't be null!");
         try {
             return new ClassLookup(path);
         } catch (IllegalAccessException e) {
