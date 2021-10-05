@@ -82,9 +82,10 @@
 <!-- ROADMAP -->
 ## Issues
 
-Please note that every issue that doesn't use one of our templates will be marked as invalid and closed immediately.
-Our templates are easy to use and can be filled out very quickly, just because someone is too lazy to fill them out can cost a lot of time while helping you with your issue. Time that we can invest into more important things like development of all our projects.
-If you are too lazy to fill out a template then we're too lazy to help you resolving your issue.
+Please note that every issue that doesn't use one of our templates will be marked as invalid and closed immediately.<br>
+Our templates are easy to use and can be filled out very quickly, just because someone is too lazy to fill them out can cost a lot of time while helping you with your issue.<br>
+Time that we can invest into more important things like development of all our projects.<br>
+If you are too lazy to fill out a template then we're too lazy to help you resolving your issue.<br>
 This might sound toxic or rude but the question is why should we help you with your issue if you can't take about (depending on the template) 1-5 mins to fill out a template.
 
 <!-- ROADMAP -->
