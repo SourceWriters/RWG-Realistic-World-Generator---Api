@@ -24,7 +24,7 @@
 <br />
 <p align="center">
   <a href="https://github.com/SourceWriters/RealisticWorldGenerator-Api">
-    <img src="images/logo.png" alt="Logo" width="96" height="96"/>
+    <img src=".github/images/logo.jpg" alt="Logo" width="96" height="96"/>
   </a>
 
   <h3 align="center">RealisticWorldGenerator Api</h3>
@@ -66,7 +66,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-<img src="images/banner.png" alt="RealisticWorldGenerator-Api Banner"/>
+<img src=".github/images/banner.png" alt="RealisticWorldGenerator-Api Banner"/>
 
 
 
