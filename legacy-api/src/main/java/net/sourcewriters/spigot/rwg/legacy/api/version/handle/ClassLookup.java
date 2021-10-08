@@ -130,8 +130,12 @@ public class ClassLookup {
         MethodHandle handle = constructors.computeIfAbsent("$base#empty", (ignore) -> {
             try {
                 return LOOKUP.unreflectConstructor(owner.getConstructor());
-            } catch (IllegalAccessException | NoSuchMethodException | SecurityException e) {
-                return null;
+            } catch (IllegalAccessException | NoSuchMethodException | SecurityException e0) {
+                try {
+                    return LOOKUP.unreflectConstructor(owner.getDeclaredConstructor());
+                } catch (IllegalAccessException | NoSuchMethodException | SecurityException e1) {
+                    return null;
+                }
             }
         });
         if (handle == null) {
