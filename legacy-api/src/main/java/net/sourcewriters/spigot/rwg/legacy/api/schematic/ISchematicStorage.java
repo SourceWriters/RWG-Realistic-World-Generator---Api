@@ -31,7 +31,7 @@ public interface ISchematicStorage {
 
     @NonNull
     Future<?> paste(ISchematic schmeatic, Location location, RandomNumberGenerator random);
-
+    
     @NonNull
     ISchematicLoader getLoader();
     

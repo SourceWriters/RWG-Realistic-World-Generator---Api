@@ -6,8 +6,6 @@ import org.bukkit.generator.ChunkGenerator.BiomeGrid;
 
 @SuppressWarnings("deprecation")
 public final class BiomeProvider1_13 extends BiomeProvider {
-    
-    BiomeProvider1_13() {}
 
     @Override
     public Biome getBiome(BiomeGrid grid, int x, int y, int z) {
