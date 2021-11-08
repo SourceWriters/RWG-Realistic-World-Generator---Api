@@ -10,6 +10,7 @@ import com.syntaxphoenix.syntaxapi.logging.ILogger;
 import net.sourcewriters.spigot.rwg.legacy.api.block.IBlockAccess;
 import net.sourcewriters.spigot.rwg.legacy.api.chest.IChestStorage;
 import net.sourcewriters.spigot.rwg.legacy.api.compatibility.ICompatibilityManager;
+import net.sourcewriters.spigot.rwg.legacy.api.data.asset.AssetManager;
 import net.sourcewriters.spigot.rwg.legacy.api.data.fix.IDataFixHandler;
 import net.sourcewriters.spigot.rwg.legacy.api.regeneration.IRegenerationHelper;
 import net.sourcewriters.spigot.rwg.legacy.api.schematic.ISchematicStorage;
@@ -30,6 +31,9 @@ public abstract class RealisticWorldGenerator {
 
     @NonNull
     public abstract IBlockAccess getBlockAccess();
+    
+    @NonNull
+    public abstract AssetManager getAssetManager();
 
     @NonNull
     public abstract IChestStorage getChestStorage();
