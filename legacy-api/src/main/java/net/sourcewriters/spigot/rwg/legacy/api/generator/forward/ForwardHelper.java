@@ -67,7 +67,7 @@ public final class ForwardHelper {
         lookup.run(current, "set", generator);
         final List<BlockPopulator> list = generator.getDefaultPopulators(world);
         lookup.run(current, "populators",
-            list == null ? new BlockPopulator[0] : list.stream().filter(obj -> obj != null).toArray(BlockPopulator[]::new));
+            (Object) (list == null ? new BlockPopulator[0] : list.stream().filter(obj -> obj != null).toArray(BlockPopulator[]::new)));
         return true;
     }
 
