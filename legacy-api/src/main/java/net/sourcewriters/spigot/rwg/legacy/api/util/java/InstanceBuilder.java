@@ -87,7 +87,7 @@ public final class InstanceBuilder {
             int tmpArgs = 0;
             for (int index = 0; index < count; index++) {
                 for (int idx = 0; idx < max; idx++) {
-                    if (!types[index].isAssignableFrom(classes[index])) {
+                    if (!types[index].isAssignableFrom(classes[idx])) {
                         continue;
                     }
                     tmpIdx[idx] = index;
