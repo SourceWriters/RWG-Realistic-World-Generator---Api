@@ -12,8 +12,10 @@ public abstract class CompatibilitySchematicConverter extends SchematicConverter
 
     protected final CompatibilityAddon addon;
 
-    public CompatibilitySchematicConverter(@NonNull RealisticWorldGenerator api, @NonNull CompatibilityAddon addon, String... extensions) {
-        super(Objects.requireNonNull(api, "RealisticWorldGenerator api can't be null!").getLogger(), Objects.requireNonNull(addon, "CompatibilityAddon can't be null!").getOwner(), extensions);
+    public CompatibilitySchematicConverter(@NonNull final RealisticWorldGenerator api, @NonNull final CompatibilityAddon addon,
+        final String... extensions) {
+        super(Objects.requireNonNull(api, "RealisticWorldGenerator api can't be null!").getLogger(),
+            Objects.requireNonNull(addon, "CompatibilityAddon can't be null!").getOwner(), extensions);
         this.addon = addon;
         Preconditions.checkArgument(api.getCompatibilityManager().register(this), "Failed to register CompatibilitySchematicConverter");
     }

@@ -46,11 +46,11 @@ public final class JsonIO {
     private JsonIO() {}
 
     @NonNull
-    public static JsonValue<?> parse(@NonNull String string) {
+    public static JsonValue<?> parse(@NonNull final String string) {
         Objects.requireNonNull(string, "String can't be null!");
         try {
             return PARSER.fromString(string);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             return JsonNull.get();
         }
     }
@@ -60,7 +60,7 @@ public final class JsonIO {
         if (string.charAt(0) == '?') {
             string = string.substring(1);
         }
-        JsonValue<?> value = parse(string);
+        final JsonValue<?> value = parse(string);
         if (!value.hasType(ValueType.OBJECT)) {
             return null;
         }
@@ -68,12 +68,12 @@ public final class JsonIO {
     }
 
     @NonNull
-    public static JsonObject toJson(@NonNull IProperties properties) {
+    public static JsonObject toJson(@NonNull final IProperties properties) {
         Objects.requireNonNull(properties, "IProperties can't be null!");
-        IProperty<?>[] array = properties.asArray();
-        JsonObject object = new JsonObject();
-        for (IProperty<?> property : array) {
-            JsonValue<?> value = JsonValue.fromPrimitive(property.getValue());
+        final IProperty<?>[] array = properties.asArray();
+        final JsonObject object = new JsonObject();
+        for (final IProperty<?> property : array) {
+            final JsonValue<?> value = JsonValue.fromPrimitive(property.getValue());
             if (value.hasType(ValueType.NULL)) {
                 continue;
             }
@@ -83,19 +83,19 @@ public final class JsonIO {
     }
 
     @NonNull
-    public static IProperties fromJson(@NonNull JsonObject object) {
+    public static IProperties fromJson(@NonNull final JsonObject object) {
         Objects.requireNonNull(object, "JsonObject can't be null!");
-        IProperties properties = IProperties.create();
+        final IProperties properties = IProperties.create();
         fromJson(properties, object);
         return properties;
     }
 
-    public static void fromJson(@NonNull IProperties properties, @NonNull JsonObject object) {
+    public static void fromJson(@NonNull final IProperties properties, @NonNull final JsonObject object) {
         Objects.requireNonNull(properties, "IProperties can't be null!");
         Objects.requireNonNull(object, "JsonObject can't be null!");
         properties.clear();
-        for (JsonEntry<?> entry : object) {
-            JsonValue<?> value = entry.getValue();
+        for (final JsonEntry<?> entry : object) {
+            final JsonValue<?> value = entry.getValue();
             if (value == null) {
                 continue;
             }
@@ -104,24 +104,24 @@ public final class JsonIO {
     }
 
     @NonNull
-    public static String toString(@NonNull IProperties properties) {
+    public static String toString(@NonNull final IProperties properties) {
         return '?' + toJson(properties).toString();
     }
 
     @NonNull
-    public static IProperties fromString(@NonNull String string) {
-        IProperties properties = IProperties.create();
+    public static IProperties fromString(@NonNull final String string) {
+        final IProperties properties = IProperties.create();
         fromString(properties, string);
         return properties;
     }
 
-    public static void fromString(@NonNull IProperties properties, @NonNull String string) {
+    public static void fromString(@NonNull final IProperties properties, @NonNull String string) {
         Objects.requireNonNull(properties, "IProperties can't be null!");
         Objects.requireNonNull(string, "String can't be null!");
         if (string.charAt(0) == '?') {
             string = string.substring(1);
         }
-        JsonValue<?> value = parse(string);
+        final JsonValue<?> value = parse(string);
         if (!value.hasType(ValueType.OBJECT)) {
             properties.clear();
             return;
@@ -129,7 +129,7 @@ public final class JsonIO {
         fromJson(properties, (JsonObject) value);
     }
 
-    public static NbtTag toNbt(JsonValue<?> value) {
+    public static NbtTag toNbt(final JsonValue<?> value) {
         if (value == null) {
             return null;
         }
@@ -139,7 +139,7 @@ public final class JsonIO {
         case BIG_INTEGER:
             return new NbtBigInt((BigInteger) value.getValue());
         case BOOLEAN:
-            return new NbtByte((byte) (((boolean) value.getValue()) ? 1 : 0));
+            return new NbtByte((byte) ((boolean) value.getValue() ? 1 : 0));
         case BYTE:
             return new NbtByte((byte) value.getValue());
         case DOUBLE:
@@ -155,10 +155,10 @@ public final class JsonIO {
         case STRING:
             return new NbtString((String) value.getValue());
         case OBJECT:
-            NbtCompound compound = new NbtCompound();
-            JsonObject object = (JsonObject) value;
-            for (JsonEntry<?> entry : object) {
-                NbtTag tag = toNbt(entry.getValue());
+            final NbtCompound compound = new NbtCompound();
+            final JsonObject object = (JsonObject) value;
+            for (final JsonEntry<?> entry : object) {
+                final NbtTag tag = toNbt(entry.getValue());
                 if (tag == null) {
                     continue;
                 }
@@ -166,17 +166,17 @@ public final class JsonIO {
             }
             return compound;
         case ARRAY:
-            JsonArray array = (JsonArray) value;
-            int size = array.size();
+            final JsonArray array = (JsonArray) value;
+            final int size = array.size();
             if (size == 0) {
                 return new NbtList<>();
             }
-            NbtCompound compound0 = new NbtCompound();
+            final NbtCompound compound0 = new NbtCompound();
             int idx = 0;
             int types = 0;
             NbtType type = null;
             for (int index = 0; index < size; index++) {
-                NbtTag tag = toNbt(array.get(index));
+                final NbtTag tag = toNbt(array.get(index));
                 if (tag == null) {
                     continue;
                 }
@@ -184,11 +184,11 @@ public final class JsonIO {
                     types++;
                     type = tag.getType();
                 }
-                compound0.set((idx++) + "", tag);
+                compound0.set(idx++ + "", tag);
             }
 
             if (types == 1) {
-                NbtList<?> list = new NbtList<>();
+                final NbtList<?> list = new NbtList<>();
                 for (int index = 0; index < idx; index++) {
                     list.addTag(compound0.get("" + index));
                 }
@@ -201,7 +201,7 @@ public final class JsonIO {
     }
 
     @NonNull
-    public static JsonValue<?> fromNbt(NbtTag tag) {
+    public static JsonValue<?> fromNbt(final NbtTag tag) {
         if (tag == null) {
             return JsonNull.get();
         }
@@ -209,17 +209,17 @@ public final class JsonIO {
         case BYTE:
             return new JsonByte((byte) tag.getValue());
         case BYTE_ARRAY:
-            JsonArray array = new JsonArray();
-            byte[] bytes = (byte[]) tag.getValue();
-            for (byte value : bytes) {
+            final JsonArray array = new JsonArray();
+            final byte[] bytes = (byte[]) tag.getValue();
+            for (final byte value : bytes) {
                 array.add(new JsonByte(value));
             }
             return array;
         case COMPOUND:
-            NbtCompound compound = (NbtCompound) tag;
+            final NbtCompound compound = (NbtCompound) tag;
             if (compound.hasKey("ARRAY", NbtType.BYTE) && compound.getBoolean("ARRAY")) {
-                JsonArray array0 = new JsonArray();
-                int size = compound.getKeys().size();
+                final JsonArray array0 = new JsonArray();
+                final int size = compound.getKeys().size();
                 for (int index = 0; index < size; index++) {
                     if (!compound.hasKey("" + index)) {
                         break;
@@ -228,9 +228,9 @@ public final class JsonIO {
                 }
                 return array0;
             }
-            JsonObject object = new JsonObject();
-            for (String key : compound.getKeys()) {
-                NbtTag current = compound.get(key);
+            final JsonObject object = new JsonObject();
+            for (final String key : compound.getKeys()) {
+                final NbtTag current = compound.get(key);
                 if (current == null) {
                     continue;
                 }
@@ -244,25 +244,25 @@ public final class JsonIO {
         case INT:
             return new JsonInteger((int) tag.getValue());
         case INT_ARRAY:
-            JsonArray array0 = new JsonArray();
-            int[] ints = (int[]) tag.getValue();
-            for (int value : ints) {
+            final JsonArray array0 = new JsonArray();
+            final int[] ints = (int[]) tag.getValue();
+            for (final int value : ints) {
                 array0.add(new JsonInteger(value));
             }
             return array0;
         case LIST:
-            JsonArray array1 = new JsonArray();
-            NbtList<?> list = (NbtList<?>) tag;
-            for (NbtTag value : list) {
+            final JsonArray array1 = new JsonArray();
+            final NbtList<?> list = (NbtList<?>) tag;
+            for (final NbtTag value : list) {
                 array1.add(fromNbt(value));
             }
             return array1;
         case LONG:
             return new JsonLong((long) tag.getValue());
         case LONG_ARRAY:
-            JsonArray array2 = new JsonArray();
-            long[] longs = (long[]) tag.getValue();
-            for (long value : longs) {
+            final JsonArray array2 = new JsonArray();
+            final long[] longs = (long[]) tag.getValue();
+            for (final long value : longs) {
                 array2.add(new JsonLong(value));
             }
             return array2;

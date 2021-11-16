@@ -6,29 +6,30 @@ import com.syntaxphoenix.syntaxapi.utils.java.Primitives;
 
 public interface IProperty<E> {
 
-	E getValue();
-	
-	E getValueOr(E fallback);
+    E getValue();
 
-	String getKey();
+    E getValueOr(E fallback);
 
-	Class<?> getOwner();
+    String getKey();
 
-	boolean isInstance(Class<?> sample);
+    Class<?> getOwner();
 
-	<V> IProperty<V> cast(Class<V> sample);
+    boolean isInstance(Class<?> sample);
 
-	<V> IProperty<V> map(Function<E, V> mapper);
+    <V> IProperty<V> cast(Class<V> sample);
 
-	boolean isEmpty();
+    <V> IProperty<V> map(Function<E, V> mapper);
 
-	default boolean isPresent() {
-		return !isEmpty();
-	}
+    boolean isEmpty();
 
-	@SuppressWarnings("unchecked")
-	public static <V> IProperty<V> of(String key, V value) {
-		return value == null ? new VoidProperty(key) : (Primitives.isInstance(value) ? new PrimitiveProperty<>(key, value) : new Property<>(key, value));
-	}
+    default boolean isPresent() {
+        return !isEmpty();
+    }
+
+    @SuppressWarnings("unchecked")
+    static <V> IProperty<V> of(final String key, final V value) {
+        return value == null ? new VoidProperty(key)
+            : Primitives.isInstance(value) ? new PrimitiveProperty<>(key, value) : new Property<>(key, value);
+    }
 
 }

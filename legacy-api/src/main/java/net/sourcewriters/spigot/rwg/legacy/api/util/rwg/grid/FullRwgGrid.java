@@ -9,13 +9,14 @@ import net.sourcewriters.spigot.rwg.legacy.api.version.nms.INmsBiomeAccess;
 
 public final class FullRwgGrid extends RwgGrid {
 
-    public FullRwgGrid(IBiomeAccess biome, INmsBiomeAccess nmsBiome, World world, BiomeGrid grid, int chunkX, int chunkZ) {
+    public FullRwgGrid(final IBiomeAccess biome, final INmsBiomeAccess nmsBiome, final World world, final BiomeGrid grid, final int chunkX,
+        final int chunkZ) {
         super(biome, nmsBiome, world, grid, chunkX, chunkZ);
     }
 
     @Override
-    protected Biome internalGet(int x, int z) {
-        if(grid == null) {
+    protected Biome internalGet(final int x, final int z) {
+        if (grid == null) {
             return nmsBiome.getBiomeAt(world, x + cx, z + cz);
         }
         return biome.getBiome(grid, x, z);
@@ -25,5 +26,5 @@ public final class FullRwgGrid extends RwgGrid {
     public boolean needsRemap() {
         return false;
     }
-    
+
 }

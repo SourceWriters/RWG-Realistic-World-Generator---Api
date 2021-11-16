@@ -10,7 +10,7 @@ public interface IBlockDataParserManager {
 
     boolean register(@NonNull BlockDataParser parser);
 
-    default boolean register(boolean expression, @NonNull Supplier<BlockDataParser> parser) {
+    default boolean register(final boolean expression, @NonNull final Supplier<BlockDataParser> parser) {
         if (!expression) {
             return false;
         }
@@ -22,11 +22,11 @@ public interface IBlockDataParserManager {
     boolean has(long id);
 
     BlockDataParser get(long id);
-    
+
     int getPosition(long id);
 
     IBlockData parse(@NonNull BlockStateEditor editor);
-    
+
     IBlockData parse(@NonNull NbtCompound compound);
 
 }

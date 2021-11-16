@@ -7,5 +7,5 @@ import java.io.IOException;
 public interface IAssetLoader<E> {
 
     E load(File file) throws IOException;
-    
+
 }

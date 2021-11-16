@@ -7,40 +7,48 @@ public class ArgumentMap implements IArgumentMap {
 
     private final HashMap<String, Object> map = new HashMap<>();
 
-    public boolean has(String key) {
+    @Override
+    public boolean has(final String key) {
         return map.containsKey(key);
     }
 
-    public boolean has(String key, Class<?> type) {
-        Object object = map.get(key);
+    @Override
+    public boolean has(final String key, final Class<?> type) {
+        final Object object = map.get(key);
         return object != null && type.isInstance(object);
     }
 
-    public Option<Object> get(String key) {
+    @Override
+    public Option<Object> get(final String key) {
         return Option.of(map.get(key));
     }
 
-    public <E> Option<E> get(String key, Class<E> type) {
+    @Override
+    public <E> Option<E> get(final String key, final Class<E> type) {
         return get(key).filter(type::isInstance).map(type::cast);
     }
 
-    public ArgumentMap set(String key, Object value) {
+    @Override
+    public ArgumentMap set(final String key, final Object value) {
         map.put(key, Objects.requireNonNull(value));
         return this;
     }
 
-    public ArgumentMap remove(String key) {
+    @Override
+    public ArgumentMap remove(final String key) {
         map.remove(key);
         return this;
     }
 
+    @Override
     public ArgumentMap clear() {
         map.clear();
         return this;
     }
 
+    @Override
     public ArgumentMap clone() {
-        ArgumentMap clone = new ArgumentMap();
+        final ArgumentMap clone = new ArgumentMap();
         map.putAll(map);
         return clone;
     }

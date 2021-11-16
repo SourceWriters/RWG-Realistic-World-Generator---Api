@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 @Retention(SOURCE)
 @Target(METHOD)
 public @interface ThreadInfo {
-    
+
     boolean sync();
 
 }

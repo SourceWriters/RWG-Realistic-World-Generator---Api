@@ -14,16 +14,16 @@ public abstract class BaseBlockData implements IBlockData {
     public final IProperties getProperties() {
         return properties;
     }
-    
+
     protected abstract String dataString();
-    
+
     @Override
     public final String asString() {
         return properties.isEmpty() ? dataString() : dataString() + JsonIO.toString(properties);
     }
-    
+
     @Override
-    public final boolean equals(Object obj) {
+    public final boolean equals(final Object obj) {
         return isSame(obj);
     }
 

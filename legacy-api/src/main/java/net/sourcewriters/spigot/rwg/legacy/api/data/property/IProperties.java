@@ -4,40 +4,40 @@ import java.util.List;
 
 public interface IProperties {
 
-	IProperties set(IProperty<?>... properties);
+    IProperties set(IProperty<?>... properties);
 
-	IProperties set(IProperty<?> property);
+    IProperties set(IProperty<?> property);
 
-	IProperties add(IProperty<?>... properties);
+    IProperties add(IProperty<?>... properties);
 
-	IProperties add(IProperty<?> property);
+    IProperties add(IProperty<?> property);
 
-	IProperties delete(String... keys);
+    IProperties delete(String... keys);
 
-	IProperties delete(String key);
+    IProperties delete(String key);
 
-	List<IProperty<?>> remove(String... keys);
+    List<IProperty<?>> remove(String... keys);
 
-	IProperty<?> remove(String key);
+    IProperty<?> remove(String key);
 
-	List<IProperty<?>> find(String... keys);
+    List<IProperty<?>> find(String... keys);
 
-	IProperty<?> find(String key);
+    IProperty<?> find(String key);
 
-	IProperties clear();
+    IProperties clear();
 
-	boolean has(String key);
+    boolean has(String key);
 
-	int count();
+    int count();
 
-	boolean isEmpty();
+    boolean isEmpty();
 
-	List<IProperty<?>> asList();
+    List<IProperty<?>> asList();
 
-	IProperty<?>[] asArray();
+    IProperty<?>[] asArray();
 
-	public static IProperties create() {
-		return new Properties();
-	}
+    static IProperties create() {
+        return new Properties();
+    }
 
 }

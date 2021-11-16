@@ -11,7 +11,7 @@ public class FakeLookup extends ClassLookup {
     private static final FakeLookup build() {
         try {
             return new FakeLookup();
-        } catch (IllegalAccessException e) {
+        } catch (final IllegalAccessException e) {
             return null;
         }
     }

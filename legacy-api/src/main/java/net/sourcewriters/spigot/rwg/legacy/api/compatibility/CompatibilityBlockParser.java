@@ -12,7 +12,8 @@ public abstract class CompatibilityBlockParser extends BlockDataParser {
 
     protected final CompatibilityAddon addon;
 
-    public CompatibilityBlockParser(@NonNull RealisticWorldGenerator api, @NonNull CompatibilityAddon addon, @NonNull String namespace) {
+    public CompatibilityBlockParser(@NonNull final RealisticWorldGenerator api, @NonNull final CompatibilityAddon addon,
+        @NonNull final String namespace) {
         super(Objects.requireNonNull(addon, "CompatibilityAddon can't be null!").getOwner(), namespace);
         Objects.requireNonNull(api, "RealisticWorldGenerator api can't be null!");
         this.addon = addon;

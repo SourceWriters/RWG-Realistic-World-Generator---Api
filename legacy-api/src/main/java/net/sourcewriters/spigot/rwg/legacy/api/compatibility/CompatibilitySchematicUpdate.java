@@ -14,13 +14,13 @@ public abstract class CompatibilitySchematicUpdate<T extends ISchematic> extends
 
     protected final CompatibilityAddon addon;
 
-    public CompatibilitySchematicUpdate(@NonNull RealisticWorldGenerator api, @NonNull CompatibilityAddon addon, MinecraftVersion version,
-        Class<T> type) {
+    public CompatibilitySchematicUpdate(@NonNull final RealisticWorldGenerator api, @NonNull final CompatibilityAddon addon,
+        final MinecraftVersion version, final Class<T> type) {
         this(api, addon, version, type, false);
     }
 
-    public CompatibilitySchematicUpdate(@NonNull RealisticWorldGenerator api, @NonNull CompatibilityAddon addon, MinecraftVersion version,
-        Class<T> type, boolean preLoad) {
+    public CompatibilitySchematicUpdate(@NonNull final RealisticWorldGenerator api, @NonNull final CompatibilityAddon addon,
+        final MinecraftVersion version, final Class<T> type, final boolean preLoad) {
         super(Objects.requireNonNull(addon, "CompatibilityAddon can't be null!").getOwner(), version, type, preLoad);
         this.addon = addon;
         Objects.requireNonNull(api, "RealisticWorldGenerator api can't be null!");

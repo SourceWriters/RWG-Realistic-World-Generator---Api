@@ -30,7 +30,8 @@ import net.sourcewriters.spigot.rwg.legacy.api.data.container.api.IDataContainer
 
 public class NbtAdapter<P, C extends NbtTag> extends AbstractDataAdapter<P, C, NbtTag> {
 
-    protected NbtAdapter(Class<P> primitiveType, Class<C> resultType, Function<P, C> builder, Function<C, P> extractor) {
+    protected NbtAdapter(final Class<P> primitiveType, final Class<C> resultType, final Function<P, C> builder,
+        final Function<C, P> extractor) {
         super(primitiveType, resultType, builder, extractor);
     }
 
@@ -47,7 +48,7 @@ public class NbtAdapter<P, C extends NbtTag> extends AbstractDataAdapter<P, C, N
         "rawtypes",
         "unchecked"
     })
-    protected static AbstractDataAdapter<?, ? extends NbtTag, NbtTag> createAdapter(NbtAdapterRegistry registry, Class<?> type) {
+    protected static AbstractDataAdapter<?, ? extends NbtTag, NbtTag> createAdapter(final NbtAdapterRegistry registry, Class<?> type) {
         type = Primitives.fromPrimitive(type);
 
         /*
@@ -55,41 +56,40 @@ public class NbtAdapter<P, C extends NbtTag> extends AbstractDataAdapter<P, C, N
          */
 
         if (Objects.equals(Boolean.class, type)) {
-            return new NbtAdapter<Boolean, NbtByte>(Boolean.class, NbtByte.class, state -> new NbtByte((byte) (state ? 1 : 0)),
+            return new NbtAdapter<>(Boolean.class, NbtByte.class, state -> new NbtByte((byte) (state ? 1 : 0)),
                 value -> value.getByteValue() == 1);
         }
 
         if (Objects.equals(Byte.class, type)) {
-            return new NbtAdapter<Byte, NbtByte>(Byte.class, NbtByte.class, NbtByte::new, value -> value.getByteValue());
+            return new NbtAdapter<>(Byte.class, NbtByte.class, NbtByte::new, NbtByte::getByteValue);
         }
 
         if (Objects.equals(Short.class, type)) {
-            return new NbtAdapter<Short, NbtShort>(Short.class, NbtShort.class, NbtShort::new, value -> value.getShortValue());
+            return new NbtAdapter<>(Short.class, NbtShort.class, NbtShort::new, NbtShort::getShortValue);
         }
 
         if (Objects.equals(Integer.class, type)) {
-            return new NbtAdapter<Integer, NbtInt>(Integer.class, NbtInt.class, NbtInt::new, value -> value.getIntValue());
+            return new NbtAdapter<>(Integer.class, NbtInt.class, NbtInt::new, NbtInt::getIntValue);
         }
 
         if (Objects.equals(Long.class, type)) {
-            return new NbtAdapter<Long, NbtLong>(Long.class, NbtLong.class, NbtLong::new, value -> value.getLongValue());
+            return new NbtAdapter<>(Long.class, NbtLong.class, NbtLong::new, NbtLong::getLongValue);
         }
 
         if (Objects.equals(BigInteger.class, type)) {
-            return new NbtAdapter<BigInteger, NbtBigInt>(BigInteger.class, NbtBigInt.class, NbtBigInt::new, value -> value.getInteger());
+            return new NbtAdapter<>(BigInteger.class, NbtBigInt.class, NbtBigInt::new, NbtBigInt::getInteger);
         }
 
         if (Objects.equals(Float.class, type)) {
-            return new NbtAdapter<Float, NbtFloat>(Float.class, NbtFloat.class, NbtFloat::new, value -> value.getFloatValue());
+            return new NbtAdapter<>(Float.class, NbtFloat.class, NbtFloat::new, NbtFloat::getFloatValue);
         }
 
         if (Objects.equals(Double.class, type)) {
-            return new NbtAdapter<Double, NbtDouble>(Double.class, NbtDouble.class, NbtDouble::new, value -> value.getDoubleValue());
+            return new NbtAdapter<>(Double.class, NbtDouble.class, NbtDouble::new, NbtDouble::getDoubleValue);
         }
 
         if (Objects.equals(BigDecimal.class, type)) {
-            return new NbtAdapter<BigDecimal, NbtBigDecimal>(BigDecimal.class, NbtBigDecimal.class, NbtBigDecimal::new,
-                value -> value.getDecimal());
+            return new NbtAdapter<>(BigDecimal.class, NbtBigDecimal.class, NbtBigDecimal::new, NbtBigDecimal::getDecimal);
         }
 
         /*
@@ -97,7 +97,7 @@ public class NbtAdapter<P, C extends NbtTag> extends AbstractDataAdapter<P, C, N
          */
 
         if (Objects.equals(String.class, type)) {
-            return new NbtAdapter<String, NbtString>(String.class, NbtString.class, NbtString::new, value -> value.getValue());
+            return new NbtAdapter<>(String.class, NbtString.class, NbtString::new, NbtString::getValue);
         }
 
         /*
@@ -105,15 +105,15 @@ public class NbtAdapter<P, C extends NbtTag> extends AbstractDataAdapter<P, C, N
          */
 
         if (Objects.equals(byte[].class, type)) {
-            return new NbtAdapter<byte[], NbtByteArray>(byte[].class, NbtByteArray.class, NbtByteArray::new, value -> value.getValue());
+            return new NbtAdapter<>(byte[].class, NbtByteArray.class, NbtByteArray::new, NbtByteArray::getValue);
         }
 
         if (Objects.equals(int[].class, type)) {
-            return new NbtAdapter<int[], NbtIntArray>(int[].class, NbtIntArray.class, NbtIntArray::new, value -> value.getValue());
+            return new NbtAdapter<>(int[].class, NbtIntArray.class, NbtIntArray::new, NbtIntArray::getValue);
         }
 
         if (Objects.equals(long[].class, type)) {
-            return new NbtAdapter<long[], NbtLongArray>(long[].class, NbtLongArray.class, NbtLongArray::new, value -> value.getValue());
+            return new NbtAdapter<>(long[].class, NbtLongArray.class, NbtLongArray::new, NbtLongArray::getValue);
         }
 
         /*
@@ -121,9 +121,9 @@ public class NbtAdapter<P, C extends NbtTag> extends AbstractDataAdapter<P, C, N
          */
 
         if (Objects.equals(IDataContainer[].class, type)) {
-            return new NbtAdapter<IDataContainer[], NbtList>(IDataContainer[].class, NbtList.class, containers -> {
-                NbtList<NbtCompound> list = new NbtList<>(NbtType.COMPOUND);
-                for (IDataContainer container : containers) {
+            return new NbtAdapter<>(IDataContainer[].class, NbtList.class, containers -> {
+                final NbtList<NbtCompound> list = new NbtList<>(NbtType.COMPOUND);
+                for (final IDataContainer container : containers) {
                     list.add(toNbtCompound(registry, container));
                 }
                 return list;
@@ -131,9 +131,9 @@ public class NbtAdapter<P, C extends NbtTag> extends AbstractDataAdapter<P, C, N
                 if (list.getElementType() != NbtType.COMPOUND) {
                     return new IDataContainer[0];
                 }
-                NbtList<NbtCompound> nbtList = list;
-                ArrayList<IDataContainer> containers = new ArrayList<>();
-                for (NbtTag tag : nbtList) {
+                final NbtList<NbtCompound> nbtList = list;
+                final ArrayList<IDataContainer> containers = new ArrayList<>();
+                for (final NbtTag tag : nbtList) {
                     containers.add(fromNbtCompound(registry, (NbtCompound) tag));
                 }
                 return containers.toArray(new IDataContainer[0]);
@@ -141,9 +141,9 @@ public class NbtAdapter<P, C extends NbtTag> extends AbstractDataAdapter<P, C, N
         }
 
         if (Objects.equals(AbstractDataContainer[].class, type)) {
-            return new NbtAdapter<AbstractDataContainer[], NbtList>(AbstractDataContainer[].class, NbtList.class, containers -> {
-                NbtList<NbtCompound> list = new NbtList<>(NbtType.COMPOUND);
-                for (AbstractDataContainer container : containers) {
+            return new NbtAdapter<>(AbstractDataContainer[].class, NbtList.class, containers -> {
+                final NbtList<NbtCompound> list = new NbtList<>(NbtType.COMPOUND);
+                for (final AbstractDataContainer container : containers) {
                     list.add(toNbtCompound(registry, container));
                 }
                 return list;
@@ -151,9 +151,9 @@ public class NbtAdapter<P, C extends NbtTag> extends AbstractDataAdapter<P, C, N
                 if (list.getElementType() != NbtType.COMPOUND) {
                     return new AbstractDataContainer[0];
                 }
-                NbtList<NbtCompound> nbtList = list;
-                ArrayList<NbtContainer> containers = new ArrayList<>();
-                for (NbtTag tag : nbtList) {
+                final NbtList<NbtCompound> nbtList = list;
+                final ArrayList<NbtContainer> containers = new ArrayList<>();
+                for (final NbtTag tag : nbtList) {
                     containers.add(fromNbtCompound(registry, (NbtCompound) tag));
                 }
                 return containers.toArray(new AbstractDataContainer[0]);
@@ -161,9 +161,9 @@ public class NbtAdapter<P, C extends NbtTag> extends AbstractDataAdapter<P, C, N
         }
 
         if (Objects.equals(NbtContainer[].class, type)) {
-            return new NbtAdapter<NbtContainer[], NbtList>(NbtContainer[].class, NbtList.class, containers -> {
-                NbtList<NbtCompound> list = new NbtList<>(NbtType.COMPOUND);
-                for (NbtContainer container : containers) {
+            return new NbtAdapter<>(NbtContainer[].class, NbtList.class, containers -> {
+                final NbtList<NbtCompound> list = new NbtList<>(NbtType.COMPOUND);
+                for (final NbtContainer container : containers) {
                     list.add(toNbtCompound(registry, container));
                 }
                 return list;
@@ -171,9 +171,9 @@ public class NbtAdapter<P, C extends NbtTag> extends AbstractDataAdapter<P, C, N
                 if (list.getElementType() != NbtType.COMPOUND) {
                     return new NbtContainer[0];
                 }
-                NbtList<NbtCompound> nbtList = list;
-                ArrayList<NbtContainer> containers = new ArrayList<>();
-                for (NbtTag tag : nbtList) {
+                final NbtList<NbtCompound> nbtList = list;
+                final ArrayList<NbtContainer> containers = new ArrayList<>();
+                for (final NbtTag tag : nbtList) {
                     containers.add(fromNbtCompound(registry, (NbtCompound) tag));
                 }
                 return containers.toArray(new NbtContainer[0]);
@@ -185,27 +185,18 @@ public class NbtAdapter<P, C extends NbtTag> extends AbstractDataAdapter<P, C, N
          */
 
         if (Objects.equals(IDataContainer.class, type)) {
-            return new NbtAdapter<IDataContainer, NbtCompound>(IDataContainer.class, NbtCompound.class, container -> {
-                return toNbtCompound(registry, container);
-            }, compound -> {
-                return fromNbtCompound(registry, compound);
-            });
+            return new NbtAdapter<>(IDataContainer.class, NbtCompound.class, container -> toNbtCompound(registry, container),
+                compound -> fromNbtCompound(registry, compound));
         }
 
         if (Objects.equals(AbstractDataContainer.class, type)) {
-            return new NbtAdapter<AbstractDataContainer, NbtCompound>(AbstractDataContainer.class, NbtCompound.class, container -> {
-                return toNbtCompound(registry, container);
-            }, compound -> {
-                return fromNbtCompound(registry, compound);
-            });
+            return new NbtAdapter<>(AbstractDataContainer.class, NbtCompound.class, container -> toNbtCompound(registry, container),
+                compound -> fromNbtCompound(registry, compound));
         }
 
         if (Objects.equals(NbtContainer.class, type)) {
-            return new NbtAdapter<NbtContainer, NbtCompound>(NbtContainer.class, NbtCompound.class, container -> {
-                return toNbtCompound(registry, container);
-            }, compound -> {
-                return fromNbtCompound(registry, compound);
-            });
+            return new NbtAdapter<>(NbtContainer.class, NbtCompound.class, container -> toNbtCompound(registry, container),
+                compound -> fromNbtCompound(registry, compound));
         }
 
         /*
@@ -213,20 +204,20 @@ public class NbtAdapter<P, C extends NbtTag> extends AbstractDataAdapter<P, C, N
          */
 
         if (NbtTag.class.isAssignableFrom(type)) {
-            return new NbtAdapter<NbtTag, NbtTag>(NbtTag.class, NbtTag.class, tag -> tag, tag -> tag);
+            return new NbtAdapter<>(NbtTag.class, NbtTag.class, tag -> tag, tag -> tag);
         }
 
         return null;
     }
 
-    private static NbtCompound toNbtCompound(NbtAdapterRegistry registry, IDataContainer container) {
+    private static NbtCompound toNbtCompound(final NbtAdapterRegistry registry, final IDataContainer container) {
         if (container instanceof NbtContainer) {
             return ((NbtContainer) container).getRoot().clone();
         }
-        NbtCompound compound = new NbtCompound();
-        for (String key : container.getKeyspaces()) {
-            Object object = container.get(key);
-            NbtTag tag = registry.wrap(object);
+        final NbtCompound compound = new NbtCompound();
+        for (final String key : container.getKeyspaces()) {
+            final Object object = container.get(key);
+            final NbtTag tag = registry.wrap(object);
             if (tag != null) {
                 compound.set(key, tag);
             }
@@ -234,7 +225,7 @@ public class NbtAdapter<P, C extends NbtTag> extends AbstractDataAdapter<P, C, N
         return compound;
     }
 
-    private static NbtContainer fromNbtCompound(NbtAdapterRegistry registry, NbtCompound compound) {
+    private static NbtContainer fromNbtCompound(final NbtAdapterRegistry registry, final NbtCompound compound) {
         return new NbtContainer(compound.clone(), registry);
     }
 

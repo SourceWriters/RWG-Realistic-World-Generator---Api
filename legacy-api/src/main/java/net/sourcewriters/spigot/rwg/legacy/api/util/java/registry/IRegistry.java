@@ -9,7 +9,7 @@ import com.syntaxphoenix.syntaxapi.utils.key.INamespace;
 public interface IRegistry<E extends IKeyed> {
 
     List<E> getByNamespace(INamespace<?> namespace);
-    
+
     List<IKey> getKeys();
 
     boolean unregister(IKey key);

@@ -11,6 +11,8 @@ import org.bukkit.entity.EntityType;
 import com.mojang.authlib.GameProfile;
 import com.syntaxphoenix.syntaxapi.nbt.NbtCompound;
 
+import net.sourcewriters.spigot.rwg.legacy.api.util.minecraft.ProfileCache;
+import net.sourcewriters.spigot.rwg.legacy.api.util.rwg.RWGEntityType;
 import net.sourcewriters.spigot.rwg.legacy.api.version.handle.ClassLookup;
 import net.sourcewriters.spigot.rwg.legacy.api.version.handle.ClassLookupCache;
 import net.sourcewriters.spigot.rwg.legacy.api.version.handle.ClassLookupProvider;
@@ -18,49 +20,47 @@ import net.sourcewriters.spigot.rwg.legacy.api.version.nms.INmsNbtAccess;
 import net.sourcewriters.spigot.rwg.legacy.api.version.nms.INmsWorldAccess;
 import net.sourcewriters.spigot.rwg.legacy.api.version.util.ServerVersion;
 import net.sourcewriters.spigot.rwg.legacy.api.version.util.Versions;
-import net.sourcewriters.spigot.rwg.legacy.api.util.minecraft.ProfileCache;
-import net.sourcewriters.spigot.rwg.legacy.api.util.rwg.RWGEntityType;
 
 public final class NmsWorldAccessImpl implements INmsWorldAccess {
 
     private final ClassLookupCache cache;
     private final INmsNbtAccess access;
 
-    public NmsWorldAccessImpl(ClassLookupProvider provider, INmsNbtAccess access) {
+    public NmsWorldAccessImpl(final ClassLookupProvider provider, final INmsNbtAccess access) {
         this.cache = provider.getCache();
         this.access = access;
     }
 
     @Override
-    public void setSpawner(Block block, EntityType type, short spawnCount, short spawnRange, short delay, short maxDelay, short minDelay,
-        short maxNearbyEntities, short requiredPlayerRange) {
+    public void setSpawner(final Block block, final EntityType type, final short spawnCount, final short spawnRange, final short delay,
+        final short maxDelay, final short minDelay, final short maxNearbyEntities, final short requiredPlayerRange) {
 
-        ServerVersion version = Versions.getServer();
+        final ServerVersion version = Versions.getServer();
 
-        Optional<ClassLookup> option0 = cache.get("cb_block_entityState");
-        Optional<ClassLookup> option1 = cache.get("nms_entity_spawner");
-        Optional<ClassLookup> option2 = cache.get("nms_nbt_compound");
-        Optional<ClassLookup> option3 = cache.get("nms_blockdata");
-        if (!option0.isPresent() || !option1.isPresent() || !option2.isPresent() || (version.getMinor() >= 16 && !option3.isPresent())) {
+        final Optional<ClassLookup> option0 = cache.get("cb_block_entityState");
+        final Optional<ClassLookup> option1 = cache.get("nms_entity_spawner");
+        final Optional<ClassLookup> option2 = cache.get("nms_nbt_compound");
+        final Optional<ClassLookup> option3 = cache.get("nms_blockdata");
+        if (!option0.isPresent() || !option1.isPresent() || !option2.isPresent() || version.getMinor() >= 16 && !option3.isPresent()) {
             return;
         }
 
-        ClassLookup state = option0.get();
-        ClassLookup spawner = option1.get();
-        ClassLookup nbt = option2.get();
-        ClassLookup blockData = option3.orElse(null);
+        final ClassLookup state = option0.get();
+        final ClassLookup spawner = option1.get();
+        final ClassLookup nbt = option2.get();
+        final ClassLookup blockData = option3.orElse(null);
 
-        BlockState blockState = block.getState();
+        final BlockState blockState = block.getState();
         if (!(blockState instanceof CreatureSpawner)) {
             return;
         }
 
-        Object spawnerObject = state.run(blockState, "entity");
+        final Object spawnerObject = state.run(blockState, "entity");
 
         Object nbtCompound = nbt.init();
         nbtCompound = spawner.run(spawnerObject, "save", nbtCompound);
 
-        NbtCompound compound = (NbtCompound) access.fromMinecraftTag(nbtCompound);
+        final NbtCompound compound = (NbtCompound) access.fromMinecraftTag(nbtCompound);
 
         compound.remove("SpawnPotentials");
 
@@ -72,12 +72,12 @@ public final class NmsWorldAccessImpl implements INmsWorldAccess {
         compound.set("MaxNearbyEntities", maxNearbyEntities);
         compound.set("RequiredPlayerRange", requiredPlayerRange);
 
-        NbtCompound dataCompound = new NbtCompound();
+        final NbtCompound dataCompound = new NbtCompound();
         dataCompound.set("id", "minecraft:" + RWGEntityType.toMinecraft(type));
 
         compound.set("SpawnData", dataCompound);
 
-        Object spawnerCompound = access.toMinecraftTag(compound);
+        final Object spawnerCompound = access.toMinecraftTag(compound);
 
         if (version.getMinor() >= 16) {
             spawner.execute(spawnerObject, "load", blockData.getOwner().cast(null), spawnerCompound);
@@ -88,44 +88,44 @@ public final class NmsWorldAccessImpl implements INmsWorldAccess {
     }
 
     @Override
-    public void setHeadTexture(Block block, String texture) {
+    public void setHeadTexture(final Block block, final String texture) {
 
         if (texture == null) {
             return;
         }
 
-        Optional<ClassLookup> option0 = cache.get("nms_entity_skull");
-        Optional<ClassLookup> option1 = cache.get("cb_block_entityState");
+        final Optional<ClassLookup> option0 = cache.get("nms_entity_skull");
+        final Optional<ClassLookup> option1 = cache.get("cb_block_entityState");
         if (!option0.isPresent() || !option1.isPresent()) {
             return;
         }
 
-        ClassLookup nmsSkull = option0.get();
-        ClassLookup cbEntityState = option1.get();
+        final ClassLookup nmsSkull = option0.get();
+        final ClassLookup cbEntityState = option1.get();
 
-        BlockState state = block.getState();
+        final BlockState state = block.getState();
         if (!(state instanceof Skull)) {
             return;
         }
 
-        GameProfile gameProfile = ProfileCache.asProfile(texture);
+        final GameProfile gameProfile = ProfileCache.asProfile(texture);
 
-        Object tileEntity = cbEntityState.run(state, "entity");
+        final Object tileEntity = cbEntityState.run(state, "entity");
         nmsSkull.execute(tileEntity, "profile", gameProfile);
 
     }
 
     @Override
-    public String getHeadTexture(Block block) {
+    public String getHeadTexture(final Block block) {
 
-        Optional<ClassLookup> option0 = cache.get("cb_block_skull");
+        final Optional<ClassLookup> option0 = cache.get("cb_block_skull");
         if (!option0.isPresent()) {
             return null;
         }
 
-        ClassLookup skull = option0.get();
+        final ClassLookup skull = option0.get();
 
-        BlockState state = block.getState();
+        final BlockState state = block.getState();
         if (!(state instanceof Skull)) {
             return null;
         }

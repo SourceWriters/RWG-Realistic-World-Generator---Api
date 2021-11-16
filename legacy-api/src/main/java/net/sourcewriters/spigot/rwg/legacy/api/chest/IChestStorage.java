@@ -15,7 +15,7 @@ public interface IChestStorage {
 
     void fillInventory(String chest, Inventory inventory);
 
-    default void fillInventory(String chest, Inventory inventory, Random random) {
+    default void fillInventory(final String chest, final Inventory inventory, final Random random) {
         fillInventory(chest, inventory, new RandomAdapter(random));
     }
 

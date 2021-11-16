@@ -11,7 +11,7 @@ public abstract class AbstractDataContainer<B> implements IDataContainer {
 
     protected final IDataAdapterRegistry<B> registry;
 
-    public AbstractDataContainer(IDataAdapterRegistry<B> registry) {
+    public AbstractDataContainer(final IDataAdapterRegistry<B> registry) {
         this.registry = registry;
     }
 
@@ -21,8 +21,8 @@ public abstract class AbstractDataContainer<B> implements IDataContainer {
     }
 
     @Override
-    public Object get(String key) {
-        B raw = getRaw(key);
+    public Object get(final String key) {
+        final B raw = getRaw(key);
         if (raw == null) {
             return raw;
         }
@@ -30,15 +30,15 @@ public abstract class AbstractDataContainer<B> implements IDataContainer {
     }
 
     @Override
-    public <E> E get(String key, IDataType<?, E> type) {
-        Object value = registry.getBase().isAssignableFrom(type.getPrimitive()) ? getRaw(key) : get(key);
+    public <E> E get(final String key, final IDataType<?, E> type) {
+        final Object value = registry.getBase().isAssignableFrom(type.getPrimitive()) ? getRaw(key) : get(key);
         if (value == null || !type.isPrimitive(value)) {
             if (Number.class.isAssignableFrom(type.getComplex())) {
                 return type.getComplex().cast(0);
             }
             return null;
         }
-        E output = type.fromPrimitiveObj(getContext(), value);
+        final E output = type.fromPrimitiveObj(getContext(), value);
         if (output == null && Number.class.isAssignableFrom(type.getComplex())) {
             return type.getComplex().cast(0);
         }
@@ -46,16 +46,16 @@ public abstract class AbstractDataContainer<B> implements IDataContainer {
     }
 
     @Override
-    public boolean has(String key, IDataType<?, ?> type) {
+    public boolean has(final String key, final IDataType<?, ?> type) {
         if (!has(key)) {
             return false;
         }
-        Object value = registry.getBase().isAssignableFrom(type.getPrimitive()) ? getRaw(key) : get(key);
+        final Object value = registry.getBase().isAssignableFrom(type.getPrimitive()) ? getRaw(key) : get(key);
         return value != null && type.isPrimitive(value);
     }
 
     @Override
-    public <V, E> void set(String key, E value, IDataType<V, E> type) {
+    public <V, E> void set(final String key, final E value, final IDataType<V, E> type) {
         set(key, registry.wrap(type.toPrimitive(getContext(), value)));
     }
 
@@ -64,32 +64,32 @@ public abstract class AbstractDataContainer<B> implements IDataContainer {
      */
 
     @Override
-    public Object get(IKey key) {
+    public Object get(final IKey key) {
         return get(key.asString());
     }
 
     @Override
-    public <E> E get(IKey key, IDataType<?, E> type) {
+    public <E> E get(final IKey key, final IDataType<?, E> type) {
         return get(key.asString(), type);
     }
 
     @Override
-    public <V, E> void set(IKey key, E value, IDataType<V, E> type) {
+    public <V, E> void set(final IKey key, final E value, final IDataType<V, E> type) {
         set(key.asString(), value, type);
     }
 
     @Override
-    public boolean has(IKey key) {
+    public boolean has(final IKey key) {
         return has(key.asString());
     }
 
     @Override
-    public boolean has(IKey key, IDataType<?, ?> type) {
+    public boolean has(final IKey key, final IDataType<?, ?> type) {
         return has(key.asString(), type);
     }
 
     @Override
-    public boolean remove(IKey key) {
+    public boolean remove(final IKey key) {
         return remove(key.asString());
     }
 
@@ -104,13 +104,13 @@ public abstract class AbstractDataContainer<B> implements IDataContainer {
 
     public abstract B getRaw(String key);
 
-    public B getRaw(IKey key) {
+    public B getRaw(final IKey key) {
         return getRaw(key.asString());
     }
 
     public abstract void set(String key, B value);
 
-    public void set(IKey key, B value) {
+    public void set(final IKey key, final B value) {
         set(key.asString(), value);
     }
 

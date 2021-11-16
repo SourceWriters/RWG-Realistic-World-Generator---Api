@@ -29,28 +29,28 @@ public class BlockDataPlacerManagerImpl implements IBlockDataPlacerManager {
     private final MinecraftVersion minecraft = Versions.getMinecraft();
     private final ServerVersion server = Versions.getServer();
 
-    public BlockDataPlacerManagerImpl(ILogger logger) {
+    public BlockDataPlacerManagerImpl(final ILogger logger) {
         this.logger = logger;
     }
 
     @Override
-    public boolean register(@NonNull BlockDataPlacer placer) {
+    public boolean register(@NonNull final BlockDataPlacer placer) {
         Objects.requireNonNull(placer, "BlockPlacer can't be null!");
         if (has(placer.getId())) {
             return false;
         }
         placers.put(placer.getId(), placer);
-        order.computeIfAbsent(placer.getNamespace(), (ignore) -> new ArrayList<>()).add(placer.getId());
+        order.computeIfAbsent(placer.getNamespace(), ignore -> new ArrayList<>()).add(placer.getId());
         return true;
     }
 
     @Override
-    public boolean unregister(long id) {
-        BlockDataPlacer placer = placers.remove(id);
+    public boolean unregister(final long id) {
+        final BlockDataPlacer placer = placers.remove(id);
         if (placer == null) {
             return false;
         }
-        List<Long> list = order.get(placer.getNamespace());
+        final List<Long> list = order.get(placer.getNamespace());
         list.remove(id);
         if (list.isEmpty()) {
             order.remove(placer.getNamespace());
@@ -59,36 +59,36 @@ public class BlockDataPlacerManagerImpl implements IBlockDataPlacerManager {
     }
 
     @Override
-    public boolean has(long id) {
+    public boolean has(final long id) {
         return placers.containsKey(id);
     }
 
     @Override
-    public BlockDataPlacer get(long id) {
+    public BlockDataPlacer get(final long id) {
         return placers.get(id);
     }
 
     @Override
-    public int getPosition(long id) {
-        BlockDataPlacer placer = get(id);
+    public int getPosition(final long id) {
+        final BlockDataPlacer placer = get(id);
         if (placer == null) {
             return -1;
         }
-        List<Long> list = order.get(placer.getNamespace());
+        final List<Long> list = order.get(placer.getNamespace());
         return list.size() - list.indexOf(id);
     }
 
     @Override
-    public BlockDataPlacer getOwner(IBlockData data) {
+    public BlockDataPlacer getOwner(final IBlockData data) {
         Objects.requireNonNull(data, "IBlockData can't be null!");
-        String namespace = data.getNamespace();
-        List<Long> list = order.get(namespace);
+        final String namespace = data.getNamespace();
+        final List<Long> list = order.get(namespace);
         if (list == null) {
             return null;
         }
-        int size = list.size();
+        final int size = list.size();
         for (int index = size - 1; index >= 0; index--) {
-            BlockDataPlacer placer = placers.get(list.get(index));
+            final BlockDataPlacer placer = placers.get(list.get(index));
             if (!placer.owns(data)) {
                 continue;
             }
@@ -98,19 +98,19 @@ public class BlockDataPlacerManagerImpl implements IBlockDataPlacerManager {
     }
 
     @Override
-    public boolean setBlock(@NonNull Block block, @NonNull IBlockData data, @NonNull RandomNumberGenerator random) {
+    public boolean setBlock(@NonNull final Block block, @NonNull final IBlockData data, @NonNull final RandomNumberGenerator random) {
         Objects.requireNonNull(block, "Block can't be null!");
         Objects.requireNonNull(data, "IBlockData can't be null!");
         Objects.requireNonNull(random, "RandomNumberGenerator can't be null!");
-        String namespace = data.getNamespace();
-        List<Long> list = order.get(namespace);
+        final String namespace = data.getNamespace();
+        final List<Long> list = order.get(namespace);
         if (list == null) {
             logger.log(LogTypeId.WARNING, "Can't setBlock for namespace '" + namespace + "', no BlockPlacer available!");
             return false;
         }
-        int size = list.size();
+        final int size = list.size();
         for (int index = size - 1; index >= 0; index--) {
-            BlockDataPlacer placer = placers.get(list.get(index));
+            final BlockDataPlacer placer = placers.get(list.get(index));
             if (!placer.owns(data)) {
                 continue;
             }

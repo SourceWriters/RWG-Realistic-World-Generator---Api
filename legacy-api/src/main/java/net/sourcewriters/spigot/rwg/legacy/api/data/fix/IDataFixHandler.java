@@ -7,7 +7,7 @@ import net.sourcewriters.spigot.rwg.legacy.api.util.annotation.source.NonNull;
 public interface IDataFixHandler {
 
     boolean register(@NonNull DataFixer fixer);
-    
+
     boolean register(@NonNull VersionDataFixer fixer);
 
     boolean unregister(long id);
@@ -16,14 +16,14 @@ public interface IDataFixHandler {
 
     DataFixer get(long id);
 
-    default String apply(@NonNull String data) {
-        BlockStateEditor editor = BlockStateEditor.of(data);
+    default String apply(@NonNull final String data) {
+        final BlockStateEditor editor = BlockStateEditor.of(data);
         apply(editor);
         return editor.asBlockData();
     }
 
-    default String apply(@NonNull IBlockData data) {
-        BlockStateEditor editor = BlockStateEditor.of(data);
+    default String apply(@NonNull final IBlockData data) {
+        final BlockStateEditor editor = BlockStateEditor.of(data);
         apply(editor);
         return editor.asBlockData();
     }

@@ -15,24 +15,24 @@ import net.sourcewriters.spigot.rwg.legacy.api.version.nms.INmsBiomeAccess;
 
 public final class NmsBiomeAccessImpl implements INmsBiomeAccess {
 
-    public NmsBiomeAccessImpl(ClassLookupProvider _ignore) {}
+    public NmsBiomeAccessImpl(final ClassLookupProvider _ignore) {}
 
     @Override
-    public org.bukkit.block.Biome getBiomeAt(World bukkitWorld, int x, int y, int z) {
+    public org.bukkit.block.Biome getBiomeAt(final World bukkitWorld, final int x, final int y, final int z) {
         if (bukkitWorld == null) {
             return org.bukkit.block.Biome.THE_VOID;
         }
-        ServerLevel server = ((CraftWorld) bukkitWorld).getHandle();
-        BiomeManager manager = server.getBiomeManager();
-        Biome biome = manager.getNoiseBiomeAtPosition(new BlockPos(x, y, z));
+        final ServerLevel server = ((CraftWorld) bukkitWorld).getHandle();
+        final BiomeManager manager = server.getBiomeManager();
+        final Biome biome = manager.getNoiseBiomeAtPosition(new BlockPos(x, y, z));
         if (biome == null) {
             return org.bukkit.block.Biome.THE_VOID;
         }
-        ResourceLocation location = server.registryAccess().registryOrThrow(Registry.BIOME_REGISTRY).getKey(biome);
+        final ResourceLocation location = server.registryAccess().registryOrThrow(Registry.BIOME_REGISTRY).getKey(biome);
         if (location == null) {
             return org.bukkit.block.Biome.THE_VOID;
         }
-        org.bukkit.block.Biome bktBiome = org.bukkit.Registry.BIOME.get(NamespacedKey.minecraft(location.getPath()));
+        final org.bukkit.block.Biome bktBiome = org.bukkit.Registry.BIOME.get(NamespacedKey.minecraft(location.getPath()));
         return bktBiome == null ? org.bukkit.block.Biome.THE_VOID : bktBiome;
     }
 

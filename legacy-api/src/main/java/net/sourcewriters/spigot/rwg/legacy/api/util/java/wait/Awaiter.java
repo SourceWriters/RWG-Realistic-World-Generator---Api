@@ -12,93 +12,93 @@ import net.sourcewriters.spigot.rwg.legacy.api.util.java.info.IStatus;
 
 public final class Awaiter<T> {
 
-	private static final Map<Class<?>, WaitFunction<?>> FUNCTIONS = Collections.synchronizedMap(new HashMap<>());
-	
-	public static Awaiter<?> of(Object waited) {
-        Class<?> waitClazz = waited.getClass();
-	    for(Class<?> clazz : FUNCTIONS.keySet()) {
-	        if(clazz.isAssignableFrom(waitClazz)) {
-	            return build(waited, clazz);
-	        }
-	    }
-	    return null;
-	}
-	
-	@SuppressWarnings("unchecked")
-    private static <E> Awaiter<E> build(Object obj, Class<E> clazz) {
-	    return new Awaiter<>(clazz.cast(obj), (WaitFunction<E>) FUNCTIONS.get(clazz));
-	}
+    private static final Map<Class<?>, WaitFunction<?>> FUNCTIONS = Collections.synchronizedMap(new HashMap<>());
 
-	public static <E> void register(Class<E> clazz, WaitFunction<E> function) {
-		if (FUNCTIONS.containsKey(clazz)) {
-			return;
-		}
-		FUNCTIONS.put(clazz, function);
-	}
+    public static Awaiter<?> of(final Object waited) {
+        final Class<?> waitClazz = waited.getClass();
+        for (final Class<?> clazz : FUNCTIONS.keySet()) {
+            if (clazz.isAssignableFrom(waitClazz)) {
+                return build(waited, clazz);
+            }
+        }
+        return null;
+    }
 
-	static {
-		register(Status.class, WaitFunction.SYNTAX_STATUS);
-		register(IStatus.class, WaitFunction.STATUS);
-		register(Future.class, WaitFunction.FUTURE);
-	}
+    @SuppressWarnings("unchecked")
+    private static <E> Awaiter<E> build(final Object obj, final Class<E> clazz) {
+        return new Awaiter<>(clazz.cast(obj), (WaitFunction<E>) FUNCTIONS.get(clazz));
+    }
 
-	private final Container<T> waited = Container.of();
-	private final WaitFunction<T> function;
+    public static <E> void register(final Class<E> clazz, final WaitFunction<E> function) {
+        if (FUNCTIONS.containsKey(clazz)) {
+            return;
+        }
+        FUNCTIONS.put(clazz, function);
+    }
 
-	private Awaiter(T waited, WaitFunction<T> function) {
-		this.waited.replace(waited);
-		this.function = function;
-	}
+    static {
+        register(Status.class, WaitFunction.SYNTAX_STATUS);
+        register(IStatus.class, WaitFunction.STATUS);
+        register(Future.class, WaitFunction.FUTURE);
+    }
 
-	public boolean now(T object) {
-		if (waited.isPresent()) {
-			return false;
-		}
-		waited.replace(object);
-		return true;
-	}
+    private final Container<T> waited = Container.of();
+    private final WaitFunction<T> function;
 
-	public boolean isAvailable() {
-		return waited.isPresent();
-	}
+    private Awaiter(final T waited, final WaitFunction<T> function) {
+        this.waited.replace(waited);
+        this.function = function;
+    }
 
-	public boolean isDone() {
-		if (!isAvailable()) {
-			return true;
-		}
-		return function.isDone(waited.get());
-	}
+    public boolean now(final T object) {
+        if (waited.isPresent()) {
+            return false;
+        }
+        waited.replace(object);
+        return true;
+    }
 
-	public boolean await() {
-		if (!isAvailable()) {
-			return true;
-		}
-		function.await(waited.get());
-		return done();
-	}
+    public boolean isAvailable() {
+        return waited.isPresent();
+    }
 
-	public boolean await(long interval) {
-		if (!isAvailable()) {
-			return true;
-		}
-		function.await(waited.get(), interval);
-		return done();
-	}
+    public boolean isDone() {
+        if (!isAvailable()) {
+            return true;
+        }
+        return function.isDone(waited.get());
+    }
 
-	public boolean await(long interval, int length) {
-		if (!isAvailable()) {
-			return true;
-		}
-		function.await(waited.get(), interval, length);
-		return done();
-	}
+    public boolean await() {
+        if (!isAvailable()) {
+            return true;
+        }
+        function.await(waited.get());
+        return done();
+    }
 
-	private boolean done() {
-		try {
-			return isDone();
-		} finally {
-			waited.replace(null);
-		}
-	}
+    public boolean await(final long interval) {
+        if (!isAvailable()) {
+            return true;
+        }
+        function.await(waited.get(), interval);
+        return done();
+    }
+
+    public boolean await(final long interval, final int length) {
+        if (!isAvailable()) {
+            return true;
+        }
+        function.await(waited.get(), interval, length);
+        return done();
+    }
+
+    private boolean done() {
+        try {
+            return isDone();
+        } finally {
+            waited.replace(null);
+        }
+    }
 
 }

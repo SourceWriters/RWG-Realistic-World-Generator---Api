@@ -7,31 +7,31 @@ public final class HashUtil {
 
     private HashUtil() {}
 
-    private static long multiplier(int index) {
+    private static long multiplier(final int index) {
         return index == 0 ? 1 : speedPow(32, index - 1);
     }
 
-    private static long speedPow(long value, int amount) {
-        long start = value;
+    private static long speedPow(long value, final int amount) {
+        final long start = value;
         for (int x = 0; x < amount; x++) {
             value *= start;
         }
         return value;
     }
 
-    public static long hash(ServerVersion... versions) {
+    public static long hash(final ServerVersion... versions) {
         long hash = 0;
         int index = 0;
-        for (ServerVersion version : versions) {
+        for (final ServerVersion version : versions) {
             hash += version.asSpecialHash() * multiplier(index++);
         }
         return hash;
     }
 
-    public static long hash(MinecraftVersion... versions) {
+    public static long hash(final MinecraftVersion... versions) {
         long hash = 0;
         int index = 0;
-        for (MinecraftVersion version : versions) {
+        for (final MinecraftVersion version : versions) {
             hash += version.asSpecialHash() * multiplier(index++);
         }
         return hash;

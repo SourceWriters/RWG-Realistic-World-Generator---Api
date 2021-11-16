@@ -7,7 +7,7 @@ import org.bukkit.generator.ChunkGenerator.BiomeGrid;
 import net.sourcewriters.spigot.rwg.legacy.api.util.annotation.source.NonNull;
 
 public abstract class BiomeProvider {
-    
+
     public abstract Biome getBiome(@NonNull BiomeGrid grid, int x, int y, int z);
 
     public abstract void setBiome(@NonNull BiomeGrid grid, int x, int y, int z, Biome biome);

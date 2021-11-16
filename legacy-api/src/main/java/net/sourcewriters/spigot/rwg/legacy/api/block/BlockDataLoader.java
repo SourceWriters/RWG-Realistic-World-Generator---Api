@@ -14,10 +14,10 @@ public abstract class BlockDataLoader {
     protected final Plugin plugin;
     protected final String name;
 
-    public BlockDataLoader(@NonNull Plugin plugin, @NonNull String name) {
+    public BlockDataLoader(@NonNull final Plugin plugin, @NonNull final String name) {
         Objects.requireNonNull(plugin, "Plugin can't be null!");
         Objects.requireNonNull(name, "String name can't be null!");
-        this.id = plugin.getName().hashCode() + (name.hashCode() * 32);
+        this.id = plugin.getName().hashCode() + name.hashCode() * 32;
         this.plugin = plugin;
         this.name = name;
     }

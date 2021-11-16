@@ -10,8 +10,8 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Optional;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 import com.syntaxphoenix.syntaxapi.reflection.ClassCache;
@@ -34,11 +34,11 @@ public class ClassLookup {
     private final HashMap<String, MethodHandle> methods = new HashMap<>();
     private final HashMap<String, IFieldHandle<?>> fields = new HashMap<>();
 
-    protected ClassLookup(String classPath) throws IllegalAccessException {
+    protected ClassLookup(final String classPath) throws IllegalAccessException {
         this(ClassCache.getClass(classPath));
     }
 
-    protected ClassLookup(Class<?> owner) throws IllegalAccessException {
+    protected ClassLookup(final Class<?> owner) throws IllegalAccessException {
         this.owner = owner;
         this.privateLookup = owner != null ? MethodHandles.privateLookupIn(owner, LOOKUP) : null;
     }
@@ -91,15 +91,15 @@ public class ClassLookup {
      * 
      */
 
-    public MethodHandle getConstructor(String name) {
+    public MethodHandle getConstructor(final String name) {
         return isValid() ? constructors.get(name) : null;
     }
 
-    public MethodHandle getMethod(String name) {
+    public MethodHandle getMethod(final String name) {
         return isValid() ? methods.get(name) : null;
     }
 
-    public IFieldHandle<?> getField(String name) {
+    public IFieldHandle<?> getField(final String name) {
         return isValid() ? fields.get(name) : null;
     }
 
@@ -107,15 +107,15 @@ public class ClassLookup {
      * 
      */
 
-    public boolean hasConstructor(String name) {
+    public boolean hasConstructor(final String name) {
         return isValid() && constructors.containsKey(name);
     }
 
-    public boolean hasMethod(String name) {
+    public boolean hasMethod(final String name) {
         return isValid() && methods.containsKey(name);
     }
 
-    public boolean hasField(String name) {
+    public boolean hasField(final String name) {
         return isValid() && fields.containsKey(name);
     }
 
@@ -127,7 +127,7 @@ public class ClassLookup {
         if (!isValid()) {
             return null;
         }
-        MethodHandle handle = constructors.computeIfAbsent("$base#empty", (ignore) -> {
+        final MethodHandle handle = constructors.computeIfAbsent("$base#empty", ignore -> {
             try {
                 return LOOKUP.unreflectConstructor(owner.getConstructor());
             } catch (IllegalAccessException | NoSuchMethodException | SecurityException e0) {
@@ -144,19 +144,19 @@ public class ClassLookup {
         }
         try {
             return handle.invoke();
-        } catch (Throwable e) {
+        } catch (final Throwable e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    public Object init(String name, Object... args) {
+    public Object init(final String name, final Object... args) {
         if (!isValid() || !constructors.containsKey(name)) {
             return null;
         }
         try {
             return constructors.get(name).invokeWithArguments(args);
-        } catch (Throwable e) {
+        } catch (final Throwable e) {
             e.printStackTrace();
         }
         return null;
@@ -166,35 +166,35 @@ public class ClassLookup {
      * 
      */
 
-    public ClassLookup execute(String name, Object... args) {
+    public ClassLookup execute(final String name, final Object... args) {
         run(name, args);
         return this;
     }
 
-    public ClassLookup execute(Object source, String name, Object... args) {
+    public ClassLookup execute(final Object source, final String name, final Object... args) {
         run(source, name, args);
         return this;
     }
 
-    public Object run(String name, Object... args) {
+    public Object run(final String name, final Object... args) {
         if (!isValid() || !methods.containsKey(name)) {
             return null;
         }
         try {
             return methods.get(name).invokeWithArguments(args);
-        } catch (Throwable e) {
+        } catch (final Throwable e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    public Object run(Object source, String name, Object... args) {
+    public Object run(final Object source, final String name, final Object... args) {
         if (!isValid() || !methods.containsKey(name)) {
             return null;
         }
         try {
             return methods.get(name).invokeWithArguments(mergeBack(args, source));
-        } catch (Throwable e) {
+        } catch (final Throwable e) {
             e.printStackTrace();
         }
         return null;
@@ -204,22 +204,22 @@ public class ClassLookup {
      * 
      */
 
-    public Object getFieldValue(String name) {
+    public Object getFieldValue(final String name) {
         return isValid() && fields.containsKey(name) ? fields.get(name).getValue() : null;
     }
 
-    public Object getFieldValue(Object source, String name) {
+    public Object getFieldValue(final Object source, final String name) {
         return isValid() && fields.containsKey(name) ? fields.get(name).getValue(source) : null;
     }
 
-    public void setFieldValue(String name, Object value) {
+    public void setFieldValue(final String name, final Object value) {
         if (!isValid() || !fields.containsKey(name)) {
             return;
         }
         fields.get(name).setValue(value);
     }
 
-    public void setFieldValue(Object source, String name, Object value) {
+    public void setFieldValue(final Object source, final String name, final Object value) {
         if (!isValid() || !fields.containsKey(name)) {
             return;
         }
@@ -230,11 +230,11 @@ public class ClassLookup {
      * 
      */
 
-    public ClassLookup searchConstructor(Predicate<ClassLookup> predicate, String name, Class<?>... args) {
+    public ClassLookup searchConstructor(final Predicate<ClassLookup> predicate, final String name, final Class<?>... args) {
         return predicate.test(this) ? searchConstructor(name, args) : this;
     }
 
-    public ClassLookup searchConstructor(String name, Class<?>... arguments) {
+    public ClassLookup searchConstructor(final String name, final Class<?>... arguments) {
         if (hasConstructor(name)) {
             return this;
         }
@@ -252,21 +252,21 @@ public class ClassLookup {
         if (constructor != null) {
             try {
                 constructors.put(name, unreflect(constructor));
-            } catch (IllegalAccessException e) {
+            } catch (final IllegalAccessException e) {
             }
         }
         return this;
     }
 
-    public ClassLookup searchConstructorsByArguments(String base, Class<?>... arguments) {
-        Constructor<?>[] constructors = Arrays.merge(Constructor<?>[]::new, owner.getDeclaredConstructors(), owner.getConstructors());
+    public ClassLookup searchConstructorsByArguments(String base, final Class<?>... arguments) {
+        final Constructor<?>[] constructors = Arrays.merge(Constructor<?>[]::new, owner.getDeclaredConstructors(), owner.getConstructors());
         if (constructors.length == 0) {
             return this;
         }
         base += '-';
         int current = 0;
-        for (Constructor<?> constructor : constructors) {
-            Class<?>[] args = constructor.getParameterTypes();
+        for (final Constructor<?> constructor : constructors) {
+            final Class<?>[] args = constructor.getParameterTypes();
             if (args.length != arguments.length) {
                 continue;
             }
@@ -275,7 +275,7 @@ public class ClassLookup {
                     this.constructors.put(base + current, unreflect(constructor));
                     current++;
                 }
-            } catch (IllegalAccessException e) {
+            } catch (final IllegalAccessException e) {
             }
         }
         return this;
@@ -285,11 +285,12 @@ public class ClassLookup {
      * 
      */
 
-    public ClassLookup searchMethod(Predicate<ClassLookup> predicate, String name, String methodName, Class<?>... arguments) {
+    public ClassLookup searchMethod(final Predicate<ClassLookup> predicate, final String name, final String methodName,
+        final Class<?>... arguments) {
         return predicate.test(this) ? searchMethod(name, methodName, arguments) : this;
     }
 
-    public ClassLookup searchMethod(String name, String methodName, Class<?>... arguments) {
+    public ClassLookup searchMethod(final String name, final String methodName, final Class<?>... arguments) {
         if (hasMethod(name)) {
             return this;
         }
@@ -313,15 +314,15 @@ public class ClassLookup {
         return this;
     }
 
-    public ClassLookup searchMethodsByArguments(String base, Class<?>... arguments) {
-        Method[] methods = Arrays.merge(Method[]::new, owner.getDeclaredMethods(), owner.getMethods());
+    public ClassLookup searchMethodsByArguments(String base, final Class<?>... arguments) {
+        final Method[] methods = Arrays.merge(Method[]::new, owner.getDeclaredMethods(), owner.getMethods());
         if (methods.length == 0) {
             return this;
         }
         base += '-';
         int current = 0;
-        for (Method method : methods) {
-            Class<?>[] args = method.getParameterTypes();
+        for (final Method method : methods) {
+            final Class<?>[] args = method.getParameterTypes();
             if (args.length != arguments.length) {
                 continue;
             }
@@ -340,11 +341,11 @@ public class ClassLookup {
      * 
      */
 
-    public ClassLookup searchField(Predicate<ClassLookup> predicate, String name, String fieldName, Class<?> type) {
+    public ClassLookup searchField(final Predicate<ClassLookup> predicate, final String name, final String fieldName, final Class<?> type) {
         return predicate.test(this) ? searchField(name, fieldName, type) : this;
     }
 
-    public ClassLookup searchField(String name, String fieldName) {
+    public ClassLookup searchField(final String name, final String fieldName) {
         if (hasMethod(name)) {
             return this;
         }
@@ -365,7 +366,7 @@ public class ClassLookup {
         return this;
     }
 
-    public ClassLookup searchField(String name, String fieldName, Class<?> type) {
+    public ClassLookup searchField(final String name, final String fieldName, final Class<?> type) {
         if (hasField(name)) {
             return this;
         }
@@ -390,7 +391,7 @@ public class ClassLookup {
      * 
      */
 
-    private void storeField(String name, Field field) {
+    private void storeField(final String name, final Field field) {
         if (!Modifier.isFinal(field.getModifiers())) {
             try {
                 fields.put(name, new SafeFieldHandle(unreflect(field)));
@@ -405,52 +406,52 @@ public class ClassLookup {
         fields.put(name, new UnsafeStaticFieldHandle(field));
     }
 
-    private VarHandle unreflect(Field field) throws IllegalAccessException, SecurityException {
+    private VarHandle unreflect(final Field field) throws IllegalAccessException, SecurityException {
         if (Modifier.isStatic(field.getModifiers())) {
-            boolean access = field.canAccess(null);
+            final boolean access = field.canAccess(null);
             if (!access) {
                 field.setAccessible(true);
             }
-            VarHandle out = LOOKUP.unreflectVarHandle(field);
+            final VarHandle out = LOOKUP.unreflectVarHandle(field);
             if (!access) {
                 field.setAccessible(false);
             }
             return out;
         }
         if (field.trySetAccessible()) {
-            VarHandle out = LOOKUP.unreflectVarHandle(field);
+            final VarHandle out = LOOKUP.unreflectVarHandle(field);
             field.setAccessible(false);
             return out;
         }
         return LOOKUP.unreflectVarHandle(field);
     }
 
-    private MethodHandle unreflect(Method method) throws IllegalAccessException, SecurityException {
+    private MethodHandle unreflect(final Method method) throws IllegalAccessException, SecurityException {
         if (Modifier.isStatic(method.getModifiers())) {
-            boolean access = method.canAccess(null);
+            final boolean access = method.canAccess(null);
             if (!access) {
                 method.setAccessible(true);
             }
-            MethodHandle out = LOOKUP.unreflect(method);
+            final MethodHandle out = LOOKUP.unreflect(method);
             if (!access) {
                 method.setAccessible(false);
             }
             return out;
         }
         if (method.trySetAccessible()) {
-            MethodHandle out = LOOKUP.unreflect(method);
+            final MethodHandle out = LOOKUP.unreflect(method);
             method.setAccessible(false);
             return out;
         }
         return LOOKUP.unreflect(method);
     }
 
-    private MethodHandle unreflect(Constructor<?> constructor) throws IllegalAccessException {
-        boolean access = constructor.canAccess(null);
+    private MethodHandle unreflect(final Constructor<?> constructor) throws IllegalAccessException {
+        final boolean access = constructor.canAccess(null);
         if (!access) {
             constructor.setAccessible(true);
         }
-        MethodHandle out = LOOKUP.unreflectConstructor(constructor);
+        final MethodHandle out = LOOKUP.unreflectConstructor(constructor);
         if (!access) {
             constructor.setAccessible(false);
         }
@@ -461,21 +462,21 @@ public class ClassLookup {
      * 
      */
 
-    public static void uncache(ClassLookup lookup) {
-        Class<?> search = lookup.getOwner();
+    public static void uncache(final ClassLookup lookup) {
+        final Class<?> search = lookup.getOwner();
         lookup.delete();
         if (ClassCache.CLASSES.isEmpty()) {
             return;
         }
-        Optional<Entry<String, Class<?>>> option = ClassCache.CLASSES.entrySet().stream().filter(entry -> entry.getValue().equals(search))
-            .findFirst();
+        final Optional<Entry<String, Class<?>>> option = ClassCache.CLASSES.entrySet().stream()
+            .filter(entry -> entry.getValue().equals(search)).findFirst();
         if (option.isPresent()) {
             ClassCache.CLASSES.remove(option.get().getKey());
         }
     }
 
-    public static Object[] mergeBack(Object[] array1, Object... array2) {
-        Object[] output = new Object[array1.length + array2.length];
+    public static Object[] mergeBack(final Object[] array1, final Object... array2) {
+        final Object[] output = new Object[array1.length + array2.length];
         System.arraycopy(array2, 0, output, 0, array2.length);
         System.arraycopy(array1, 0, output, array2.length, array1.length);
         return output;
@@ -485,18 +486,18 @@ public class ClassLookup {
      * 
      */
 
-    public static final ClassLookup of(Class<?> clazz) {
+    public static final ClassLookup of(final Class<?> clazz) {
         try {
             return new ClassLookup(clazz);
-        } catch (IllegalAccessException e) {
+        } catch (final IllegalAccessException e) {
             return null;
         }
     }
 
-    public static final ClassLookup of(String path) {
+    public static final ClassLookup of(final String path) {
         try {
             return new ClassLookup(path);
-        } catch (IllegalAccessException e) {
+        } catch (final IllegalAccessException e) {
             return null;
         }
     }

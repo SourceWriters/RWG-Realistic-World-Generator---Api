@@ -8,7 +8,7 @@ public final class UnsafeStaticFieldHandle extends UnsafeFieldHandle<Field> {
     private final Object base;
     private final long offset;
 
-    public UnsafeStaticFieldHandle(Field handle) {
+    public UnsafeStaticFieldHandle(final Field handle) {
         this.handle = handle;
         this.base = UNSAFE.staticFieldBase(handle);
         this.offset = UNSAFE.staticFieldOffset(handle);
@@ -20,17 +20,17 @@ public final class UnsafeStaticFieldHandle extends UnsafeFieldHandle<Field> {
     }
 
     @Override
-    public Object getValue(Object source) {
+    public Object getValue(final Object source) {
         return null; // Stay null because its static
     }
 
     @Override
-    public IFieldHandle<Field> setValue(Object value) {
+    public IFieldHandle<Field> setValue(final Object value) {
         return setMemoryValue(base, offset, value);
     }
 
     @Override
-    public IFieldHandle<Field> setValue(Object source, Object value) {
+    public IFieldHandle<Field> setValue(final Object source, final Object value) {
         return this; // Do nothing because its static
     }
 

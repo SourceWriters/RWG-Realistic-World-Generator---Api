@@ -11,12 +11,12 @@ import net.sourcewriters.spigot.rwg.legacy.api.util.rwg.grid.RwgGrid;
 
 public interface INmsBiomeAccess {
 
-    default RwgGrid getBiomeGrid(Chunk chunk) {
+    default RwgGrid getBiomeGrid(final Chunk chunk) {
         return getBiomeGridAt(chunk.getWorld(), chunk.getX(), chunk.getZ());
     }
 
-    default RwgGrid getBiomeGridAt(World world, int x, int z) {
-        IRwgGenerator generator = ForwardHelper.get(world);
+    default RwgGrid getBiomeGridAt(final World world, final int x, final int z) {
+        final IRwgGenerator generator = ForwardHelper.get(world);
         if (generator == null) {
             return null;
         }
@@ -24,7 +24,7 @@ public interface INmsBiomeAccess {
     }
 
     @NonNull
-    default Biome getBiomeAt(@NonNull World world, int x, int z) {
+    default Biome getBiomeAt(@NonNull final World world, final int x, final int z) {
         return getBiomeAt(world, x, 0, z);
     }
 

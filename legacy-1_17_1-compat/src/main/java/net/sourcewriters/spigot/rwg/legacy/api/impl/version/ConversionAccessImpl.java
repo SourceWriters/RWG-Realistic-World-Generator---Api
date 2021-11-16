@@ -15,12 +15,12 @@ public final class ConversionAccessImpl implements IConversionAccess {
 
     private final ClassLookupProvider provider;
 
-    public ConversionAccessImpl(ClassLookupProvider provider) {
+    public ConversionAccessImpl(final ClassLookupProvider provider) {
         this.provider = provider;
     }
 
     @Override
-    public final Material asBukkit(RWGMaterial material) {
+    public Material asBukkit(final RWGMaterial material) {
         switch (material) {
         case HEAD:
             return Material.getMaterial("PLAYER_HEAD");
@@ -38,16 +38,16 @@ public final class ConversionAccessImpl implements IConversionAccess {
     }
 
     @Override
-    public final TreeType getTreeType(String name) {
+    public TreeType getTreeType(final String name) {
         try {
             return TreeType.valueOf(name);
-        } catch (IllegalArgumentException ignore) {
+        } catch (final IllegalArgumentException ignore) {
             return null;
         }
     }
 
     @Override
-    public final boolean isGiantTree(TreeType type) {
+    public boolean isGiantTree(final TreeType type) {
         switch (type) {
         case JUNGLE:
         case MEGA_REDWOOD:
@@ -59,9 +59,9 @@ public final class ConversionAccessImpl implements IConversionAccess {
     }
 
     @Override
-    public final ItemStack asHeadItem(GameProfile profile) {
-        ItemStack stack = new ItemStack(RWGMaterial.HEAD_ITEM.asBukkit(this));
-        SkullMeta meta = (SkullMeta) stack.getItemMeta();
+    public ItemStack asHeadItem(final GameProfile profile) {
+        final ItemStack stack = new ItemStack(RWGMaterial.HEAD_ITEM.asBukkit(this));
+        final SkullMeta meta = (SkullMeta) stack.getItemMeta();
         provider.getLookup("cb_skull_meta").setFieldValue(meta, "profile", profile);
         stack.setItemMeta(meta);
         return stack;

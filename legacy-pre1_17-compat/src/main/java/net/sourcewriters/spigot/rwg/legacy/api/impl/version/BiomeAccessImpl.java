@@ -18,22 +18,22 @@ public final class BiomeAccessImpl implements IBiomeAccess {
     }
 
     @Override
-    public final Biome getBiome(BiomeGrid grid, int x, int y, int z) {
+    public Biome getBiome(final BiomeGrid grid, final int x, final int y, final int z) {
         return provider.getBiome(grid, x, y, z);
     }
 
     @Override
-    public final void setBiome(BiomeGrid grid, int x, int y, int z, Biome biome) {
+    public void setBiome(final BiomeGrid grid, final int x, final int y, final int z, final Biome biome) {
         provider.setBiome(grid, x, y, z, biome);
     }
 
     @Override
-    public final Biome getBiome(World world, int x, int y, int z) {
+    public Biome getBiome(final World world, final int x, final int y, final int z) {
         return provider.getBiome(world, x, y, z);
     }
 
     @Override
-    public final void setBiome(World world, int x, int y, int z, Biome biome) {
+    public void setBiome(final World world, final int x, final int y, final int z, final Biome biome) {
         provider.setBiome(world, x, y, z, biome);
     }
 

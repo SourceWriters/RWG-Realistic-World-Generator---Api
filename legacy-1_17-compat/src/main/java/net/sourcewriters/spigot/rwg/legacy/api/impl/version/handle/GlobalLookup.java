@@ -13,7 +13,7 @@ public final class GlobalLookup {
 
     private GlobalLookup() {}
 
-    public static void setup(ClassLookupProvider provider) {
+    public static void setup(final ClassLookupProvider provider) {
 
         provider.createLookup("cb_world", CraftWorld.class).searchField("generator", "generator", ChunkGenerator.class);
         provider.createLookup("cb_generator", CustomChunkGenerator.class).searchField("generator", "generator", ChunkGenerator.class);

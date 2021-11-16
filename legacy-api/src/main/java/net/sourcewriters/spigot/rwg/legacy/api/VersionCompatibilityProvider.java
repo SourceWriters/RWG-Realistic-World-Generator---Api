@@ -9,12 +9,12 @@ import net.sourcewriters.spigot.rwg.legacy.api.data.argument.exception.ArgumentS
 
 public abstract class VersionCompatibilityProvider {
 
-    protected final <E> void set(IArgumentMap map, Class<E> clazz, E value) {
+    protected final <E> void set(final IArgumentMap map, final Class<E> clazz, final E value) {
         map.set(clazz.getSimpleName(), value);
     }
 
-    public final <E> E get(IArgumentMap map, ArgumentStack stack, Class<E> clazz) {
-        String name = clazz.getSimpleName();
+    public final <E> E get(final IArgumentMap map, final ArgumentStack stack, final Class<E> clazz) {
+        final String name = clazz.getSimpleName();
         return map.getOrStack(name, clazz, stack);
     }
 

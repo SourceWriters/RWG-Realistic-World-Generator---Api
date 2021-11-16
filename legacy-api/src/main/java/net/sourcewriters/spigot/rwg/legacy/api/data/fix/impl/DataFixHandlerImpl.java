@@ -15,7 +15,7 @@ public class DataFixHandlerImpl implements IDataFixHandler {
     private final ConcurrentHashMap<Long, DataFixer> fixers = new ConcurrentHashMap<>();
 
     @Override
-    public boolean register(@NonNull DataFixer fixer) {
+    public boolean register(@NonNull final DataFixer fixer) {
         if (fixer instanceof VersionDataFixer) {
             return register((VersionDataFixer) fixer);
         }
@@ -28,7 +28,7 @@ public class DataFixHandlerImpl implements IDataFixHandler {
     }
 
     @Override
-    public boolean register(@NonNull VersionDataFixer fixer) {
+    public boolean register(@NonNull final VersionDataFixer fixer) {
         Objects.requireNonNull(fixer, "VersionDataFixer can't be null!");
         if (has(fixer.getId()) || !fixer.isSupported(Versions.getMinecraft())) {
             return false;
@@ -38,23 +38,23 @@ public class DataFixHandlerImpl implements IDataFixHandler {
     }
 
     @Override
-    public boolean unregister(long id) {
+    public boolean unregister(final long id) {
         return fixers.remove(id) != null;
     }
 
     @Override
-    public boolean has(long id) {
+    public boolean has(final long id) {
         return fixers.containsKey(id);
     }
 
     @Override
-    public DataFixer get(long id) {
+    public DataFixer get(final long id) {
         return fixers.get(id);
     }
 
     @Override
-    public void apply(BlockStateEditor editor) {
-        for (DataFixer fixer : fixers.values()) {
+    public void apply(final BlockStateEditor editor) {
+        for (final DataFixer fixer : fixers.values()) {
             fixer.tryApply(editor);
         }
     }

@@ -11,7 +11,7 @@ public interface IBlockDataLoaderManager {
 
     boolean register(@NonNull BlockDataLoader loader);
 
-    default boolean register(boolean expression, @NonNull Supplier<BlockDataLoader> loader) {
+    default boolean register(final boolean expression, @NonNull final Supplier<BlockDataLoader> loader) {
         if (!expression) {
             return false;
         }
@@ -23,7 +23,7 @@ public interface IBlockDataLoaderManager {
     boolean has(long id);
 
     BlockDataLoader get(long id);
-    
+
     int getPosition(long id);
 
     IBlockData load(@NonNull Location location);

@@ -18,34 +18,47 @@ import com.syntaxphoenix.syntaxapi.nbt.NbtString;
 import com.syntaxphoenix.syntaxapi.nbt.NbtTag;
 import com.syntaxphoenix.syntaxapi.nbt.NbtType;
 
-import net.minecraft.nbt.*;
+import net.minecraft.nbt.ByteArrayTag;
+import net.minecraft.nbt.ByteTag;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.DoubleTag;
+import net.minecraft.nbt.EndTag;
+import net.minecraft.nbt.FloatTag;
+import net.minecraft.nbt.IntArrayTag;
+import net.minecraft.nbt.IntTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.LongArrayTag;
+import net.minecraft.nbt.LongTag;
+import net.minecraft.nbt.ShortTag;
+import net.minecraft.nbt.StringTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.world.item.ItemStack;
 import net.sourcewriters.spigot.rwg.legacy.api.version.nms.INmsNbtAccess;
 
 public final class NmsNbtAccessImpl implements INmsNbtAccess {
 
     @Override
-    public NbtCompound itemToCompound(org.bukkit.inventory.ItemStack itemStack) {
-        ItemStack stack = CraftItemStack.asNMSCopy(itemStack);
-        CompoundTag tag = new CompoundTag();
+    public NbtCompound itemToCompound(final org.bukkit.inventory.ItemStack itemStack) {
+        final ItemStack stack = CraftItemStack.asNMSCopy(itemStack);
+        final CompoundTag tag = new CompoundTag();
         stack.save(tag);
         return (NbtCompound) convert(tag);
     }
 
     @Override
-    public org.bukkit.inventory.ItemStack itemFromCompound(NbtCompound compound) {
+    public org.bukkit.inventory.ItemStack itemFromCompound(final NbtCompound compound) {
         return CraftItemStack.asBukkitCopy(ItemStack.of((CompoundTag) convert(compound)));
     }
 
     @Override
-    public NbtTag fromMinecraftTag(Object nmsTag) {
+    public NbtTag fromMinecraftTag(final Object nmsTag) {
         if (nmsTag == null || !(nmsTag instanceof Tag)) {
             return null;
         }
         return convert((Tag) nmsTag);
     }
 
-    public NbtTag convert(Tag tag) {
+    public NbtTag convert(final Tag tag) {
         switch (NbtType.getById(tag.getId())) {
         case END:
             return NbtEnd.INSTANCE;
@@ -70,16 +83,16 @@ public final class NmsNbtAccessImpl implements INmsNbtAccess {
         case STRING:
             return new NbtString(((StringTag) tag).getAsString());
         case LIST:
-            ListTag listTag = (ListTag) tag;
-            NbtList<?> targetList = new NbtList<>(NbtType.getById(listTag.getElementType()));
-            for (Tag listEntry : listTag) {
+            final ListTag listTag = (ListTag) tag;
+            final NbtList<?> targetList = new NbtList<>(NbtType.getById(listTag.getElementType()));
+            for (final Tag listEntry : listTag) {
                 targetList.addTag(convert(listEntry));
             }
             return targetList;
         case COMPOUND:
-            CompoundTag compoundTag = (CompoundTag) tag;
-            NbtCompound targetCompound = new NbtCompound();
-            for (String key : compoundTag.getAllKeys()) {
+            final CompoundTag compoundTag = (CompoundTag) tag;
+            final NbtCompound targetCompound = new NbtCompound();
+            for (final String key : compoundTag.getAllKeys()) {
                 targetCompound.set(key, convert(compoundTag.get(key)));
             }
             return targetCompound;
@@ -89,11 +102,11 @@ public final class NmsNbtAccessImpl implements INmsNbtAccess {
     }
 
     @Override
-    public Object toMinecraftTag(NbtTag tag) {
+    public Object toMinecraftTag(final NbtTag tag) {
         return convert(tag);
     }
 
-    public Tag convert(NbtTag tag) {
+    public Tag convert(final NbtTag tag) {
         switch (tag.getType()) {
         case END:
             return EndTag.INSTANCE;
@@ -118,17 +131,17 @@ public final class NmsNbtAccessImpl implements INmsNbtAccess {
         case STRING:
             return StringTag.valueOf(((NbtString) tag).getValue());
         case LIST:
-            NbtList<?> listTag = (NbtList<?>) tag;
-            ListTag targetList = new ListTag();
-            int size = listTag.size();
+            final NbtList<?> listTag = (NbtList<?>) tag;
+            final ListTag targetList = new ListTag();
+            final int size = listTag.size();
             for (int index = 0; index < size; index++) {
                 targetList.addTag(index, convert(listTag.get(index)));
             }
             return targetList;
         case COMPOUND:
-            NbtCompound compoundTag = (NbtCompound) tag;
-            CompoundTag targetCompound = new CompoundTag();
-            for (String key : compoundTag.getKeys()) {
+            final NbtCompound compoundTag = (NbtCompound) tag;
+            final CompoundTag targetCompound = new CompoundTag();
+            for (final String key : compoundTag.getKeys()) {
                 targetCompound.put(key, convert(compoundTag.get(key)));
             }
             return targetCompound;

@@ -13,14 +13,14 @@ public abstract class DataFixer {
     private final Plugin plugin;
     private final String namespace;
 
-    public DataFixer(@NonNull Plugin plugin, @NonNull String namespace) {
+    public DataFixer(@NonNull final Plugin plugin, @NonNull final String namespace) {
         this(0, plugin, namespace);
     }
 
-    public DataFixer(long specialHash, @NonNull Plugin plugin, @NonNull String namespace) {
+    public DataFixer(final long specialHash, @NonNull final Plugin plugin, @NonNull final String namespace) {
         Objects.requireNonNull(plugin, "Plugin can't be null!");
         Objects.requireNonNull(plugin, "String namespace can't be null!");
-        this.id = specialHash + (namespace.hashCode() * 32) + (plugin.getName().hashCode() * 1024);
+        this.id = specialHash + namespace.hashCode() * 32 + plugin.getName().hashCode() * 1024;
         this.plugin = plugin;
         this.namespace = namespace;
     }
@@ -41,7 +41,7 @@ public abstract class DataFixer {
 
     protected abstract void apply(@NonNull BlockStateEditor editor);
 
-    public final void tryApply(@NonNull BlockStateEditor editor) {
+    public final void tryApply(@NonNull final BlockStateEditor editor) {
         if (!Objects.requireNonNull(editor, "BlockStateEditor can't be null!").getNamespace().equals(namespace)) {
             return;
         }

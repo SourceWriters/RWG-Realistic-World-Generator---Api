@@ -14,14 +14,14 @@ import net.sourcewriters.spigot.rwg.legacy.api.version.util.ServerVersion;
 
 public class DefaultMinecraftPlacer extends BlockDataPlacer {
 
-    public DefaultMinecraftPlacer(Plugin plugin) {
+    public DefaultMinecraftPlacer(final Plugin plugin) {
         super(plugin, "minecraft");
     }
 
     @Override
-    public boolean placeBlock(Location location, Block block, IBlockData data, RandomNumberGenerator random, MinecraftVersion minecraft,
-        ServerVersion server) {
-        BlockData bukkit = data.asBukkit();
+    public boolean placeBlock(final Location location, final Block block, final IBlockData data, final RandomNumberGenerator random,
+        final MinecraftVersion minecraft, final ServerVersion server) {
+        final BlockData bukkit = data.asBukkit();
         if (bukkit == null) {
             return false;
         }

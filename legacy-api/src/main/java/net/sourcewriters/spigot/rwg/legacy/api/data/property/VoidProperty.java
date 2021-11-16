@@ -5,50 +5,50 @@ import java.util.function.Function;
 @SuppressWarnings("rawtypes")
 class VoidProperty implements IProperty {
 
-	private final String key;
+    private final String key;
 
-	public VoidProperty(String key) {
-		this.key = key;
-	}
+    public VoidProperty(final String key) {
+        this.key = key;
+    }
 
-	@Override
-	public Object getValue() {
-		return null;
-	}
-    
     @Override
-    public Object getValueOr(Object fallback) {
+    public Object getValue() {
+        return null;
+    }
+
+    @Override
+    public Object getValueOr(final Object fallback) {
         return fallback;
     }
 
-	@Override
-	public String getKey() {
-		return key;
-	}
-	
-	@Override
-	public Class getOwner() {
-		return Void.class;
-	}
+    @Override
+    public String getKey() {
+        return key;
+    }
 
-	@Override
-	public boolean isInstance(Class sample) {
-		return false;
-	}
+    @Override
+    public Class getOwner() {
+        return Void.class;
+    }
 
-	@Override
-	public IProperty cast(Class sample) {
-		return this;
-	}
+    @Override
+    public boolean isInstance(final Class sample) {
+        return false;
+    }
 
-	@Override
-	public IProperty map(Function mapper) {
-		return this;
-	}
+    @Override
+    public IProperty cast(final Class sample) {
+        return this;
+    }
 
-	@Override
-	public boolean isEmpty() {
-		return true;
-	}
+    @Override
+    public IProperty map(final Function mapper) {
+        return this;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return true;
+    }
 
 }

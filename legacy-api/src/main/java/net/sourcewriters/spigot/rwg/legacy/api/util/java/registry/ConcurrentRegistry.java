@@ -14,10 +14,10 @@ public class ConcurrentRegistry<E extends IKeyed> implements IRegistry<E> {
     protected final ConcurrentHashMap<MapKey, E> map = new ConcurrentHashMap<>();
 
     @Override
-    public List<E> getByNamespace(INamespace<?> namespace) {
-        Set<MapKey> keys = map.keySet();
-        ArrayList<E> output = new ArrayList<>();
-        for (MapKey key : keys) {
+    public List<E> getByNamespace(final INamespace<?> namespace) {
+        final Set<MapKey> keys = map.keySet();
+        final ArrayList<E> output = new ArrayList<>();
+        for (final MapKey key : keys) {
             if (key.getKey().getNamespace().isSimilar(namespace)) {
                 output.add(map.get(key));
             }
@@ -31,14 +31,14 @@ public class ConcurrentRegistry<E extends IKeyed> implements IRegistry<E> {
     }
 
     @Override
-    public boolean unregister(IKey key) {
+    public boolean unregister(final IKey key) {
         return false;
     }
 
     @SuppressWarnings("unlikely-arg-type")
     @Override
-    public boolean register(E object) {
-        IKey key = object.getKey();
+    public boolean register(final E object) {
+        final IKey key = object.getKey();
         if (key == null || map.containsKey(key)) {
             return false;
         }
@@ -48,13 +48,13 @@ public class ConcurrentRegistry<E extends IKeyed> implements IRegistry<E> {
 
     @SuppressWarnings("unlikely-arg-type")
     @Override
-    public boolean has(IKey key) {
+    public boolean has(final IKey key) {
         return map.containsKey(key);
     }
 
     @SuppressWarnings("unlikely-arg-type")
     @Override
-    public E get(IKey key) {
+    public E get(final IKey key) {
         return map.get(key);
     }
 

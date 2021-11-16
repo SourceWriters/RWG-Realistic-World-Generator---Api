@@ -20,18 +20,18 @@ import net.sourcewriters.spigot.rwg.legacy.api.version.IVersionAccess;
 public abstract class RealisticWorldGenerator {
 
     public static RealisticWorldGenerator get() {
-        RegisteredServiceProvider<RealisticWorldGenerator> provider = Bukkit.getServicesManager()
+        final RegisteredServiceProvider<RealisticWorldGenerator> provider = Bukkit.getServicesManager()
             .getRegistration(RealisticWorldGenerator.class);
         return provider != null ? provider.getProvider() : null;
     }
 
-    protected RealisticWorldGenerator(Plugin plugin) {
+    protected RealisticWorldGenerator(final Plugin plugin) {
         Bukkit.getServicesManager().register(RealisticWorldGenerator.class, this, plugin, ServicePriority.Highest);
     }
 
     @NonNull
     public abstract IBlockAccess getBlockAccess();
-    
+
     @NonNull
     public abstract AssetManager getAssetManager();
 
@@ -46,13 +46,13 @@ public abstract class RealisticWorldGenerator {
 
     @NonNull
     public abstract ISchematicStorage getSchematicStorage();
-    
+
     @NonNull
     public abstract IRegenerationHelper getRegenerationHelper();
 
     @NonNull
     public abstract ICompatibilityManager getCompatibilityManager();
-    
+
     @NonNull
     public abstract ILogger getLogger();
 

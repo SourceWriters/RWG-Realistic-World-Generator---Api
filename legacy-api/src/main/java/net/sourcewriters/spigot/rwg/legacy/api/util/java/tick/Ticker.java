@@ -16,7 +16,7 @@ public final class Ticker {
     private static long ID = 0;
 
     private static String nextName() {
-        return "Ticker " + (ID++);
+        return "Ticker " + ID++;
     }
 
     private final List<ITickReceiver> receivers = Collections.synchronizedList(new ArrayList<>());
@@ -41,23 +41,23 @@ public final class Ticker {
         this(nextName(), DEFAULT_TICK_TIME, DEFAULT_DELAY);
     }
 
-    public Ticker(long length) {
+    public Ticker(final long length) {
         this(nextName(), length, DEFAULT_DELAY);
     }
 
-    public Ticker(long length, long delay) {
+    public Ticker(final long length, final long delay) {
         this(nextName(), length, delay);
     }
 
-    public Ticker(String name) {
+    public Ticker(final String name) {
         this(name, DEFAULT_TICK_TIME, DEFAULT_DELAY);
     }
 
-    public Ticker(String name, long length) {
+    public Ticker(final String name, final long length) {
         this(name, length, DEFAULT_DELAY);
     }
 
-    public Ticker(String name, long length, long delay) {
+    public Ticker(final String name, final long length, final long delay) {
         thread = new Thread(this::timeTick);
         thread.setName(name);
         thread.setDaemon(true);
@@ -66,14 +66,14 @@ public final class Ticker {
         thread.start();
     }
 
-    public boolean add(ITickReceiver receiver) {
+    public boolean add(final ITickReceiver receiver) {
         if (receivers.contains(receiver)) {
             return false;
         }
         return receivers.add(receiver);
     }
 
-    public boolean remove(ITickReceiver receiver) {
+    public boolean remove(final ITickReceiver receiver) {
         return receivers.remove(receiver);
     }
 
@@ -81,7 +81,7 @@ public final class Ticker {
         return receivers.size();
     }
 
-    public ITickReceiver find(Predicate<ITickReceiver> predicate) {
+    public ITickReceiver find(final Predicate<ITickReceiver> predicate) {
         return receivers.stream().filter(predicate).findAny().orElse(null);
     }
 
@@ -89,7 +89,7 @@ public final class Ticker {
         return length;
     }
 
-    public Ticker setLength(long length) {
+    public Ticker setLength(final long length) {
         this.length = length;
         this.emptyLength = (length + 1) * 3;
         return this;
@@ -125,8 +125,8 @@ public final class Ticker {
             }
             delta = System.nanoTime() - time;
             updateTps();
-            ITickReceiver[] receivers = this.receivers.toArray(ITickReceiver[]::new);
-            for (ITickReceiver receiver : receivers) {
+            final ITickReceiver[] receivers = this.receivers.toArray(ITickReceiver[]::new);
+            for (final ITickReceiver receiver : receivers) {
                 receiver.onTick(delta);
             }
             time = System.nanoTime();

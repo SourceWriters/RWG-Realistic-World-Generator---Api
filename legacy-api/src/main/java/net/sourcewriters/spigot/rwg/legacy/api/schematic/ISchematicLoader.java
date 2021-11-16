@@ -12,19 +12,21 @@ public interface ISchematicLoader {
      * necessary it also converts the schematic into a valid schematic format if
      * possible.
      * 
-     * @param file the schematic that should be loaded
-     * @return the loaded schematic
+     * @param  file                     the schematic that should be loaded
+     * 
+     * @return                          the loaded schematic
+     * 
      * @throws IllegalArgumentException if the file is not loadable nor convertable
      * @throws Exception                if something goes wrong while loading or
-     *                                  converting the file to a valid schematic
-     *                                  format
+     *                                      converting the file to a valid schematic
+     *                                      format
      */
     @NonNull
     ISchematic load(@NonNull File file) throws Exception;
 
     boolean register(@NonNull SchematicConverter converter);
 
-    default boolean register(boolean expression, @NonNull Supplier<SchematicConverter> converter) {
+    default boolean register(final boolean expression, @NonNull final Supplier<SchematicConverter> converter) {
         if (!expression) {
             return false;
         }

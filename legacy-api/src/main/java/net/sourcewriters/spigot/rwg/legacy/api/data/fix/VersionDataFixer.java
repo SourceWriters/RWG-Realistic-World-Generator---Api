@@ -7,7 +7,7 @@ import net.sourcewriters.spigot.rwg.legacy.api.version.util.MinecraftVersion;
 
 public abstract class VersionDataFixer extends DataFixer {
 
-    public VersionDataFixer(long versionHash, @NonNull Plugin plugin, @NonNull String namespace) {
+    public VersionDataFixer(final long versionHash, @NonNull final Plugin plugin, @NonNull final String namespace) {
         super(versionHash, plugin, namespace);
     }
 

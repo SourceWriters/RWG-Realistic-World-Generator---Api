@@ -11,7 +11,8 @@ public abstract class VersionBackwardDataFixer extends VersionDataFixer {
 
     private final MinecraftVersion version;
 
-    public VersionBackwardDataFixer(@NonNull Plugin plugin, @NonNull String namespace, @NonNull MinecraftVersion version) {
+    public VersionBackwardDataFixer(@NonNull final Plugin plugin, @NonNull final String namespace,
+        @NonNull final MinecraftVersion version) {
         super(Objects.requireNonNull(version, "MinecraftVersion can't be null!").asSpecialHash() * -1, plugin, namespace);
         this.version = version;
     }
@@ -22,7 +23,7 @@ public abstract class VersionBackwardDataFixer extends VersionDataFixer {
     }
 
     @Override
-    public final boolean isSupported(@NonNull MinecraftVersion version) {
+    public final boolean isSupported(@NonNull final MinecraftVersion version) {
         return Objects.requireNonNull(version, "MinecraftVersion can't be null!").compareTo(this.version) <= 0;
     }
 

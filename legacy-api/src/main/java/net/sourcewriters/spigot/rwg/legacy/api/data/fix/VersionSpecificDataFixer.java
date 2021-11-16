@@ -12,21 +12,21 @@ public abstract class VersionSpecificDataFixer extends VersionDataFixer {
 
     private final MinecraftVersion[] versions;
 
-    public VersionSpecificDataFixer(Plugin plugin, String namespace, MinecraftVersion... versions) {
+    public VersionSpecificDataFixer(final Plugin plugin, final String namespace, final MinecraftVersion... versions) {
         super(HashUtil.hash(Checks.isNotNullOrEmpty(versions, "MinecraftVersion versions")), plugin, namespace);
         this.versions = versions;
     }
 
     public final MinecraftVersion[] getVersions() {
-        MinecraftVersion[] array = new MinecraftVersion[versions.length];
+        final MinecraftVersion[] array = new MinecraftVersion[versions.length];
         System.arraycopy(versions, 0, array, 0, array.length);
         return array;
     }
 
     @Override
-    public final boolean isSupported(MinecraftVersion version) {
+    public final boolean isSupported(final MinecraftVersion version) {
         Objects.requireNonNull(version, "MinecraftVersion can't be null!");
-        for (MinecraftVersion current : versions) {
+        for (final MinecraftVersion current : versions) {
             if (current.isSimilar(version)) {
                 return true;
             }

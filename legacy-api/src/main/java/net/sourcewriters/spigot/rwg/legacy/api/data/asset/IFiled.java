@@ -5,5 +5,5 @@ import java.io.File;
 public interface IFiled {
 
     File getFile();
-    
+
 }

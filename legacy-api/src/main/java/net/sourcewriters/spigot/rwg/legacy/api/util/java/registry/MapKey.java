@@ -6,14 +6,14 @@ public final class MapKey {
 
     private final IKey key;
 
-    public MapKey(IKey key) {
+    public MapKey(final IKey key) {
         this.key = key;
     }
 
     public IKey getKey() {
         return key;
     }
-    
+
     @Override
     public int hashCode() {
         return key.hash();

@@ -38,7 +38,7 @@ public class BlockAccessImpl implements IBlockAccess {
     private final BlockDataParserManagerImpl parserManager;
     private final BlockDataPlacerManagerImpl placerManager;
 
-    public BlockAccessImpl(ILogger logger, IConversionAccess access, IDataFixHandler fixHandler) {
+    public BlockAccessImpl(final ILogger logger, final IConversionAccess access, final IDataFixHandler fixHandler) {
         this.logger = logger;
         this.access = access;
         this.fixHandler = fixHandler;
@@ -67,9 +67,9 @@ public class BlockAccessImpl implements IBlockAccess {
 
     @CallerSensitive
     @Override
-    public IBlockData dataOf(@NonNull Block block) {
+    public IBlockData dataOf(@NonNull final Block block) {
         Objects.requireNonNull(block, "Block can't be null!");
-        Optional<Class<?>> clazz = Tracker.getCallerClass();
+        final Optional<Class<?>> clazz = Tracker.getCallerClass();
         if (clazz.isPresent() && BlockDataLoader.class.isAssignableFrom(clazz.get())) {
             logger.log(LogTypeId.WARNING,
                 "BlockDataLoader (" + clazz.get().getName() + ") is calling dataOf(Block), this could cause an infinite loop!");
@@ -79,25 +79,25 @@ public class BlockAccessImpl implements IBlockAccess {
 
     @CallerSensitive
     @Override
-    public IBlockData dataOf(@NonNull String rawData) {
+    public IBlockData dataOf(@NonNull final String rawData) {
         Objects.requireNonNull(rawData, "String rawData can't be null!");
-        BlockStateEditor editor = BlockStateEditor.of(rawData);
-        if (editor.getNamespace().equalsIgnoreCase("minecraft")) {
+        final BlockStateEditor editor = BlockStateEditor.of(rawData);
+        if ("minecraft".equalsIgnoreCase(editor.getNamespace())) {
             fixHandler.apply(editor);
             try {
-                IBlockData data = dataOf(Bukkit.createBlockData(editor.asBlockData()));
+                final IBlockData data = dataOf(Bukkit.createBlockData(editor.asBlockData()));
                 if (!editor.hasProperties()) {
                     return data;
                 }
                 data.getProperties().set(JsonIO.fromString(editor.getProperties()).asArray());
                 return data;
-            } catch (IllegalArgumentException exp) {
+            } catch (final IllegalArgumentException exp) {
                 logger.log(LogTypeId.WARNING, "Unable to parse IBlockData of '" + rawData + "'!");
                 logger.log(LogTypeId.WARNING, exp);
                 return null;
             }
         }
-        Optional<Class<?>> clazz = Tracker.getCallerClass();
+        final Optional<Class<?>> clazz = Tracker.getCallerClass();
         if (clazz.isPresent() && BlockDataParser.class.isAssignableFrom(clazz.get())) {
             logger.log(LogTypeId.WARNING, "BlockDataParser (" + clazz.get().getName()
                 + ") is calling dataOf(String) with custom namespace, this could cause an infinite loop!");
@@ -106,28 +106,28 @@ public class BlockAccessImpl implements IBlockAccess {
     }
 
     @Override
-    public IBlockData dataOf(@NonNull BlockData data) {
+    public IBlockData dataOf(@NonNull final BlockData data) {
         Objects.requireNonNull(data, "Block can't be null!");
         return new MinecraftBlockData(data);
     }
 
     @Override
-    public IBlockData dataOf(@NonNull Material material) {
+    public IBlockData dataOf(@NonNull final Material material) {
         Objects.requireNonNull(material, "Material can't be null!");
         return dataOf(Bukkit.createBlockData(material));
     }
 
     @Override
-    public IBlockData dataOf(@NonNull RWGMaterial material) {
+    public IBlockData dataOf(@NonNull final RWGMaterial material) {
         Objects.requireNonNull(material, "RWGMaterial can't be null!");
         return dataOf(access.asBukkit(material));
     }
 
     @CallerSensitive
     @Override
-    public IBlockData dataOf(@NonNull NbtCompound compound) {
+    public IBlockData dataOf(@NonNull final NbtCompound compound) {
         Objects.requireNonNull(compound, "NbtCompound can't be null!");
-        Optional<Class<?>> clazz = Tracker.getCallerClass();
+        final Optional<Class<?>> clazz = Tracker.getCallerClass();
         if (clazz.isPresent() && BlockDataParser.class.isAssignableFrom(clazz.get())) {
             logger.log(LogTypeId.WARNING,
                 "BlockDataParser (" + clazz.get().getName() + ") is calling dataOf(NbtCompound), this could cause an infinite loop!");

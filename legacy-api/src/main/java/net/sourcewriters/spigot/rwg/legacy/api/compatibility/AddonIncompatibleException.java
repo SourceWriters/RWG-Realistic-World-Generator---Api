@@ -11,9 +11,7 @@ public class AddonIncompatibleException extends RuntimeException {
      * message. The cause is not initialized, and may subsequently be initialized by
      * a call to {@link #initCause}.
      */
-    public AddonIncompatibleException() {
-        super();
-    }
+    public AddonIncompatibleException() {}
 
     /**
      * Constructs a new AddonIncompatibleException with the specified detail
@@ -21,9 +19,9 @@ public class AddonIncompatibleException extends RuntimeException {
      * a call to {@link #initCause}.
      *
      * @param message the detail message. The detail message is saved for later
-     *                retrieval by the {@link #getMessage()} method.
+     *                    retrieval by the {@link #getMessage()} method.
      */
-    public AddonIncompatibleException(String message) {
+    public AddonIncompatibleException(final String message) {
         super(message);
     }
 
@@ -31,33 +29,33 @@ public class AddonIncompatibleException extends RuntimeException {
      * Constructs a new AddonIncompatibleException with the specified
      * {@code PluginPackage} and compatible versions.
      *
-     * @param pluginPackage the
-     *                      {@link com.syntaxphoenix.utilities.plugin.PluginPackage}
-     *                      which is used to build the detailed message
+     * @param pluginPackage the {@link com.syntaxphoenix.utilities.plugin.PluginPackage}
+     *                          which is used to build the detailed message
      * @param versions      the compatible versions of this plugin
      */
-    public AddonIncompatibleException(IPluginPackage pluginPackage, String... versions) {
+    public AddonIncompatibleException(final IPluginPackage pluginPackage, final String... versions) {
         super(pluginPackage.getName() + " is not compatible with the " + Tracker.getClassFromStack(1).map(Class::getName).orElse(null)
             + " addon. Please use one of the following versions instead: " + String.join(", ", versions));
     }
 
     /**
-     * Constructs a new AddonIncompatibleException with the specified detail
-     * message and cause.
+     * Constructs a new AddonIncompatibleException with the specified detail message
+     * and cause.
      * <p>
      * Note that the detail message associated with {@code cause} is <i>not</i>
      * automatically incorporated in this AddonIncompatibleException's detail
      * message.
      *
      * @param message the detail message (which is saved for later retrieval by the
-     *                {@link #getMessage()} method).
+     *                    {@link #getMessage()} method).
      * @param cause   the cause (which is saved for later retrieval by the
-     *                {@link #getCause()} method). (A <tt>null</tt> value is
-     *                permitted, and indicates that the cause is nonexistent or
-     *                unknown.)
-     * @since 1.4
+     *                    {@link #getCause()} method). (A <tt>null</tt> value is
+     *                    permitted, and indicates that the cause is nonexistent or
+     *                    unknown.)
+     * 
+     * @since         1.4
      */
-    public AddonIncompatibleException(String message, Throwable cause) {
+    public AddonIncompatibleException(final String message, final Throwable cause) {
         super(message, cause);
     }
 
@@ -70,12 +68,13 @@ public class AddonIncompatibleException extends RuntimeException {
      * {@link java.security.PrivilegedActionException}).
      *
      * @param cause the cause (which is saved for later retrieval by the
-     *              {@link #getCause()} method). (A <tt>null</tt> value is
-     *              permitted, and indicates that the cause is nonexistent or
-     *              unknown.)
-     * @since 1.4
+     *                  {@link #getCause()} method). (A <tt>null</tt> value is
+     *                  permitted, and indicates that the cause is nonexistent or
+     *                  unknown.)
+     * 
+     * @since       1.4
      */
-    public AddonIncompatibleException(Throwable cause) {
+    public AddonIncompatibleException(final Throwable cause) {
         super(cause);
     }
 
@@ -86,13 +85,15 @@ public class AddonIncompatibleException extends RuntimeException {
      *
      * @param message            the detail message.
      * @param cause              the cause. (A {@code null} value is permitted, and
-     *                           indicates that the cause is nonexistent or
-     *                           unknown.)
+     *                               indicates that the cause is nonexistent or
+     *                               unknown.)
      * @param enableSuppression  whether or not suppression is enabled or disabled
      * @param writableStackTrace whether or not the stack trace should be writable
-     * @since 1.7
+     * 
+     * @since                    1.7
      */
-    protected AddonIncompatibleException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    protected AddonIncompatibleException(final String message, final Throwable cause, final boolean enableSuppression,
+        final boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 }

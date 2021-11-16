@@ -26,28 +26,28 @@ public final class NmsNbtAccessImpl implements INmsNbtAccess {
     private final ClassLookupProvider provider;
     private final ILogger logger;
 
-    public NmsNbtAccessImpl(ClassLookupProvider provider, ILogger logger) {
+    public NmsNbtAccessImpl(final ClassLookupProvider provider, final ILogger logger) {
         this.provider = provider;
         this.logger = logger;
     }
 
     @Override
-    public NbtCompound itemToCompound(ItemStack itemStack) {
+    public NbtCompound itemToCompound(final ItemStack itemStack) {
 
-        Optional<ClassLookup> option0 = provider.getOptionalLookup("cb_itemstack");
-        Optional<ClassLookup> option1 = provider.getOptionalLookup("nms_itemstack");
-        Optional<ClassLookup> option2 = provider.getOptionalLookup("nms_nbt_compound");
+        final Optional<ClassLookup> option0 = provider.getOptionalLookup("cb_itemstack");
+        final Optional<ClassLookup> option1 = provider.getOptionalLookup("nms_itemstack");
+        final Optional<ClassLookup> option2 = provider.getOptionalLookup("nms_nbt_compound");
         if (!option0.isPresent() || !option1.isPresent() || !option2.isPresent()) {
             return null;
         }
 
-        ClassLookup cbStack = option0.get();
-        ClassLookup nmsStack = option1.get();
-        ClassLookup nbt = option2.get();
+        final ClassLookup cbStack = option0.get();
+        final ClassLookup nmsStack = option1.get();
+        final ClassLookup nbt = option2.get();
 
         Object nbtCompound = nbt.init();
 
-        Object item = cbStack.run("nms", itemStack);
+        final Object item = cbStack.run("nms", itemStack);
         nbtCompound = nmsStack.run(item, "save", nbtCompound);
 
         return (NbtCompound) fromMinecraftTag(nbtCompound);
@@ -55,53 +55,53 @@ public final class NmsNbtAccessImpl implements INmsNbtAccess {
     }
 
     @Override
-    public ItemStack itemFromCompound(NbtCompound compound) {
+    public ItemStack itemFromCompound(final NbtCompound compound) {
 
-        Optional<ClassLookup> option0 = provider.getOptionalLookup("cb_itemstack");
-        Optional<ClassLookup> option1 = provider.getOptionalLookup("nms_itemstack");
+        final Optional<ClassLookup> option0 = provider.getOptionalLookup("cb_itemstack");
+        final Optional<ClassLookup> option1 = provider.getOptionalLookup("nms_itemstack");
         if (!option0.isPresent() || !option1.isPresent()) {
             return null;
         }
 
-        ClassLookup cbStack = option0.get();
-        ClassLookup nmsStack = option1.get();
+        final ClassLookup cbStack = option0.get();
+        final ClassLookup nmsStack = option1.get();
 
-        Object nmsItem = nmsStack.run("load", toMinecraftTag(compound));
-        Object bktItem = cbStack.run("bukkit", nmsItem);
+        final Object nmsItem = nmsStack.run("load", toMinecraftTag(compound));
+        final Object bktItem = cbStack.run("bukkit", nmsItem);
 
         return (ItemStack) bktItem;
 
     }
 
     @Override
-    public NbtTag fromMinecraftTag(Object nmsTag) {
+    public NbtTag fromMinecraftTag(final Object nmsTag) {
         try {
-            PipedOutputStream output = new PipedOutputStream();
-            PipedInputStream stream = new PipedInputStream(output);
+            final PipedOutputStream output = new PipedOutputStream();
+            final PipedInputStream stream = new PipedInputStream(output);
 
             provider.getLookup("nms_stream_tools").execute("write", nmsTag, new DataOutputStream(output));
-            NbtTag tag = NbtDeserializer.UNCOMPRESSED.fromStream(stream).getTag();
+            final NbtTag tag = NbtDeserializer.UNCOMPRESSED.fromStream(stream).getTag();
 
             output.close();
             stream.close();
 
             return tag;
-        } catch (IOException ex) {
+        } catch (final IOException ex) {
             logger.log(LogTypeId.WARNING, ex);
         }
         return null;
     }
 
     @Override
-    public Object toMinecraftTag(NbtTag tag) {
+    public Object toMinecraftTag(final NbtTag tag) {
         try {
 
-            PipedInputStream input = new PipedInputStream();
-            PipedOutputStream stream = new PipedOutputStream(input);
+            final PipedInputStream input = new PipedInputStream();
+            final PipedOutputStream stream = new PipedOutputStream(input);
 
             NbtSerializer.UNCOMPRESSED.toStream(new NbtNamedTag("root", tag), stream);
 
-            Object nbt = provider.getLookup("nms_stream_tools").run("read", new DataInputStream(input), 0,
+            final Object nbt = provider.getLookup("nms_stream_tools").run("read", new DataInputStream(input), 0,
                 provider.getLookup("nms_nbt_read_limiter").getFieldValue("limiter"));
 
             input.close();
@@ -109,7 +109,7 @@ public final class NmsNbtAccessImpl implements INmsNbtAccess {
 
             return nbt;
 
-        } catch (IOException ex) {
+        } catch (final IOException ex) {
             logger.log(LogTypeId.WARNING, ex);
         }
         return null;

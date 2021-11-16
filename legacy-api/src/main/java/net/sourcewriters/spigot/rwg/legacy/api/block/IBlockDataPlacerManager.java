@@ -14,7 +14,7 @@ public interface IBlockDataPlacerManager {
 
     boolean register(@NonNull BlockDataPlacer placer);
 
-    default boolean register(boolean expression, @NonNull Supplier<BlockDataPlacer> placer) {
+    default boolean register(final boolean expression, @NonNull final Supplier<BlockDataPlacer> placer) {
         if (!expression) {
             return false;
         }
@@ -28,10 +28,11 @@ public interface IBlockDataPlacerManager {
     BlockDataPlacer get(long id);
 
     int getPosition(long id);
-    
+
     BlockDataPlacer getOwner(@NonNull IBlockData data);
 
-    default boolean setBlock(@NonNull Location location, @NonNull IBlockData data, @NonNull RandomNumberGenerator random) {
+    default boolean setBlock(@NonNull final Location location, @NonNull final IBlockData data,
+        @NonNull final RandomNumberGenerator random) {
         return setBlock(Objects.requireNonNull(location, "Location can't be null").getBlock(), data, random);
     }
 

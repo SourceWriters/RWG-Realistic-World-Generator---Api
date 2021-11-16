@@ -8,16 +8,16 @@ import org.bukkit.generator.BlockPopulator;
 
 public class ForwardPopulator extends BlockPopulator {
 
-    private BlockPopulator[] populators = new BlockPopulator[0];
+    private BlockPopulator[] populators = {};
 
-    void setPopulators(BlockPopulator[] populators) {
+    void setPopulators(final BlockPopulator[] populators) {
         this.populators = populators;
     }
 
     @Override
-    public void populate(World world, Random random, Chunk chunk) {
-        BlockPopulator[] populators = this.populators;
-        for (BlockPopulator populator : populators) {
+    public void populate(final World world, final Random random, final Chunk chunk) {
+        final BlockPopulator[] populators = this.populators;
+        for (final BlockPopulator populator : populators) {
             populator.populate(world, random, chunk);
         }
     }

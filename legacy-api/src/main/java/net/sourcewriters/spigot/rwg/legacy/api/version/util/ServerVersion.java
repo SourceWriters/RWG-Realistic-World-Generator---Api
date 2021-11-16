@@ -16,16 +16,15 @@ public class ServerVersion extends Version {
      */
 
     public ServerVersion() {
-        super();
         refaction = 0;
     }
 
-    public ServerVersion(int major, int minor, int patch) {
+    public ServerVersion(final int major, final int minor, final int patch) {
         super(major, minor, patch);
         refaction = 0;
     }
 
-    public ServerVersion(int major, int minor, int patch, int refaction) {
+    public ServerVersion(final int major, final int minor, final int patch, final int refaction) {
         super(major, minor, patch);
         this.refaction = refaction;
     }
@@ -39,15 +38,15 @@ public class ServerVersion extends Version {
     }
 
     public final int asSpecialHash() {
-        return Integer.hashCode(getRefaction()) + Integer.hashCode(getPatch() * 32) + (Integer.hashCode(getMinor()) * 1024)
-            + (Integer.hashCode(getMajor()) * 32768);
+        return Integer.hashCode(getRefaction()) + Integer.hashCode(getPatch() * 32) + Integer.hashCode(getMinor()) * 1024
+            + Integer.hashCode(getMajor()) * 32768;
     }
 
     /*
      * 
      */
 
-    protected ServerVersion setRefaction(int refaction) {
+    protected ServerVersion setRefaction(final int refaction) {
         this.refaction = refaction;
         return this;
     }
@@ -57,7 +56,7 @@ public class ServerVersion extends Version {
      */
 
     @Override
-    public boolean isHigher(Version version) {
+    public boolean isHigher(final Version version) {
         if (getMajor() > version.getMajor()) {
             return true;
         }
@@ -77,12 +76,11 @@ public class ServerVersion extends Version {
             return false;
         }
         if (version instanceof ServerVersion) {
-            ServerVersion other = (ServerVersion) version;
+            final ServerVersion other = (ServerVersion) version;
             if (refaction > other.refaction) {
                 return true;
             }
             if (refaction < other.refaction) {
-                return false;
             }
         } else if (refaction > 0) {
             return true;
@@ -91,13 +89,13 @@ public class ServerVersion extends Version {
     }
 
     @Override
-    public boolean isSimilar(Version version) {
+    public boolean isSimilar(final Version version) {
         return super.isSimilar(version)
             && (version instanceof ServerVersion ? ((ServerVersion) version).refaction == refaction : refaction == 0);
     }
 
     @Override
-    public boolean isLower(Version version) {
+    public boolean isLower(final Version version) {
         if (getMajor() < version.getMajor()) {
             return true;
         }
@@ -117,12 +115,11 @@ public class ServerVersion extends Version {
             return false;
         }
         if (version instanceof ServerVersion) {
-            ServerVersion other = (ServerVersion) version;
+            final ServerVersion other = (ServerVersion) version;
             if (refaction < other.refaction) {
                 return true;
             }
             if (refaction > other.refaction) {
-                return false;
             }
         }
         return false;
@@ -138,16 +135,16 @@ public class ServerVersion extends Version {
     }
 
     @Override
-    public ServerVersion update(int major, int minor, int patch) {
+    public ServerVersion update(final int major, final int minor, final int patch) {
         return ((ServerVersion) super.update(major, minor, patch)).setRefaction(refaction);
     }
 
-    public ServerVersion update(int major, int minor, int patch, int refaction) {
+    public ServerVersion update(final int major, final int minor, final int patch, final int refaction) {
         return ((ServerVersion) super.update(major, minor, patch)).setRefaction(this.refaction + refaction);
     }
 
     @Override
-    protected ServerVersion init(int major, int minor, int patch) {
+    protected ServerVersion init(final int major, final int minor, final int patch) {
         return new ServerVersion(major, minor, patch);
     }
 
@@ -163,7 +160,7 @@ public class ServerVersion extends Version {
     @Override
     public VersionFormatter getFormatter() {
         return version -> {
-            StringBuilder builder = new StringBuilder();
+            final StringBuilder builder = new StringBuilder();
             builder.append('v');
             builder.append(version.getMajor());
             builder.append('_');
@@ -172,7 +169,7 @@ public class ServerVersion extends Version {
             builder.append(version.getPatch());
 
             if (version instanceof ServerVersion) {
-                ServerVersion server = (ServerVersion) version;
+                final ServerVersion server = (ServerVersion) version;
                 if (server.getRefaction() != 0) {
                     builder.append('.');
                     builder.append(server.getRefaction());
@@ -187,30 +184,30 @@ public class ServerVersion extends Version {
      * 
      */
 
-    public static ServerVersion of(int major) {
+    public static ServerVersion of(final int major) {
         return new ServerVersion(major, 0, 0);
     }
 
-    public static ServerVersion of(int major, int minor) {
+    public static ServerVersion of(final int major, final int minor) {
         return new ServerVersion(major, minor, 0);
     }
 
-    public static ServerVersion of(int major, int minor, int patch) {
+    public static ServerVersion of(final int major, final int minor, final int patch) {
         return new ServerVersion(major, minor, patch);
     }
 
-    public static ServerVersion of(int major, int minor, int patch, int refaction) {
+    public static ServerVersion of(final int major, final int minor, final int patch, final int refaction) {
         return new ServerVersion(major, minor, patch, refaction);
     }
 
-    public static ServerVersion fromString(String versionString) {
+    public static ServerVersion fromString(final String versionString) {
         return ANALYZER.analyze(versionString);
     }
 
-    public static ServerVersion[] fromStringArray(String... versionStrings) {
-        ServerVersion[] versions = new ServerVersion[versionStrings.length];
+    public static ServerVersion[] fromStringArray(final String... versionStrings) {
+        final ServerVersion[] versions = new ServerVersion[versionStrings.length];
         int index = 0;
-        for (String versionString : versionStrings) {
+        for (final String versionString : versionStrings) {
             versions[index] = ANALYZER.analyze(versionString);
             index++;
         }
@@ -224,12 +221,12 @@ public class ServerVersion extends Version {
     public static class ServerAnalyzer implements VersionAnalyzer {
         @Override
         public ServerVersion analyze(String formatted) {
-            ServerVersion version = new ServerVersion();
-            String[] parts = (formatted = formatted.replaceFirst("v", "")).contains("_") ? formatted.split("_")
-                : (formatted.contains(".") ? formatted.split("\\.")
+            final ServerVersion version = new ServerVersion();
+            final String[] parts = (formatted = formatted.replaceFirst("v", "")).contains("_") ? formatted.split("_")
+                : formatted.contains(".") ? formatted.split("\\.")
                     : new String[] {
                         formatted
-                    });
+                    };
             try {
                 if (parts.length == 1) {
                     version.setMajor(Strings.isNumeric(parts[0]) ? Integer.parseInt(parts[0]) : 0);
@@ -240,14 +237,14 @@ public class ServerVersion extends Version {
                     version.setMajor(Strings.isNumeric(parts[0]) ? Integer.parseInt(parts[0]) : 0);
                     version.setMinor(Strings.isNumeric(parts[1]) ? Integer.parseInt(parts[1]) : 0);
                     if ((parts[2] = parts[2].replaceFirst("R", "")).contains(".")) {
-                        String[] parts0 = parts[2].split("\\.");
+                        final String[] parts0 = parts[2].split("\\.");
                         version.setPatch(Strings.isNumeric(parts0[0]) ? Integer.parseInt(parts0[0]) : 0);
                         version.setRefaction(Strings.isNumeric(parts0[1]) ? Integer.parseInt(parts0[1]) : 0);
                     } else {
                         version.setPatch(Strings.isNumeric(parts[2]) ? Integer.parseInt(parts[2]) : 0);
                     }
                 }
-            } catch (NumberFormatException ex) {
+            } catch (final NumberFormatException ex) {
             }
             return version;
         }

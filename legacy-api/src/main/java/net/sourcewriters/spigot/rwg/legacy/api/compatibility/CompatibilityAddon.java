@@ -14,10 +14,10 @@ public abstract class CompatibilityAddon {
     private final boolean external;
     private final Plugin owner;
     private final IPluginPackage plugin;
-    
+
     private final String id;
 
-    public CompatibilityAddon(ICompatibilityManager manager, Plugin owner, IPluginPackage target) {
+    public CompatibilityAddon(final ICompatibilityManager manager, final Plugin owner, final IPluginPackage target) {
         Objects.requireNonNull(manager, "ICompatibilityManager can't be null!");
         Objects.requireNonNull(owner, "Plugin can't be null!");
         Objects.requireNonNull(target, "Target plugin name can't be null!");
@@ -30,7 +30,7 @@ public abstract class CompatibilityAddon {
     public final boolean isExternal() {
         return external;
     }
-    
+
     @NonNull
     public final String getId() {
         return id;
@@ -46,23 +46,25 @@ public abstract class CompatibilityAddon {
         return plugin;
     }
 
-    public final boolean enable(RealisticWorldGenerator realisticApi) {
+    public final boolean enable(final RealisticWorldGenerator realisticApi) {
         try {
             onEnable(realisticApi, plugin);
             return true;
-        } catch (Exception exception) {
-            realisticApi.getLogger().log(LogTypeId.ERROR, "Failed to enable CompatibilityAddon of '" + owner.getName() + "' for '" + plugin.getName() + "'!");
+        } catch (final Exception exception) {
+            realisticApi.getLogger().log(LogTypeId.ERROR,
+                "Failed to enable CompatibilityAddon of '" + owner.getName() + "' for '" + plugin.getName() + "'!");
             realisticApi.getLogger().log(LogTypeId.ERROR, exception);
             return false;
         }
     }
 
-    public final boolean disable(RealisticWorldGenerator realisticApi) {
+    public final boolean disable(final RealisticWorldGenerator realisticApi) {
         try {
             onDisable(realisticApi, plugin);
             return true;
-        } catch (Exception exception) {
-            realisticApi.getLogger().log(LogTypeId.ERROR, "Failed to disable CompatibilityAddon of '" + owner.getName() + "' for '" + plugin.getName() + "'!");
+        } catch (final Exception exception) {
+            realisticApi.getLogger().log(LogTypeId.ERROR,
+                "Failed to disable CompatibilityAddon of '" + owner.getName() + "' for '" + plugin.getName() + "'!");
             realisticApi.getLogger().log(LogTypeId.ERROR, exception);
             return false;
         }

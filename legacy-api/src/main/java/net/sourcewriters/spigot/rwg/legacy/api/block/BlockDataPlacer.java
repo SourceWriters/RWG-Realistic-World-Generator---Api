@@ -15,7 +15,7 @@ import net.sourcewriters.spigot.rwg.legacy.api.version.util.MinecraftVersion;
 import net.sourcewriters.spigot.rwg.legacy.api.version.util.ServerVersion;
 
 public abstract class BlockDataPlacer {
-    
+
     private static final AtomicLong GLOBAL_ID = new AtomicLong(0);
 
     protected final long id;
@@ -23,7 +23,7 @@ public abstract class BlockDataPlacer {
     protected final String namespace;
     protected final Plugin plugin;
 
-    public BlockDataPlacer(@NonNull Plugin plugin, @NonNull String namespace) {
+    public BlockDataPlacer(@NonNull final Plugin plugin, @NonNull final String namespace) {
         this.plugin = Objects.requireNonNull(plugin, "Plugin can't be null!");
         Objects.requireNonNull(namespace, "String namespace can't be null!");
         Preconditions.checkArgument(!namespace.isBlank(), "String namespace can't be empty!");
@@ -46,7 +46,7 @@ public abstract class BlockDataPlacer {
         return namespace;
     }
 
-    public boolean owns(@NonNull IBlockData data) {
+    public boolean owns(@NonNull final IBlockData data) {
         return true;
     }
 

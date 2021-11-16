@@ -8,22 +8,22 @@ import org.bukkit.generator.ChunkGenerator.BiomeGrid;
 public final class BiomeProvider1_13 extends BiomeProvider {
 
     @Override
-    public Biome getBiome(BiomeGrid grid, int x, int y, int z) {
+    public Biome getBiome(final BiomeGrid grid, final int x, final int y, final int z) {
         return grid.getBiome(x, z);
     }
 
     @Override
-    public void setBiome(BiomeGrid grid, int x, int y, int z, Biome biome) {
+    public void setBiome(final BiomeGrid grid, final int x, final int y, final int z, final Biome biome) {
         grid.setBiome(x, z, biome);
     }
 
     @Override
-    public Biome getBiome(World world, int x, int y, int z) {
+    public Biome getBiome(final World world, final int x, final int y, final int z) {
         return world.getBiome(x, z);
     }
 
     @Override
-    public void setBiome(World world, int x, int y, int z, Biome biome) {
+    public void setBiome(final World world, final int x, final int y, final int z, final Biome biome) {
         world.setBiome(x, z, biome);
     }
 

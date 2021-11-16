@@ -6,24 +6,25 @@ import net.sourcewriters.spigot.rwg.legacy.api.util.annotation.source.NonNull;
 
 public interface ICompatibilityManager {
 
-    abstract boolean isExternal(Plugin plugin);
+    boolean isExternal(Plugin plugin);
 
     @NonNull
-    abstract IPluginPackage getPackage(@NonNull String name);
+    IPluginPackage getPackage(@NonNull String name);
 
     @NonNull
-    abstract IPluginPackage getPackage(@NonNull Plugin plugin);
-    
-    abstract boolean register(@NonNull Plugin owner, @NonNull Class<? extends CompatibilityAddon> addon, String targetPlugin) throws AddonInitializationException;
-    
-    abstract boolean register(@NonNull CompatibilityBlockPlacer placer);
-    
-    abstract boolean register(@NonNull CompatibilityBlockParser parser);
-    
-    abstract boolean register(@NonNull CompatibilityBlockLoader loader);
-    
-    abstract boolean register(@NonNull CompatibilitySchematicUpdate<?> update);
-    
-    abstract boolean register(@NonNull CompatibilitySchematicConverter converter);
+    IPluginPackage getPackage(@NonNull Plugin plugin);
+
+    boolean register(@NonNull Plugin owner, @NonNull Class<? extends CompatibilityAddon> addon, String targetPlugin)
+        throws AddonInitializationException;
+
+    boolean register(@NonNull CompatibilityBlockPlacer placer);
+
+    boolean register(@NonNull CompatibilityBlockParser parser);
+
+    boolean register(@NonNull CompatibilityBlockLoader loader);
+
+    boolean register(@NonNull CompatibilitySchematicUpdate<?> update);
+
+    boolean register(@NonNull CompatibilitySchematicConverter converter);
 
 }

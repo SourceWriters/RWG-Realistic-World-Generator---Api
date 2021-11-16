@@ -9,7 +9,7 @@ public final class CompatibilityAddonDisableEvent extends Event {
 
     private final CompatibilityAddon addon;
 
-    public CompatibilityAddonDisableEvent(CompatibilityAddon addon) {
+    public CompatibilityAddonDisableEvent(final CompatibilityAddon addon) {
         this.addon = addon;
     }
 

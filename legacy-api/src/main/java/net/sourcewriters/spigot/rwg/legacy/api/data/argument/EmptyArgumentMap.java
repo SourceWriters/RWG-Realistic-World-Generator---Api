@@ -1,38 +1,38 @@
 package net.sourcewriters.spigot.rwg.legacy.api.data.argument;
 
 public final class EmptyArgumentMap implements IArgumentMap {
-    
+
     public static final EmptyArgumentMap INSTANCE = new EmptyArgumentMap();
-    
+
     private EmptyArgumentMap() {}
 
     @Override
-    public boolean has(String key) {
+    public boolean has(final String key) {
         return false;
     }
 
     @Override
-    public boolean has(String key, Class<?> type) {
+    public boolean has(final String key, final Class<?> type) {
         return false;
     }
 
     @Override
-    public Option<Object> get(String key) {
+    public Option<Object> get(final String key) {
         return Option.empty();
     }
 
     @Override
-    public <E> Option<E> get(String key, Class<E> type) {
+    public <E> Option<E> get(final String key, final Class<E> type) {
         return Option.empty();
     }
 
     @Override
-    public IArgumentMap set(String key, Object value) {
+    public IArgumentMap set(final String key, final Object value) {
         return this;
     }
 
     @Override
-    public IArgumentMap remove(String key) {
+    public IArgumentMap remove(final String key) {
         return this;
     }
 

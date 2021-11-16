@@ -9,9 +9,7 @@ public class AddonInitializationException extends RuntimeException {
      * message. The cause is not initialized, and may subsequently be initialized by
      * a call to {@link #initCause}.
      */
-    public AddonInitializationException() {
-        super();
-    }
+    public AddonInitializationException() {}
 
     /**
      * Constructs a new AddonInitializationException with the specified detail
@@ -19,9 +17,9 @@ public class AddonInitializationException extends RuntimeException {
      * a call to {@link #initCause}.
      *
      * @param message the detail message. The detail message is saved for later
-     *                retrieval by the {@link #getMessage()} method.
+     *                    retrieval by the {@link #getMessage()} method.
      */
-    public AddonInitializationException(String message) {
+    public AddonInitializationException(final String message) {
         super(message);
     }
 
@@ -34,14 +32,15 @@ public class AddonInitializationException extends RuntimeException {
      * message.
      *
      * @param message the detail message (which is saved for later retrieval by the
-     *                {@link #getMessage()} method).
+     *                    {@link #getMessage()} method).
      * @param cause   the cause (which is saved for later retrieval by the
-     *                {@link #getCause()} method). (A <tt>null</tt> value is
-     *                permitted, and indicates that the cause is nonexistent or
-     *                unknown.)
-     * @since 1.4
+     *                    {@link #getCause()} method). (A <tt>null</tt> value is
+     *                    permitted, and indicates that the cause is nonexistent or
+     *                    unknown.)
+     * 
+     * @since         1.4
      */
-    public AddonInitializationException(String message, Throwable cause) {
+    public AddonInitializationException(final String message, final Throwable cause) {
         super(message, cause);
     }
 
@@ -54,12 +53,13 @@ public class AddonInitializationException extends RuntimeException {
      * {@link java.security.PrivilegedActionException}).
      *
      * @param cause the cause (which is saved for later retrieval by the
-     *              {@link #getCause()} method). (A <tt>null</tt> value is
-     *              permitted, and indicates that the cause is nonexistent or
-     *              unknown.)
-     * @since 1.4
+     *                  {@link #getCause()} method). (A <tt>null</tt> value is
+     *                  permitted, and indicates that the cause is nonexistent or
+     *                  unknown.)
+     * 
+     * @since       1.4
      */
-    public AddonInitializationException(Throwable cause) {
+    public AddonInitializationException(final Throwable cause) {
         super(cause);
     }
 
@@ -70,13 +70,15 @@ public class AddonInitializationException extends RuntimeException {
      *
      * @param message            the detail message.
      * @param cause              the cause. (A {@code null} value is permitted, and
-     *                           indicates that the cause is nonexistent or
-     *                           unknown.)
+     *                               indicates that the cause is nonexistent or
+     *                               unknown.)
      * @param enableSuppression  whether or not suppression is enabled or disabled
      * @param writableStackTrace whether or not the stack trace should be writable
-     * @since 1.7
+     * 
+     * @since                    1.7
      */
-    protected AddonInitializationException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    protected AddonInitializationException(final String message, final Throwable cause, final boolean enableSuppression,
+        final boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 }

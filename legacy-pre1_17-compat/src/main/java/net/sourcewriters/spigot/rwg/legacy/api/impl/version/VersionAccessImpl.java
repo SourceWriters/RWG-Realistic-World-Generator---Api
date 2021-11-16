@@ -13,24 +13,24 @@ public final class VersionAccessImpl implements IVersionAccess {
     private final ConversionAccessImpl conversionAccess;
     private final BiomeAccessImpl biomeAccess;
 
-    public VersionAccessImpl(ILogger logger) {
+    public VersionAccessImpl(final ILogger logger) {
         nmsAccess = new NmsAccessImpl(logger);
         conversionAccess = new ConversionAccessImpl(nmsAccess.getLookupProvider());
         biomeAccess = new BiomeAccessImpl();
     }
 
     @Override
-    public final INmsAccess getNmsAccess() {
+    public INmsAccess getNmsAccess() {
         return nmsAccess;
     }
 
     @Override
-    public final IConversionAccess getConversionAccess() {
+    public IConversionAccess getConversionAccess() {
         return conversionAccess;
     }
 
     @Override
-    public final IBiomeAccess getBiomeAccess() {
+    public IBiomeAccess getBiomeAccess() {
         return biomeAccess;
     }
 

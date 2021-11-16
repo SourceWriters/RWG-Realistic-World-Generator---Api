@@ -32,15 +32,15 @@ public class ClassLookupProvider {
         this((Consumer<ClassLookupProvider>) null);
     }
 
-    public ClassLookupProvider(Consumer<ClassLookupProvider> setup) {
+    public ClassLookupProvider(final Consumer<ClassLookupProvider> setup) {
         this(new ClassLookupCache(), setup);
     }
 
-    public ClassLookupProvider(ClassLookupCache cache) {
+    public ClassLookupProvider(final ClassLookupCache cache) {
         this(cache, null);
     }
 
-    public ClassLookupProvider(ClassLookupCache cache, Consumer<ClassLookupProvider> setup) {
+    public ClassLookupProvider(final ClassLookupCache cache, final Consumer<ClassLookupProvider> setup) {
         this.cache = cache;
         this.version = Versions.getServer();
         this.cbPath = String.format(CB_PATH_FORMAT, Versions.getServerAsString(), "%s");
@@ -59,13 +59,13 @@ public class ClassLookupProvider {
      * Delete
      */
 
-    public void deleteByName(String name) {
+    public void deleteByName(final String name) {
         cache.delete(name);
     }
 
-    public void deleteByPackage(String path) {
-        Entry<String, ClassLookup>[] array = cache.entries();
-        for (Entry<String, ClassLookup> entry : array) {
+    public void deleteByPackage(final String path) {
+        final Entry<String, ClassLookup>[] array = cache.entries();
+        for (final Entry<String, ClassLookup> entry : array) {
             if (!entry.getValue().getOwner().getPackageName().equals(path)) {
                 continue;
             }
@@ -77,12 +77,12 @@ public class ClassLookupProvider {
      * Skip
      */
 
-    public ClassLookupProvider require(boolean skip) {
+    public ClassLookupProvider require(final boolean skip) {
         this.skip = !skip;
         return this;
     }
 
-    public ClassLookupProvider skip(boolean skip) {
+    public ClassLookupProvider skip(final boolean skip) {
         this.skip = skip;
         return this;
     }
@@ -111,43 +111,43 @@ public class ClassLookupProvider {
     }
 
     @NonNull
-    public ClassLookup createNMSLookup(String name, String path) {
+    public ClassLookup createNMSLookup(final String name, final String path) {
         return skip ? FAKE : cache.create(name, getNMSClass(path));
     }
 
     @NonNull
-    public ClassLookup createCBLookup(String name, String path) {
+    public ClassLookup createCBLookup(final String name, final String path) {
         return skip ? FAKE : cache.create(name, getCBClass(path));
     }
 
     @NonNull
-    public ClassLookup createLookup(String name, String path) {
+    public ClassLookup createLookup(final String name, final String path) {
         return skip ? FAKE : cache.create(name, getClass(path));
     }
 
     @NonNull
-    public ClassLookup createLookup(String name, Class<?> clazz) {
+    public ClassLookup createLookup(final String name, final Class<?> clazz) {
         return skip ? FAKE : cache.create(name, clazz);
     }
 
     @NonNull
-    public Optional<ClassLookup> getOptionalLookup(String name) {
+    public Optional<ClassLookup> getOptionalLookup(final String name) {
         return cache.get(name);
     }
 
-    public ClassLookup getLookup(String name) {
+    public ClassLookup getLookup(final String name) {
         return cache.get(name).orElse(null);
     }
 
-    public Class<?> getNMSClass(String path) {
+    public Class<?> getNMSClass(final String path) {
         return getClass(String.format(nmsPath, path));
     }
 
-    public Class<?> getCBClass(String path) {
+    public Class<?> getCBClass(final String path) {
         return getClass(String.format(cbPath, path));
     }
 
-    public Class<?> getClass(String path) {
+    public Class<?> getClass(final String path) {
         return ClassCache.getClass(path);
     }
 

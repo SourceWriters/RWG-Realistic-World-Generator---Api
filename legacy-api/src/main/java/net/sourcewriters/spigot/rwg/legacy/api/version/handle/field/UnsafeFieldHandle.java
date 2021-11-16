@@ -8,12 +8,12 @@ public abstract class UnsafeFieldHandle<O> implements IFieldHandle<O> {
 
     protected static final Unsafe UNSAFE = getUnsafe();
 
-    protected final IFieldHandle<O> setMemoryValue(Object base, long offset, Object value) {
+    protected final IFieldHandle<O> setMemoryValue(final Object base, final long offset, final Object value) {
         UNSAFE.putObject(base, offset, value);
         return this;
     }
 
-    protected final Object getMemoryValue(Object base, long offset) {
+    protected final Object getMemoryValue(final Object base, final long offset) {
         return UNSAFE.getObject(base, offset);
     }
 
@@ -24,10 +24,10 @@ public abstract class UnsafeFieldHandle<O> implements IFieldHandle<O> {
 
     private static Unsafe getUnsafe() {
         try {
-            Field field = Unsafe.class.getDeclaredField("theUnsafe");
+            final Field field = Unsafe.class.getDeclaredField("theUnsafe");
             field.setAccessible(true);
             return (Unsafe) field.get(null);
-        } catch (Exception ignore) {
+        } catch (final Exception ignore) {
             return null;
         }
     }

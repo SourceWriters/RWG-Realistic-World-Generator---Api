@@ -13,7 +13,7 @@ import net.sourcewriters.spigot.rwg.legacy.api.util.rwg.RWGMaterial;
 public interface IConversionAccess {
 
     @NonNull
-    default ItemStack asHeadItem(@NonNull String texture) {
+    default ItemStack asHeadItem(@NonNull final String texture) {
         return asHeadItem(ProfileCache.asProfile(texture));
     }
 

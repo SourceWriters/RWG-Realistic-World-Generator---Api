@@ -30,7 +30,7 @@ import java.lang.annotation.Target;
 public @interface Unsafe {
 
     public UnsafeStatus status() default UnsafeStatus.WORK_IN_PROGRESS;
-    
+
     public boolean useable() default false;
 
 }

@@ -12,14 +12,14 @@ import net.sourcewriters.spigot.rwg.legacy.api.util.annotation.unsafe.Unsafe;
 import net.sourcewriters.spigot.rwg.legacy.api.util.annotation.unsafe.UnsafeStatus;
 
 public class CustomBlockData extends BaseBlockData {
-    
+
     private static final BlockData AIR = Bukkit.createBlockData(Material.AIR);
 
     private final String namespace;
     private final String id;
     private final String key;
 
-    public CustomBlockData(@NonNull String namespace, @NonNull String id) {
+    public CustomBlockData(@NonNull final String namespace, @NonNull final String id) {
         this.namespace = Objects.requireNonNull(namespace, "String namespace can't be null!");
         this.id = Objects.requireNonNull(id, "String id can't be null!");
         this.key = namespace + ":" + id;
@@ -49,7 +49,7 @@ public class CustomBlockData extends BaseBlockData {
     public Material getMaterial() {
         return Material.AIR;
     }
-    
+
     @Override
     protected String dataString() {
         return key;

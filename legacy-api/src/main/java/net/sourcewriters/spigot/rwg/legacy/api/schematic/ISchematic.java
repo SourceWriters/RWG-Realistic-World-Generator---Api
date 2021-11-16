@@ -6,9 +6,9 @@ import net.sourcewriters.spigot.rwg.legacy.api.version.util.MinecraftVersion;
 
 @Unsafe(status = UnsafeStatus.SUBJECT_TO_CHANGE, useable = true)
 public interface ISchematic {
-    
+
     String getName();
-    
+
     MinecraftVersion getFormatVersion();
 
 }

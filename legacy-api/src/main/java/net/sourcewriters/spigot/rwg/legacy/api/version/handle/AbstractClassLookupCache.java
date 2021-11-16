@@ -1,8 +1,8 @@
 package net.sourcewriters.spigot.rwg.legacy.api.version.handle;
 
 import java.util.HashMap;
-import java.util.Objects;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Optional;
 
 import net.sourcewriters.spigot.rwg.legacy.api.util.annotation.source.NonNull;
@@ -16,40 +16,40 @@ public abstract class AbstractClassLookupCache<R extends ClassLookup> {
     }
 
     @NonNull
-    public Optional<R> get(String name) {
+    public Optional<R> get(final String name) {
         return Optional.ofNullable(cache.get(name));
     }
 
-    public boolean has(String name) {
+    public boolean has(final String name) {
         return cache.containsKey(name);
     }
 
     @NonNull
-    public R create(@NonNull String name, @NonNull String path) {
+    public R create(@NonNull final String name, @NonNull final String path) {
         Objects.requireNonNull(name, "String name can't be null!");
         Objects.requireNonNull(name, "String path can't be null!");
         if (has(name)) {
             return cache.get(name);
         }
-        R reflect = create(path);
+        final R reflect = create(path);
         cache.put(name, reflect);
         return reflect;
     }
 
     @NonNull
-    public R create(@NonNull String name, @NonNull Class<?> clazz) {
+    public R create(@NonNull final String name, @NonNull final Class<?> clazz) {
         Objects.requireNonNull(name, "String name can't be null!");
         Objects.requireNonNull(clazz, "Class can't be null!");
         if (has(name)) {
             return cache.get(name);
         }
-        R reflect = create(clazz);
+        final R reflect = create(clazz);
         cache.put(name, reflect);
         return reflect;
     }
 
-    public void delete(String name) {
-        ClassLookup lookup = cache.remove(name);
+    public void delete(final String name) {
+        final ClassLookup lookup = cache.remove(name);
         if (lookup != null) {
             lookup.delete();
         }

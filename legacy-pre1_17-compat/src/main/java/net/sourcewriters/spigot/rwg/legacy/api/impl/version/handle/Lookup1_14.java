@@ -7,12 +7,12 @@ public final class Lookup1_14 extends VersionLookup {
     Lookup1_14() {}
 
     @Override
-    public void setup(ClassLookupProvider provider) {
+    public void setup(final ClassLookupProvider provider) {
 
-        Class<?> iRegistryClass = provider.getNMSClass("IRegistry");
-        Class<?> genLayerClass = provider.getNMSClass("GenLayer");
-        Class<?> areaLazyClass = provider.getNMSClass("AreaLazy");
-        Class<?> areaTransformer8Class = provider.getNMSClass("AreaTransformer8");
+        final Class<?> iRegistryClass = provider.getNMSClass("IRegistry");
+        final Class<?> genLayerClass = provider.getNMSClass("GenLayer");
+        final Class<?> areaLazyClass = provider.getNMSClass("AreaLazy");
+        final Class<?> areaTransformer8Class = provider.getNMSClass("AreaTransformer8");
 
         provider.createLookup("nms_world_chunk_manager_overworld", provider.getNMSClass("WorldChunkManagerOverworld"))
             .searchField("genLayer", "d", genLayerClass);

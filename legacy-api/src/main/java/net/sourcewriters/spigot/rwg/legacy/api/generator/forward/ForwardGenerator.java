@@ -16,28 +16,28 @@ public final class ForwardGenerator extends ChunkGenerator {
     private final ForwardPopulator populator = new ForwardPopulator();
     private ChunkGenerator generator;
 
-    public ForwardGenerator(ChunkGenerator generator) {
+    public ForwardGenerator(final ChunkGenerator generator) {
         this.generator = generator;
     }
 
-    public final void setGenerator(ChunkGenerator generator) {
+    public void setGenerator(final ChunkGenerator generator) {
         this.generator = generator;
     }
 
-    public final ChunkGenerator getGenerator() {
+    public ChunkGenerator getGenerator() {
         return generator;
     }
 
-    public final void setPopulators(BlockPopulator[] populators) {
+    public void setPopulators(final BlockPopulator[] populators) {
         populator.setPopulators(populators);
     }
 
-    public final long getIdentifier() {
+    public long getIdentifier() {
         return identifier;
     }
 
     @Override
-    public boolean canSpawn(World world, int x, int z) {
+    public boolean canSpawn(final World world, final int x, final int z) {
         if (generator != null) {
             return generator.canSpawn(world, x, z);
         }
@@ -45,7 +45,7 @@ public final class ForwardGenerator extends ChunkGenerator {
     }
 
     @Override
-    public ChunkData generateChunkData(World world, Random random, int x, int z, BiomeGrid biome) {
+    public ChunkData generateChunkData(final World world, final Random random, final int x, final int z, final BiomeGrid biome) {
         if (generator != null) {
             return generator.generateChunkData(world, random, x, z, biome);
         }
@@ -53,11 +53,11 @@ public final class ForwardGenerator extends ChunkGenerator {
     }
 
     @Override
-    public List<BlockPopulator> getDefaultPopulators(World world) {
-        ArrayList<BlockPopulator> list = new ArrayList<>();
+    public List<BlockPopulator> getDefaultPopulators(final World world) {
+        final ArrayList<BlockPopulator> list = new ArrayList<>();
         list.add(populator);
         if (generator != null) {
-            List<BlockPopulator> populators = generator.getDefaultPopulators(world);
+            final List<BlockPopulator> populators = generator.getDefaultPopulators(world);
             populator.setPopulators(
                 populators == null ? new BlockPopulator[0] : populators.stream().filter(obj -> obj != null).toArray(BlockPopulator[]::new));
         }
@@ -65,7 +65,7 @@ public final class ForwardGenerator extends ChunkGenerator {
     }
 
     @Override
-    public Location getFixedSpawnLocation(World world, Random random) {
+    public Location getFixedSpawnLocation(final World world, final Random random) {
         if (generator != null) {
             return generator.getFixedSpawnLocation(world, random);
         }

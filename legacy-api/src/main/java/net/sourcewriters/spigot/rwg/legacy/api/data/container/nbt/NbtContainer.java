@@ -14,11 +14,11 @@ public class NbtContainer extends AbstractDataContainer<NbtTag> implements IData
 
     private final NbtCompound root;
 
-    public NbtContainer(IDataAdapterRegistry<NbtTag> registry) {
+    public NbtContainer(final IDataAdapterRegistry<NbtTag> registry) {
         this(new NbtCompound(), registry);
     }
 
-    protected NbtContainer(NbtCompound root, IDataAdapterRegistry<NbtTag> registry) {
+    protected NbtContainer(final NbtCompound root, final IDataAdapterRegistry<NbtTag> registry) {
         super(registry);
         this.root = root;
     }
@@ -38,9 +38,9 @@ public class NbtContainer extends AbstractDataContainer<NbtTag> implements IData
     }
 
     @Override
-    public void fromNbt(NbtCompound nbt) {
+    public void fromNbt(final NbtCompound nbt) {
         root.clear();
-        for (String key : nbt.getKeys()) {
+        for (final String key : nbt.getKeys()) {
             root.set(key, nbt.get(key));
         }
     }
@@ -51,22 +51,22 @@ public class NbtContainer extends AbstractDataContainer<NbtTag> implements IData
     }
 
     @Override
-    public boolean has(String key) {
+    public boolean has(final String key) {
         return root.hasKey(key);
     }
 
     @Override
-    public NbtTag getRaw(String key) {
+    public NbtTag getRaw(final String key) {
         return root.get(key);
     }
 
     @Override
-    public boolean remove(String key) {
+    public boolean remove(final String key) {
         return root.remove(key) != null;
     }
 
     @Override
-    public void set(String key, NbtTag value) {
+    public void set(final String key, final NbtTag value) {
         root.set(key, value);
     }
 

@@ -14,8 +14,9 @@ import java.util.Objects;
  * @param <U> the type of the second argument the predicate
  * @param <V> the type of the third argument the predicate
  *
- * @see Predicate
- * @since 1.8
+ * @see       Predicate
+ * 
+ * @since     1.8
  */
 @FunctionalInterface
 public interface TriPredicate<T, U, V> {
@@ -23,11 +24,12 @@ public interface TriPredicate<T, U, V> {
     /**
      * Evaluates this predicate on the given arguments.
      *
-     * @param t the first input argument
-     * @param u the second input argument
-     * @param v the third input argument
-     * @return {@code true} if the input arguments match the predicate, otherwise
-     *         {@code false}
+     * @param  t the first input argument
+     * @param  u the second input argument
+     * @param  v the third input argument
+     * 
+     * @return   {@code true} if the input arguments match the predicate, otherwise
+     *               {@code false}
      */
     boolean test(T t, U u, V v);
 
@@ -42,14 +44,18 @@ public interface TriPredicate<T, U, V> {
      * the caller; if evaluation of this predicate throws an exception, the
      * {@code other} predicate will not be evaluated.
      *
-     * @param other a predicate that will be logically-ANDed with this predicate
-     * @return a composed predicate that represents the short-circuiting logical AND
-     *         of this predicate and the {@code other} predicate
+     * @param  other                a predicate that will be logically-ANDed with
+     *                                  this predicate
+     * 
+     * @return                      a composed predicate that represents the
+     *                                  short-circuiting logical AND of this
+     *                                  predicate and the {@code other} predicate
+     * 
      * @throws NullPointerException if other is null
      */
-    default TriPredicate<T, U, V> and(TriPredicate<? super T, ? super U, ? super V> other) {
+    default TriPredicate<T, U, V> and(final TriPredicate<? super T, ? super U, ? super V> other) {
         Objects.requireNonNull(other);
-        return (T t, U u, V v) -> test(t, u, v) && other.test(t, u, v);
+        return (final T t, final U u, final V v) -> test(t, u, v) && other.test(t, u, v);
     }
 
     /**
@@ -58,7 +64,7 @@ public interface TriPredicate<T, U, V> {
      * @return a predicate that represents the logical negation of this predicate
      */
     default TriPredicate<T, U, V> negate() {
-        return (T t, U u, V v) -> !test(t, u, v);
+        return (final T t, final U u, final V v) -> !test(t, u, v);
     }
 
     /**
@@ -71,13 +77,17 @@ public interface TriPredicate<T, U, V> {
      * the caller; if evaluation of this predicate throws an exception, the
      * {@code other} predicate will not be evaluated.
      *
-     * @param other a predicate that will be logically-ORed with this predicate
-     * @return a composed predicate that represents the short-circuiting logical OR
-     *         of this predicate and the {@code other} predicate
+     * @param  other                a predicate that will be logically-ORed with
+     *                                  this predicate
+     * 
+     * @return                      a composed predicate that represents the
+     *                                  short-circuiting logical OR of this
+     *                                  predicate and the {@code other} predicate
+     * 
      * @throws NullPointerException if other is null
      */
-    default TriPredicate<T, U, V> or(TriPredicate<? super T, ? super U, ? super V> other) {
+    default TriPredicate<T, U, V> or(final TriPredicate<? super T, ? super U, ? super V> other) {
         Objects.requireNonNull(other);
-        return (T t, U u, V v) -> test(t, u, v) || other.test(t, u, v);
+        return (final T t, final U u, final V v) -> test(t, u, v) || other.test(t, u, v);
     }
 }

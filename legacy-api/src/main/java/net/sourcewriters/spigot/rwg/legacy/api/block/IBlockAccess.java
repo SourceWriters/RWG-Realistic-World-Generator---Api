@@ -11,10 +11,10 @@ import net.sourcewriters.spigot.rwg.legacy.api.util.annotation.source.NonNull;
 import net.sourcewriters.spigot.rwg.legacy.api.util.rwg.RWGMaterial;
 
 public interface IBlockAccess {
-    
+
     @NonNull
     IBlockDataLoaderManager getLoaderManager();
-    
+
     @NonNull
     IBlockDataParserManager getParserManager();
 

@@ -11,7 +11,7 @@ import net.sourcewriters.spigot.rwg.legacy.api.data.container.api.IDataAdapter;
 public class NbtAdapterRegistry extends AbstractDataAdapterRegistry<NbtTag> {
 
     @Override
-    public Object extract(NbtTag base) {
+    public Object extract(final NbtTag base) {
         if (base.getType() == NbtType.END) {
             return null;
         }
@@ -25,13 +25,13 @@ public class NbtAdapterRegistry extends AbstractDataAdapterRegistry<NbtTag> {
 
     @SuppressWarnings("unchecked")
     @Override
-    protected <P, C extends NbtTag> IDataAdapter<P, C, NbtTag> build(Class<?> clazz) {
+    protected <P, C extends NbtTag> IDataAdapter<P, C, NbtTag> build(final Class<?> clazz) {
         return (IDataAdapter<P, C, NbtTag>) NbtAdapter.createAdapter(this, clazz);
     }
 
     @Override
-    public <P, C extends NbtTag> IDataAdapter<P, C, NbtTag> create(Class<P> primitiveType, Class<C> complexType, Function<P, C> builder,
-        Function<C, P> extractor) {
+    public <P, C extends NbtTag> IDataAdapter<P, C, NbtTag> create(final Class<P> primitiveType, final Class<C> complexType,
+        final Function<P, C> builder, final Function<C, P> extractor) {
         return new NbtAdapter<>(primitiveType, complexType, builder, extractor);
     }
 

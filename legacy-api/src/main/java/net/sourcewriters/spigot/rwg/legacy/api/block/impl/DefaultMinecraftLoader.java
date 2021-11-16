@@ -9,13 +9,13 @@ import net.sourcewriters.spigot.rwg.legacy.api.block.IBlockAccess;
 import net.sourcewriters.spigot.rwg.legacy.api.block.IBlockData;
 
 public final class DefaultMinecraftLoader extends BlockDataLoader {
-    
-    public DefaultMinecraftLoader(Plugin plugin) {
+
+    public DefaultMinecraftLoader(final Plugin plugin) {
         super(plugin, "Minecraft - All");
     }
 
     @Override
-    public IBlockData load(IBlockAccess access, Block block, BlockData blockData) {
+    public IBlockData load(final IBlockAccess access, final Block block, final BlockData blockData) {
         return access.dataOf(blockData).setConversionPossible(true);
     }
 

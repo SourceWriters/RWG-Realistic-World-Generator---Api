@@ -9,31 +9,31 @@ import net.sourcewriters.spigot.rwg.legacy.api.util.annotation.source.NonNull;
 public interface IPluginPackage {
 
     @NonNull
-    public String getName();
+    String getName();
 
-    public Plugin getPlugin();
-    
-    public boolean isEnabled();
-    
-    public boolean hasParsedVersion();
+    Plugin getPlugin();
 
-    public Version getParsedVersion();
-    
-    public String getVersion();
+    boolean isEnabled();
 
-    public default boolean isFromPlugin(Class<?> clazz) {
-        Plugin plugin = getPlugin();
+    boolean hasParsedVersion();
+
+    Version getParsedVersion();
+
+    String getVersion();
+
+    default boolean isFromPlugin(final Class<?> clazz) {
+        final Plugin plugin = getPlugin();
         if (!isEnabled()) {
             return false;
         }
         return clazz.getClassLoader().equals(plugin.getClass().getClassLoader());
     }
 
-    public default boolean isPlugin(Plugin plugin) {
+    default boolean isPlugin(final Plugin plugin) {
         return hasName(plugin.getName());
     }
 
-    public default boolean hasName(String name) {
+    default boolean hasName(final String name) {
         return getName().equals(name);
     }
 

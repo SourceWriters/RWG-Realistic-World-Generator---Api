@@ -26,29 +26,29 @@ public final class AssetManager implements Closeable {
     private final ILogger logger;
     private final int cacheTime;
 
-    public AssetManager(ILogger logger, int cacheTime) {
+    public AssetManager(final ILogger logger, final int cacheTime) {
         this.cacheTime = Math.min(Math.max(cacheTime, MIN_CACHE_TIME), MAX_CACHE_TIME);
         this.logger = logger;
         ticker.pause();
     }
 
-    public IAsset<?> get(IKey key) {
+    public IAsset<?> get(final IKey key) {
         return registry.get(key);
     }
 
-    public boolean has(IKey key) {
+    public boolean has(final IKey key) {
         return registry.has(key);
     }
 
-    public IAsset<?> unregister(IKey key) {
-        IAsset<?> asset = registry.get(key);
+    public IAsset<?> unregister(final IKey key) {
+        final IAsset<?> asset = registry.get(key);
         if (asset == null) {
             return asset;
         }
         registry.unregister(key);
         try {
             asset.close();
-        } catch (IOException exp) {
+        } catch (final IOException exp) {
             if (logger != null) {
                 logger.log(LogTypeId.WARNING, "Failed to close asset '" + key.asString() + "' while unregistering!");
                 logger.log(LogTypeId.WARNING, exp);
@@ -64,11 +64,11 @@ public final class AssetManager implements Closeable {
         return asset;
     }
 
-    public <E> IAsset<E> createLazy(IKey key, BiFunction<ILogger, IKey, LazyAsset<E>> function) {
+    public <E> IAsset<E> createLazy(final IKey key, final BiFunction<ILogger, IKey, LazyAsset<E>> function) {
         if (registry.has(key)) {
             return null;
         }
-        LazyAsset<E> asset = function.apply(logger, key);
+        final LazyAsset<E> asset = function.apply(logger, key);
         if (asset != null) {
             registry.register(asset);
             ticker.add(asset);
@@ -79,11 +79,11 @@ public final class AssetManager implements Closeable {
         return asset;
     }
 
-    public <E> IAsset<E> createPersistent(IKey key, BiFunction<ILogger, IKey, PersistentAsset<E>> function) {
+    public <E> IAsset<E> createPersistent(final IKey key, final BiFunction<ILogger, IKey, PersistentAsset<E>> function) {
         if (registry.has(key)) {
             return null;
         }
-        IAsset<E> asset = function.apply(logger, key);
+        final IAsset<E> asset = function.apply(logger, key);
         if (asset != null) {
             registry.register(asset);
         }
@@ -101,11 +101,11 @@ public final class AssetManager implements Closeable {
     @Override
     public void close() throws IOException {
         ticker.stop();
-        List<IKey> keys = registry.getKeys();
-        for (IKey key : keys) {
+        final List<IKey> keys = registry.getKeys();
+        for (final IKey key : keys) {
             try {
                 registry.get(key).close();
-            } catch (IOException exp) {
+            } catch (final IOException exp) {
                 if (logger != null) {
                     logger.log("Failed to close asset '" + key.asString() + "'!");
                 }

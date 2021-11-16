@@ -23,28 +23,28 @@ import net.sourcewriters.spigot.rwg.legacy.api.version.IVersionAccess;
 public class VersionCompatibilityProviderImpl extends VersionCompatibilityProvider {
 
     @Override
-    public void provide(ILogger logger, IArgumentMap map) {
-        IDataFixHandler dataFixHandler = new DataFixHandlerImpl();
-        IVersionAccess versionAccess = new VersionAccessImpl(logger);
+    public void provide(final ILogger logger, final IArgumentMap map) {
+        final IDataFixHandler dataFixHandler = new DataFixHandlerImpl();
+        final IVersionAccess versionAccess = new VersionAccessImpl(logger);
         set(map, IBlockAccess.class, new BlockAccessImpl(logger, versionAccess.getConversionAccess(), dataFixHandler));
         set(map, IVersionAccess.class, versionAccess);
         set(map, IDataFixHandler.class, dataFixHandler);
     }
 
     @Override
-    public void setup(RealisticWorldGenerator api, Plugin plugin, ILogger logger) {
-        
-        IBlockAccess blockAccess = api.getBlockAccess();
+    public void setup(final RealisticWorldGenerator api, final Plugin plugin, final ILogger logger) {
 
-        IBlockDataLoaderManager loaderManager = blockAccess.getLoaderManager();
+        final IBlockAccess blockAccess = api.getBlockAccess();
+
+        final IBlockDataLoaderManager loaderManager = blockAccess.getLoaderManager();
         loaderManager.register(new DefaultMinecraftLoader(plugin));
 
-        IBlockDataParserManager parserManager = blockAccess.getParserManager();
+        final IBlockDataParserManager parserManager = blockAccess.getParserManager();
         parserManager.register(new DefaultMinecraftParser(plugin));
 
-        IBlockDataPlacerManager placerManager = blockAccess.getPlacerManager();
+        final IBlockDataPlacerManager placerManager = blockAccess.getPlacerManager();
         placerManager.register(new DefaultMinecraftPlacer(plugin));
-        
+
     }
 
 }

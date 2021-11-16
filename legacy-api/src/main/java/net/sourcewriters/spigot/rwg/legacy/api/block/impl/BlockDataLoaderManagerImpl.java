@@ -26,13 +26,13 @@ public class BlockDataLoaderManagerImpl implements IBlockDataLoaderManager {
     private final ILogger logger;
     private final IBlockAccess access;
 
-    public BlockDataLoaderManagerImpl(ILogger logger, IBlockAccess access) {
+    public BlockDataLoaderManagerImpl(final ILogger logger, final IBlockAccess access) {
         this.logger = logger;
         this.access = access;
     }
 
     @Override
-    public boolean register(BlockDataLoader loader) {
+    public boolean register(final BlockDataLoader loader) {
         Objects.requireNonNull(loader, "BlockDataLoader can't be null!");
         if (has(loader.getId())) {
             return false;
@@ -43,33 +43,33 @@ public class BlockDataLoaderManagerImpl implements IBlockDataLoaderManager {
     }
 
     @Override
-    public boolean unregister(long id) {
+    public boolean unregister(final long id) {
         order.remove(id);
         return loaders.remove(id) != null;
     }
 
     @Override
-    public boolean has(long id) {
+    public boolean has(final long id) {
         return order.contains(id);
     }
 
     @Override
-    public BlockDataLoader get(long id) {
+    public BlockDataLoader get(final long id) {
         return loaders.get(id);
     }
 
     @Override
-    public int getPosition(long id) {
+    public int getPosition(final long id) {
         return order.size() - order.indexOf(id);
     }
 
     @Override
-    public IBlockData load(@NonNull Location location) {
+    public IBlockData load(@NonNull final Location location) {
         Objects.requireNonNull(location, "Location can't be null!");
         if (Bukkit.isPrimaryThread()) {
             try {
                 return load(location.getBlock());
-            } catch (Exception exp) {
+            } catch (final Exception exp) {
                 logger.log(LogTypeId.WARNING, "Failed to load block");
                 logger.log(LogTypeId.WARNING, exp);
                 return null;
@@ -77,7 +77,7 @@ public class BlockDataLoaderManagerImpl implements IBlockDataLoaderManager {
         }
         try {
             return load(location.getBlock());
-        } catch (Exception exp) {
+        } catch (final Exception exp) {
             logger.log(LogTypeId.WARNING, "Failed to load block asynchronously to main thread");
             logger.log(LogTypeId.WARNING, exp);
             return null;
@@ -85,16 +85,16 @@ public class BlockDataLoaderManagerImpl implements IBlockDataLoaderManager {
     }
 
     @Override
-    public IBlockData load(@NonNull Block block) {
+    public IBlockData load(@NonNull final Block block) {
         Objects.requireNonNull(block, "Block can't be null!");
         if (loaders.isEmpty()) {
             logger.log(LogTypeId.ERROR, "Can't load blocks without BlockDataLoader's!");
             return null;
         }
-        BlockData data = block.getBlockData();
-        int size = order.size();
+        final BlockData data = block.getBlockData();
+        final int size = order.size();
         for (int index = size - 1; index >= 0; index--) {
-            IBlockData output = loaders.get(order.get(index)).load(access, block, data);
+            final IBlockData output = loaders.get(order.get(index)).load(access, block, data);
             if (output != null) {
                 return output;
             }

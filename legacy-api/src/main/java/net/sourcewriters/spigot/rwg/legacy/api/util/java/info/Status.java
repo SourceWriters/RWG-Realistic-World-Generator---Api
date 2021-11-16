@@ -7,13 +7,13 @@ public final class Status implements IStatus {
 
     public static final Status EMPTY = new Status(true);
 
-    public static final Status create() {
+    public static Status create() {
         return new Status(false);
-    };
+    }
 
     private final AtomicLong total = new AtomicLong(0);
     private final AtomicLong marked = new AtomicLong(0);
-    
+
     private final AtomicLong failed = new AtomicLong(0);
     private final AtomicLong success = new AtomicLong(0);
     private final AtomicLong skipped = new AtomicLong(0);
@@ -26,7 +26,7 @@ public final class Status implements IStatus {
      * 
      * @param loaded - defines if it was loaded or not
      */
-    private Status(boolean done) {
+    private Status(final boolean done) {
         this.done.set(done);
     }
 
@@ -35,13 +35,14 @@ public final class Status implements IStatus {
      * 
      * @param total - starting total amount of objects to load
      */
-    public Status(long total) {
+    public Status(final long total) {
         this.total.set(total);
     }
 
     /**
      * Set the loading to done
      */
+    @Override
     public void done() {
         done.getAndSet(true);
     }
@@ -51,6 +52,7 @@ public final class Status implements IStatus {
      * 
      * @return if loading is done
      */
+    @Override
     public boolean isDone() {
         return done.get();
     }
@@ -60,6 +62,7 @@ public final class Status implements IStatus {
      * 
      * @return if it was marked or not
      */
+    @Override
     public boolean success() {
         if (isDone() || !mark()) {
             return false;
@@ -73,6 +76,7 @@ public final class Status implements IStatus {
      * 
      * @return if it was marked or not
      */
+    @Override
     public boolean failed() {
         if (isDone() || !mark()) {
             return false;
@@ -86,6 +90,7 @@ public final class Status implements IStatus {
      * 
      * @return if it was marked or not
      */
+    @Override
     public boolean skip() {
         if (isDone() || !mark()) {
             return false;
@@ -99,6 +104,7 @@ public final class Status implements IStatus {
      * 
      * @return if it was marked or not
      */
+    @Override
     public boolean cancel() {
         if (isDone() || !mark()) {
             return false;
@@ -123,6 +129,7 @@ public final class Status implements IStatus {
     /**
      * Add one object to total objects to load
      */
+    @Override
     public void add() {
         add(1);
     }
@@ -132,7 +139,8 @@ public final class Status implements IStatus {
      *
      * @param amount - amount to add
      */
-    public void add(long amount) {
+    @Override
+    public void add(final long amount) {
         if (isDone()) {
             return;
         }
@@ -144,7 +152,8 @@ public final class Status implements IStatus {
      * 
      * @param status - LoadingStatus to add
      */
-    public void add(IStatus status) {
+    @Override
+    public void add(final IStatus status) {
         if (isDone()) {
             return;
         }
@@ -161,6 +170,7 @@ public final class Status implements IStatus {
      * 
      * @return the total amount
      */
+    @Override
     public long getTotal() {
         return total.longValue();
     }
@@ -170,6 +180,7 @@ public final class Status implements IStatus {
      * 
      * @return the marked amount
      */
+    @Override
     public long getMarked() {
         return marked.longValue();
     }
@@ -179,6 +190,7 @@ public final class Status implements IStatus {
      * 
      * @return the failed amount
      */
+    @Override
     public long getFailed() {
         return failed.longValue();
     }
@@ -188,6 +200,7 @@ public final class Status implements IStatus {
      * 
      * @return the successful amount
      */
+    @Override
     public long getSuccess() {
         return success.longValue();
     }
@@ -197,6 +210,7 @@ public final class Status implements IStatus {
      * 
      * @return the not loaded amount
      */
+    @Override
     public long getSkipped() {
         return skipped.longValue();
     }
@@ -206,6 +220,7 @@ public final class Status implements IStatus {
      * 
      * @return the cancelled amount
      */
+    @Override
     public long getCancelled() {
         return cancelled.longValue();
     }

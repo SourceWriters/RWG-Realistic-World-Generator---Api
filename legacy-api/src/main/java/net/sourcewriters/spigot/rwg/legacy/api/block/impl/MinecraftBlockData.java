@@ -16,9 +16,9 @@ public class MinecraftBlockData extends BaseBlockData {
 
     private final BlockData data;
 
-    public MinecraftBlockData(BlockData data) {
+    public MinecraftBlockData(final BlockData data) {
         this.data = Objects.requireNonNull(data, "BlockData data can't be null!");
-        String[] tmp = data.getAsString().split("\\[", 2)[0].split(":", 2);
+        final String[] tmp = data.getAsString().split("\\[", 2)[0].split(":", 2);
         this.namespace = tmp[0];
         this.id = tmp[1];
         this.key = namespace + ":" + id;
@@ -53,7 +53,7 @@ public class MinecraftBlockData extends BaseBlockData {
     public BlockData asBukkit() {
         return data;
     }
-    
+
     @Override
     protected String dataString() {
         return data.getAsString();

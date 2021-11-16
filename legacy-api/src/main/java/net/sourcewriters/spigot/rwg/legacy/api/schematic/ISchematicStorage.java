@@ -17,12 +17,12 @@ public interface ISchematicStorage {
     ISchematic get(String name);
 
     boolean has(String name);
-    
+
     int amount();
-    
+
     @NonNull
     String[] getNames();
-    
+
     @NonNull
     ISchematic[] getSchematics();
 
@@ -31,10 +31,10 @@ public interface ISchematicStorage {
 
     @NonNull
     Future<?> paste(ISchematic schmeatic, Location location, RandomNumberGenerator random);
-    
+
     @NonNull
     ISchematicLoader getLoader();
-    
+
     @NonNull
     ISchematicUpdater getUpdater();
 

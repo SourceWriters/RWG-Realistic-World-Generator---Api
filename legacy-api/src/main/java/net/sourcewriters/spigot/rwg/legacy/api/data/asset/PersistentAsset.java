@@ -14,11 +14,11 @@ public final class PersistentAsset<E> implements IAsset<E> {
     private final E asset;
     private final File file;
 
-    public PersistentAsset(ILogger logger, IKey key, File file, IAssetLoader<E> loader) {
+    public PersistentAsset(final ILogger logger, final IKey key, final File file, final IAssetLoader<E> loader) {
         E tmpAsset = null;
         try {
             tmpAsset = loader.load(file);
-        } catch (IOException exp) {
+        } catch (final IOException exp) {
             if (logger != null) {
                 logger.log(LogTypeId.WARNING, "Failed to load persistent asset '" + key.asString() + "'!");
                 logger.log(LogTypeId.WARNING, exp);
@@ -29,13 +29,13 @@ public final class PersistentAsset<E> implements IAsset<E> {
         this.key = key;
     }
 
-    public PersistentAsset(IKey key, File file, E asset) {
+    public PersistentAsset(final IKey key, final File file, final E asset) {
         this.asset = asset;
-        this.file = (file == null && asset instanceof IFiled) ? ((IFiled) asset).getFile() : null;
+        this.file = file == null && asset instanceof IFiled ? ((IFiled) asset).getFile() : null;
         this.key = key;
     }
 
-    public PersistentAsset(IKey key, E asset) {
+    public PersistentAsset(final IKey key, final E asset) {
         this(key, null, asset);
     }
 

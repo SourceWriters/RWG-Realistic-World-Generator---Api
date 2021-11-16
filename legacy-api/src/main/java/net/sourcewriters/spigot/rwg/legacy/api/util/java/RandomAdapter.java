@@ -10,19 +10,19 @@ import net.sourcewriters.spigot.rwg.legacy.api.version.handle.ClassLookup;
 public final class RandomAdapter extends RandomNumberGenerator {
 
     private static final ClassLookup LOOKUP = ClassLookup.of(Random.class).searchField("seed", "seed", AtomicLong.class);
-    
+
     private final Random random;
     private final AtomicLong seedState;
-    
+
     private long seed;
 
-    public RandomAdapter(Random random) {
+    public RandomAdapter(final Random random) {
         this.random = random;
         this.seedState = (AtomicLong) LOOKUP.getFieldValue(random, "seed");
     }
 
     @Override
-    public void setSeed(long seed) {
+    public void setSeed(final long seed) {
         random.setSeed(this.seed = seed);
     }
 
@@ -32,7 +32,7 @@ public final class RandomAdapter extends RandomNumberGenerator {
     }
 
     @Override
-    public void setCompressedState(long state) {
+    public void setCompressedState(final long state) {
         seedState.set(state);
     }
 
@@ -52,12 +52,12 @@ public final class RandomAdapter extends RandomNumberGenerator {
     }
 
     @Override
-    public short nextShort(short bound) {
+    public short nextShort(final short bound) {
         return nextShort((short) 0, bound);
     }
 
     @Override
-    public short nextShort(short min, short max) {
+    public short nextShort(final short min, final short max) {
         if (max <= min) {
             return min;
         }
@@ -70,12 +70,12 @@ public final class RandomAdapter extends RandomNumberGenerator {
     }
 
     @Override
-    public int nextInt(int bound) {
+    public int nextInt(final int bound) {
         return random.nextInt(bound);
     }
 
     @Override
-    public int nextInt(int min, int max) {
+    public int nextInt(final int min, final int max) {
         return min + random.nextInt(max - min);
     }
 
@@ -85,12 +85,12 @@ public final class RandomAdapter extends RandomNumberGenerator {
     }
 
     @Override
-    public long nextLong(long bound) {
+    public long nextLong(final long bound) {
         return nextLong(0L, bound);
     }
 
     @Override
-    public long nextLong(long min, long max) {
+    public long nextLong(final long min, final long max) {
         if (max <= min) {
             return min;
         }
@@ -103,16 +103,16 @@ public final class RandomAdapter extends RandomNumberGenerator {
     }
 
     @Override
-    public float nextFloat(float bound) {
+    public float nextFloat(final float bound) {
         return nextFloat(0, bound);
     }
 
     @Override
-    public float nextFloat(float min, float max) {
+    public float nextFloat(final float min, final float max) {
         if (max <= min) {
             return min;
         }
-        return min + (nextFloat() * (max - min));
+        return min + nextFloat() * (max - min);
     }
 
     @Override
@@ -121,16 +121,16 @@ public final class RandomAdapter extends RandomNumberGenerator {
     }
 
     @Override
-    public double nextDouble(double bound) {
+    public double nextDouble(final double bound) {
         return nextDouble(0, bound);
     }
 
     @Override
-    public double nextDouble(double min, double max) {
+    public double nextDouble(final double min, final double max) {
         if (max <= min) {
             return min;
         }
-        return min + (nextDouble() * (max - min));
+        return min + nextDouble() * (max - min);
     }
 
 }

@@ -20,29 +20,29 @@ public final class NmsAccessImpl implements INmsAccess {
     private final NmsBiomeAccessImpl biomeAccess;
     private final NmsWorldAccessImpl worldAccess;
 
-    public NmsAccessImpl(ILogger logger) {
+    public NmsAccessImpl(final ILogger logger) {
         nbtAccess = new NmsNbtAccessImpl();
         biomeAccess = new NmsBiomeAccessImpl(provider);
         worldAccess = new NmsWorldAccessImpl(provider);
     }
 
     @Override
-    public final ClassLookupProvider getLookupProvider() {
+    public ClassLookupProvider getLookupProvider() {
         return provider;
     }
 
     @Override
-    public final INmsNbtAccess getNbtAccess() {
+    public INmsNbtAccess getNbtAccess() {
         return nbtAccess;
     }
 
     @Override
-    public final INmsBiomeAccess getBiomeAccess() {
+    public INmsBiomeAccess getBiomeAccess() {
         return biomeAccess;
     }
 
     @Override
-    public final INmsWorldAccess getWorldAccess() {
+    public INmsWorldAccess getWorldAccess() {
         return worldAccess;
     }
 

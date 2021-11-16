@@ -16,18 +16,18 @@ public final class GlobalLookup {
 
     private GlobalLookup() {}
 
-    public static void setup(ClassLookupProvider provider) {
+    public static void setup(final ClassLookupProvider provider) {
 
         /*
          * Setup everything else
          */
 
-        Class<?> nbtTagCompoundClass = provider.createLookup("nms_nbt_compound", provider.getNMSClass("NBTTagCompound")).getOwner();
-        Class<?> nmsItemStackClass = provider.createLookup("nms_itemstack", provider.getNMSClass("ItemStack"))
+        final Class<?> nbtTagCompoundClass = provider.createLookup("nms_nbt_compound", provider.getNMSClass("NBTTagCompound")).getOwner();
+        final Class<?> nmsItemStackClass = provider.createLookup("nms_itemstack", provider.getNMSClass("ItemStack"))
             .searchMethod("save", "save", nbtTagCompoundClass).searchMethod("load", "a", nbtTagCompoundClass).getOwner();
 
-        Class<?> nbtBaseClass = provider.getNMSClass("NBTBase");
-        Class<?> nbtReadLimiterClass = provider.getNMSClass("NBTReadLimiter");
+        final Class<?> nbtBaseClass = provider.getNMSClass("NBTBase");
+        final Class<?> nbtReadLimiterClass = provider.getNMSClass("NBTReadLimiter");
 
         provider.createLookup("nms_nbt_read_limiter", nbtReadLimiterClass).searchField("limiter", "a", nbtReadLimiterClass);
 
@@ -69,8 +69,8 @@ public final class GlobalLookup {
         versionSetup(provider);
     }
 
-    private static void versionSetup(ClassLookupProvider provider) {
-        VersionLookup lookup = InstanceBuilder.buildExact(VersionLookup.class).orElse(null);
+    private static void versionSetup(final ClassLookupProvider provider) {
+        final VersionLookup lookup = InstanceBuilder.buildExact(VersionLookup.class).orElse(null);
         if (lookup == null) {
             return;
         }

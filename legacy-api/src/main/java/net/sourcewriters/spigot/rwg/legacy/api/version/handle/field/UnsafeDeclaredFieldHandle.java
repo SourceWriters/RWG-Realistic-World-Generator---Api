@@ -3,11 +3,11 @@ package net.sourcewriters.spigot.rwg.legacy.api.version.handle.field;
 import java.lang.reflect.Field;
 
 public final class UnsafeDeclaredFieldHandle extends UnsafeFieldHandle<Field> {
-    
+
     private final Field handle;
     private final long offset;
-    
-    public UnsafeDeclaredFieldHandle(Field handle) {
+
+    public UnsafeDeclaredFieldHandle(final Field handle) {
         this.handle = handle;
         this.offset = UNSAFE.objectFieldOffset(handle);
     }
@@ -18,17 +18,17 @@ public final class UnsafeDeclaredFieldHandle extends UnsafeFieldHandle<Field> {
     }
 
     @Override
-    public Object getValue(Object source) {
+    public Object getValue(final Object source) {
         return getMemoryValue(source, offset);
     }
 
     @Override
-    public IFieldHandle<Field> setValue(Object value) {
+    public IFieldHandle<Field> setValue(final Object value) {
         return this; // Do nothing because its not static
     }
 
     @Override
-    public IFieldHandle<Field> setValue(Object source, Object value) {
+    public IFieldHandle<Field> setValue(final Object source, final Object value) {
         return setMemoryValue(source, offset, value);
     }
 

@@ -8,7 +8,7 @@ public enum RWGEntityType {
 
     private String minecraftName;
 
-    RWGEntityType(String minecraftName) {
+    RWGEntityType(final String minecraftName) {
         this.minecraftName = minecraftName;
     }
 
@@ -16,8 +16,8 @@ public enum RWGEntityType {
         return minecraftName;
     }
 
-    public static String toMinecraft(EntityType type) {
-        for (RWGEntityType entity : RWGEntityType.values()) {
+    public static String toMinecraft(final EntityType type) {
+        for (final RWGEntityType entity : RWGEntityType.values()) {
             if (type.name().equalsIgnoreCase(entity.name())) {
                 return entity.minecraftName;
             }

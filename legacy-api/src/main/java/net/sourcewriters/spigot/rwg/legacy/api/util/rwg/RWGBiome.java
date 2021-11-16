@@ -94,7 +94,7 @@ public enum RWGBiome {
         OCEANS = Arrays.stream(RWGBiome.values()).filter(biome -> biome.ocean).toArray(RWGBiome[]::new);
     }
 
-    private String[] cache = new String[3];
+    private final String[] cache = new String[3];
     private boolean ocean = false;
 
     RWGBiome() {
@@ -103,7 +103,7 @@ public enum RWGBiome {
         cache[2] = name();
     }
 
-    RWGBiome(boolean ocean) {
+    RWGBiome(final boolean ocean) {
         this();
         this.ocean = ocean;
     }
@@ -117,16 +117,16 @@ public enum RWGBiome {
     }
 
     private String generateName() {
-        String[] parts = name().split("_");
+        final String[] parts = name().split("_");
         for (int index = 0; index < parts.length; index++) {
             parts[index] = Strings.firstLetterToUpperCase(parts[index].toLowerCase());
         }
         return Strings.toString(parts, " ");
     }
 
-    public static RWGBiome fromString(String str) {
-        for (RWGBiome biome : values()) {
-            for (String current : biome.cache) {
+    public static RWGBiome fromString(final String str) {
+        for (final RWGBiome biome : values()) {
+            for (final String current : biome.cache) {
                 if (current.equalsIgnoreCase(str)) {
                     return biome;
                 }
@@ -136,7 +136,7 @@ public enum RWGBiome {
     }
 
     public static RWGBiome[] oceans() {
-        RWGBiome[] array = new RWGBiome[OCEANS.length];
+        final RWGBiome[] array = new RWGBiome[OCEANS.length];
         System.arraycopy(OCEANS, 0, array, 0, OCEANS.length);
         return array;
     }

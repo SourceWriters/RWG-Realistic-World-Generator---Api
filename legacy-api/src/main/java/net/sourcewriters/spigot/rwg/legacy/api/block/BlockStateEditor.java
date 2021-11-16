@@ -1,8 +1,8 @@
 package net.sourcewriters.spigot.rwg.legacy.api.block;
 
 import java.util.HashMap;
-import java.util.Objects;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.function.Function;
 
 import net.sourcewriters.spigot.rwg.legacy.api.block.state.Rotation;
@@ -20,17 +20,17 @@ public class BlockStateEditor {
 
     private final String properties;
 
-    private BlockStateEditor(@NonNull String blockdata) {
+    private BlockStateEditor(@NonNull final String blockdata) {
         String[] parts = Objects.requireNonNull(blockdata, "String blockdata can't be null!").split(":", 2);
         namespace = parts[0];
         if (parts[1].contains("[")) {
             parts = parts[1].split("\\[", 2);
             id = parts[0];
-            String[] tmp = parts[1].split("\\]", 2);
+            final String[] tmp = parts[1].split("\\]", 2);
             properties = !tmp[1].isBlank() ? tmp[1] : null;
             parts = tmp[0].split(",");
-            for (String part : parts) {
-                String[] state = part.trim().split("=");
+            for (final String part : parts) {
+                final String[] state = part.trim().split("=");
                 states.put(state[0], state[1]);
             }
             return;
@@ -69,23 +69,23 @@ public class BlockStateEditor {
     }
 
     @NonNull
-    public BlockStateEditor rename(@NonNull String name) {
+    public BlockStateEditor rename(@NonNull final String name) {
         this.id = Objects.requireNonNull(name, "String name can't be null!").toLowerCase();
         return this;
     }
 
     @NonNull
-    public BlockStateEditor map(@NonNull Function<String, String> mapper, @NonNull String... states) {
+    public BlockStateEditor map(@NonNull final Function<String, String> mapper, @NonNull final String... states) {
         Objects.requireNonNull(mapper, "String name can't be null!");
         Checks.isNotNullOrEmpty(states, "String[] states");
-        for (String state : states) {
+        for (final String state : states) {
             this.states.computeIfPresent(state, (key, value) -> mapper.apply(value));
         }
         return this;
     }
 
     @NonNull
-    public BlockStateEditor put(@NonNull String name, String state) {
+    public BlockStateEditor put(@NonNull final String name, final String state) {
         Objects.requireNonNull(name, "String name can't be null!");
         if (state == null) {
             return remove(name);
@@ -95,7 +95,7 @@ public class BlockStateEditor {
     }
 
     @NonNull
-    public BlockStateEditor apply(@NonNull Rotation rotation) {
+    public BlockStateEditor apply(@NonNull final Rotation rotation) {
         return put("facing", Objects.requireNonNull(rotation, "Rotation can't be null!").name().toLowerCase());
     }
 
@@ -104,24 +104,24 @@ public class BlockStateEditor {
     }
 
     @NonNull
-    public boolean has(String state) {
+    public boolean has(final String state) {
         return states.containsKey(state);
     }
 
-    public String get(String state) {
+    public String get(final String state) {
         return states.get(state);
     }
 
     @NonNull
-    public BlockStateEditor remove(String state) {
+    public BlockStateEditor remove(final String state) {
         states.remove(state);
         return this;
     }
 
     @NonNull
     private String statesAsString() {
-        StringBuilder builder = new StringBuilder("[");
-        for (Entry<String, String> entry : states.entrySet()) {
+        final StringBuilder builder = new StringBuilder("[");
+        for (final Entry<String, String> entry : states.entrySet()) {
             builder.append(entry.getKey()).append('=').append(entry.getValue()).append(", ");
         }
         return builder.substring(0, builder.length() - 2) + ']';
@@ -136,12 +136,12 @@ public class BlockStateEditor {
     }
 
     @NonNull
-    public static BlockStateEditor of(@NonNull String value) {
+    public static BlockStateEditor of(@NonNull final String value) {
         return new BlockStateEditor(Objects.requireNonNull(value));
     }
 
     @NonNull
-    public static BlockStateEditor of(@NonNull IBlockData data) {
+    public static BlockStateEditor of(@NonNull final IBlockData data) {
         return Objects.requireNonNull(data).asEditor();
     }
 

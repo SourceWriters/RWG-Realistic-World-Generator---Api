@@ -19,12 +19,12 @@ public final class ProfileCache {
     private ProfileCache() {}
 
     @NonNull
-    public static GameProfile asProfile(@NonNull String texture) {
+    public static GameProfile asProfile(@NonNull final String texture) {
         return PROFILE_CACHE.computeIfAbsent(texture, ProfileCache::buildProfile);
     }
 
-    public static String asTexture(@NonNull GameProfile profile) {
-        Collection<Property> property = profile.getProperties().get("textures");
+    public static String asTexture(@NonNull final GameProfile profile) {
+        final Collection<Property> property = profile.getProperties().get("textures");
         if (property.size() == 0) {
             return null;
         }
@@ -32,19 +32,19 @@ public final class ProfileCache {
     }
 
     @NonNull
-    public static String asFullTexture(@NonNull String texture) {
+    public static String asFullTexture(@NonNull final String texture) {
         return texture.startsWith(SIGNATURE) ? texture : SIGNATURE + texture;
     }
 
     @NonNull
-    public static String asShortTexture(@NonNull String texture) {
+    public static String asShortTexture(@NonNull final String texture) {
         return texture.startsWith(SIGNATURE) ? texture.substring(SIGNATURE_LENGTH) : texture;
     }
 
     @NonNull
-    private static GameProfile buildProfile(@NonNull String texture) {
-        String value = texture.startsWith(SIGNATURE) ? texture : SIGNATURE + texture;
-        GameProfile profile = new GameProfile(UUID.randomUUID(), Keys.generateKey(12));
+    private static GameProfile buildProfile(@NonNull final String texture) {
+        final String value = texture.startsWith(SIGNATURE) ? texture : SIGNATURE + texture;
+        final GameProfile profile = new GameProfile(UUID.randomUUID(), Keys.generateKey(12));
         profile.getProperties().put("textures", new Property("textures", value));
         return profile;
     }

@@ -20,18 +20,18 @@ public final class ForwardHelper {
 
     private ForwardHelper() {}
 
-    public static boolean isForward(ChunkGenerator generator) {
+    public static boolean isForward(final ChunkGenerator generator) {
         if (generator == null) {
             return false;
         }
-        Class<?> clazz = generator.getClass();
-        String name = clazz.getName();
+        final Class<?> clazz = generator.getClass();
+        final String name = clazz.getName();
         if (LIST.contains(name)) {
             return CACHE.get(name).isPresent();
         }
-        ClassLookup lookup = CACHE.create(name, clazz);
-        Object object = lookup.searchMethod("id", "getIdentifier").run(generator, "id");
-        boolean valid = (object != null && ((long) object) == 345679324062398605L);
+        final ClassLookup lookup = CACHE.create(name, clazz);
+        final Object object = lookup.searchMethod("id", "getIdentifier").run(generator, "id");
+        final boolean valid = object != null && (long) object == 345679324062398605L;
         LIST.add(name);
         if (!valid) {
             CACHE.delete(name);
@@ -42,33 +42,32 @@ public final class ForwardHelper {
         return valid;
     }
 
-    public static IRwgGenerator get(World world) {
+    public static IRwgGenerator get(final World world) {
         return world != null ? get(world.getGenerator()) : null;
     }
 
-    public static IRwgGenerator get(ChunkGenerator generator) {
+    public static IRwgGenerator get(final ChunkGenerator generator) {
         if (!isForward(generator)) {
             return null;
         }
-        Object found = CACHE.get(generator.getClass().getName()).orElse(null).run(generator, "get");
+        final Object found = CACHE.get(generator.getClass().getName()).orElse(null).run(generator, "get");
         return found instanceof IRwgGenerator ? (IRwgGenerator) found : null;
     }
 
-    public static boolean set(World world, Function<World, ChunkGenerator> builder) {
+    public static boolean set(final World world, final Function<World, ChunkGenerator> builder) {
         if (world == null || world.getGenerator() == null) {
             return false;
         }
-        ChunkGenerator current = world.getGenerator();
+        final ChunkGenerator current = world.getGenerator();
         if (!isForward(current)) {
             return false;
         }
-        ChunkGenerator generator = builder.apply(world);
-        ClassLookup lookup = CACHE.get(current.getClass().getName()).orElse(null);
+        final ChunkGenerator generator = builder.apply(world);
+        final ClassLookup lookup = CACHE.get(current.getClass().getName()).orElse(null);
         lookup.run(current, "set", generator);
-        List<BlockPopulator> list = generator.getDefaultPopulators(world);
-        lookup.run(current, "populators", (Object[]) new Object[] {
-            list == null ? new BlockPopulator[0] : list.stream().filter(obj -> obj != null).toArray(BlockPopulator[]::new)
-        });
+        final List<BlockPopulator> list = generator.getDefaultPopulators(world);
+        lookup.run(current, "populators",
+            list == null ? new BlockPopulator[0] : list.stream().filter(obj -> obj != null).toArray(BlockPopulator[]::new));
         return true;
     }
 

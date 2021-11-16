@@ -16,11 +16,11 @@ public enum RWGMaterial {
     SPAWNER;
 
     @NonNull
-    public Material asBukkit(@NonNull IConversionAccess access) {
+    public Material asBukkit(@NonNull final IConversionAccess access) {
         return Objects.requireNonNull(access, "IConversionAccess can't be null!").asBukkit(this);
     }
 
-    public static Material getBukkitMaterial(@NonNull IConversionAccess access, @NonNull String material) {
+    public static Material getBukkitMaterial(@NonNull final IConversionAccess access, @NonNull final String material) {
         Objects.requireNonNull(material, "String material can't be null!");
         try {
             return Material.valueOf(material.toUpperCase());

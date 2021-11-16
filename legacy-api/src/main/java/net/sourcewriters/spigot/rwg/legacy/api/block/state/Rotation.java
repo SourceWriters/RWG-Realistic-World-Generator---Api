@@ -15,7 +15,7 @@ public enum Rotation {
     private final int left, right;
     private final boolean axisZ;
 
-    private Rotation(StructureRotation structure, int left, int right, boolean axisZ) {
+    Rotation(final StructureRotation structure, final int left, final int right, final boolean axisZ) {
         this.structure = structure;
         this.left = left;
         this.right = right;
@@ -40,7 +40,7 @@ public enum Rotation {
     }
 
     @NonNull
-    public static Rotation fromStructure(StructureRotation structure) {
+    public static Rotation fromStructure(final StructureRotation structure) {
         switch (structure) {
         case CLOCKWISE_90:
             return EAST;
@@ -54,7 +54,7 @@ public enum Rotation {
     }
 
     @NonNull
-    public static Rotation fromString(String value) {
+    public static Rotation fromString(final String value) {
         try {
             return valueOf(value.toUpperCase());
         } catch (IllegalArgumentException | NullPointerException ignore) {

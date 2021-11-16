@@ -6,7 +6,7 @@ public class SafeFieldHandle implements IFieldHandle<VarHandle> {
 
     private final VarHandle handle;
 
-    public SafeFieldHandle(VarHandle handle) {
+    public SafeFieldHandle(final VarHandle handle) {
         this.handle = handle;
     }
 
@@ -16,18 +16,18 @@ public class SafeFieldHandle implements IFieldHandle<VarHandle> {
     }
 
     @Override
-    public Object getValue(Object source) {
+    public Object getValue(final Object source) {
         return handle.get(source);
     }
 
     @Override
-    public IFieldHandle<VarHandle> setValue(Object value) {
+    public IFieldHandle<VarHandle> setValue(final Object value) {
         handle.set(value);
         return this;
     }
 
     @Override
-    public IFieldHandle<VarHandle> setValue(Object source, Object value) {
+    public IFieldHandle<VarHandle> setValue(final Object source, final Object value) {
         handle.set(source, value);
         return this;
     }

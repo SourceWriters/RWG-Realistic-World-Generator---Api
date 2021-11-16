@@ -12,7 +12,8 @@ public abstract class CompatibilityBlockPlacer extends BlockDataPlacer {
 
     protected final CompatibilityAddon addon;
 
-    public CompatibilityBlockPlacer(@NonNull RealisticWorldGenerator api, @NonNull CompatibilityAddon addon, @NonNull String namespace) {
+    public CompatibilityBlockPlacer(@NonNull final RealisticWorldGenerator api, @NonNull final CompatibilityAddon addon,
+        @NonNull final String namespace) {
         super(Objects.requireNonNull(addon, "CompatibilityAddon can't be null!").getOwner(), namespace);
         Objects.requireNonNull(api, "RealisticWorldGenerator api can't be null!");
         this.addon = addon;

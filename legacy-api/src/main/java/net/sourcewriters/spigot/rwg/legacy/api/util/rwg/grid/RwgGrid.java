@@ -17,10 +17,11 @@ public abstract class RwgGrid {
 
     protected final INmsBiomeAccess nmsBiome;
     protected final IBiomeAccess biome;
-    
+
     protected final BiomeGrid grid;
 
-    public RwgGrid(IBiomeAccess biome, INmsBiomeAccess nmsBiome, World world, BiomeGrid grid, int chunkX, int chunkZ) {
+    public RwgGrid(final IBiomeAccess biome, final INmsBiomeAccess nmsBiome, final World world, final BiomeGrid grid, final int chunkX,
+        final int chunkZ) {
         this.nmsBiome = nmsBiome;
         this.biome = biome;
         this.world = world;
@@ -36,27 +37,27 @@ public abstract class RwgGrid {
     public IBiomeAccess getBiomeAccess() {
         return biome;
     }
-    
+
     protected abstract Biome internalGet(int x, int z);
-    
+
     public abstract boolean needsRemap();
 
-    public Biome getBukkit(int x, int z) {
+    public Biome getBukkit(final int x, final int z) {
         if (cache[x][z] != null) {
             return cache[x][z];
         }
         return cache[x][z] = internalGet(x, z);
     }
 
-    public void setBukkit(int x, int z, Biome biome) {
+    public void setBukkit(final int x, final int z, final Biome biome) {
         cache[x][z] = biome;
     }
 
-    public RWGBiome get(int x, int z) {
+    public RWGBiome get(final int x, final int z) {
         return output[x][z];
     }
 
-    public void set(int x, int z, RWGBiome biome) {
+    public void set(final int x, final int z, final RWGBiome biome) {
         output[x][z] = biome;
     }
 

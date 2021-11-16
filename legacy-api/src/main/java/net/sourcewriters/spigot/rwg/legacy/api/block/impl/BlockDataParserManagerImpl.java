@@ -30,29 +30,29 @@ public class BlockDataParserManagerImpl implements IBlockDataParserManager {
     private final ILogger logger;
     private final IBlockAccess access;
 
-    public BlockDataParserManagerImpl(ILogger logger, IBlockAccess access) {
+    public BlockDataParserManagerImpl(final ILogger logger, final IBlockAccess access) {
         this.logger = logger;
         this.access = access;
     }
 
     @Override
-    public boolean register(BlockDataParser parser) {
+    public boolean register(final BlockDataParser parser) {
         Objects.requireNonNull(parser, "BlockDataParser can't be null!");
         if (has(parser.getId())) {
             return false;
         }
         parsers.put(parser.getId(), parser);
-        order.computeIfAbsent(parser.getNamespace(), (ignore) -> new ArrayList<>()).add(parser.getId());
+        order.computeIfAbsent(parser.getNamespace(), ignore -> new ArrayList<>()).add(parser.getId());
         return true;
     }
 
     @Override
-    public boolean unregister(long id) {
-        BlockDataParser parser = parsers.remove(id);
+    public boolean unregister(final long id) {
+        final BlockDataParser parser = parsers.remove(id);
         if (parser == null) {
             return false;
         }
-        List<Long> list = order.get(parser.getNamespace());
+        final List<Long> list = order.get(parser.getNamespace());
         list.remove(id);
         if (list.isEmpty()) {
             order.remove(parser.getNamespace());
@@ -61,43 +61,43 @@ public class BlockDataParserManagerImpl implements IBlockDataParserManager {
     }
 
     @Override
-    public boolean has(long id) {
+    public boolean has(final long id) {
         return parsers.containsKey(id);
     }
 
     @Override
-    public BlockDataParser get(long id) {
+    public BlockDataParser get(final long id) {
         return parsers.get(id);
     }
 
     @Override
-    public int getPosition(long id) {
-        BlockDataParser parser = get(id);
+    public int getPosition(final long id) {
+        final BlockDataParser parser = get(id);
         if (parser == null) {
             return -1;
         }
-        List<Long> list = order.get(parser.getNamespace());
+        final List<Long> list = order.get(parser.getNamespace());
         return list.size() - list.indexOf(id);
     }
 
     @Override
-    public IBlockData parse(BlockStateEditor editor) {
+    public IBlockData parse(final BlockStateEditor editor) {
         Objects.requireNonNull(editor, "BlockStateEditor can't be null!");
-        NbtCompound compound = new NbtCompound();
+        final NbtCompound compound = new NbtCompound();
         compound.set("namespace", editor.getNamespace());
         compound.set("id", editor.getId());
-        NbtCompound statesTag = new NbtCompound();
-        HashMap<String, String> states = editor.getStates();
-        for (Entry<String, String> entry : states.entrySet()) {
+        final NbtCompound statesTag = new NbtCompound();
+        final HashMap<String, String> states = editor.getStates();
+        for (final Entry<String, String> entry : states.entrySet()) {
             statesTag.set(entry.getKey(), entry.getValue());
         }
         compound.set("states", statesTag);
         if (editor.hasProperties()) {
-            JsonObject object = JsonIO.parseProperties(editor.getProperties());
+            final JsonObject object = JsonIO.parseProperties(editor.getProperties());
             if (object == null) {
                 return parse(compound);
             }
-            NbtTag tag = JsonIO.toNbt(object);
+            final NbtTag tag = JsonIO.toNbt(object);
             if (tag == null || tag.getType() != NbtType.COMPOUND || ((NbtCompound) tag).size() == 0) {
                 return parse(compound);
             }
@@ -107,19 +107,19 @@ public class BlockDataParserManagerImpl implements IBlockDataParserManager {
     }
 
     @Override
-    public IBlockData parse(NbtCompound compound) {
+    public IBlockData parse(final NbtCompound compound) {
         Objects.requireNonNull(compound, "NbtCompound can't be null!");
         Checks.hasKey(compound, "namespace", NbtType.STRING);
         Checks.hasKey(compound, "id", NbtType.STRING);
         Checks.hasKey(compound, "states", NbtType.COMPOUND);
-        List<Long> list = order.get(compound.getString("namespace"));
+        final List<Long> list = order.get(compound.getString("namespace"));
         if (list == null) {
             logger.log(LogTypeId.WARNING, "Can't parse namespace '" + compound.getString("namespace") + "', no BlockDataParser available!");
             return null;
         }
-        int size = list.size();
+        final int size = list.size();
         for (int index = size - 1; index >= 0; index--) {
-            IBlockData output = parsers.get(list.get(index)).parse(access, compound);
+            final IBlockData output = parsers.get(list.get(index)).parse(access, compound);
             if (output != null) {
                 return output;
             }

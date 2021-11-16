@@ -25,7 +25,7 @@ public final class LazyAsset<E> implements IAsset<E>, ITickReceiver {
 
     private final ILogger logger;
 
-    public LazyAsset(ILogger logger, IKey key, File file, IAssetLoader<E> loader) {
+    public LazyAsset(final ILogger logger, final IKey key, final File file, final IAssetLoader<E> loader) {
         this.key = key;
         this.file = file;
         this.loader = loader;
@@ -37,7 +37,7 @@ public final class LazyAsset<E> implements IAsset<E>, ITickReceiver {
         return key;
     }
 
-    void setCacheTime(int time) {
+    void setCacheTime(final int time) {
         this.time = time;
         if (remaining > time) {
             remaining = time;
@@ -55,7 +55,7 @@ public final class LazyAsset<E> implements IAsset<E>, ITickReceiver {
         }
         try {
             asset = loader.load(file);
-        } catch (IOException exp) {
+        } catch (final IOException exp) {
             throw this.error = new AssetUnavailableException("Failed to load asset '" + key.asString() + "'!", exp);
         }
         remaining = time;
@@ -111,14 +111,14 @@ public final class LazyAsset<E> implements IAsset<E>, ITickReceiver {
     }
 
     @Override
-    public void onTick(long deltaTime) {
+    public void onTick(final long deltaTime) {
         if (!available) {
             return;
         }
         if (remaining-- == 0) {
             try {
                 unload();
-            } catch (IOException exp) {
+            } catch (final IOException exp) {
                 if (logger != null) {
                     logger.log(LogTypeId.WARNING, "Failed to unload lazy asset '" + key.asString() + "'!");
                     logger.log(LogTypeId.WARNING, exp);

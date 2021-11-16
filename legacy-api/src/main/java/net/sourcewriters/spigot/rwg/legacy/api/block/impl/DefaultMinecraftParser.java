@@ -15,24 +15,24 @@ import net.sourcewriters.spigot.rwg.legacy.api.util.data.JsonIO;
 
 public class DefaultMinecraftParser extends BlockDataParser {
 
-    public DefaultMinecraftParser(Plugin plugin) {
+    public DefaultMinecraftParser(final Plugin plugin) {
         super(plugin, "minecraft");
     }
 
     @Override
-    public IBlockData parse(IBlockAccess access, NbtCompound compound) {
-        String id = compound.getString("id");
-        NbtCompound states = compound.getCompound("states");
-        StringBuilder builder = new StringBuilder("[");
-        for (String key : states.getKeys()) {
+    public IBlockData parse(final IBlockAccess access, final NbtCompound compound) {
+        final String id = compound.getString("id");
+        final NbtCompound states = compound.getCompound("states");
+        final StringBuilder builder = new StringBuilder("[");
+        for (final String key : states.getKeys()) {
             builder.append(key).append('=').append(states.getString(key)).append(',');
         }
-        String state = builder.substring(0, builder.length() == 1 ? 1 : builder.length() - 1) + ']';
-        IBlockData data = access.dataOf("minecraft:" + id + state);
+        final String state = builder.substring(0, builder.length() == 1 ? 1 : builder.length() - 1) + ']';
+        final IBlockData data = access.dataOf("minecraft:" + id + state);
         if (data == null || !compound.hasKey("properties", NbtType.COMPOUND)) {
             return data;
         }
-        JsonValue<?> value = JsonIO.fromNbt(compound.getCompound("properties"));
+        final JsonValue<?> value = JsonIO.fromNbt(compound.getCompound("properties"));
         if (!value.hasType(ValueType.OBJECT)) {
             return data;
         }
