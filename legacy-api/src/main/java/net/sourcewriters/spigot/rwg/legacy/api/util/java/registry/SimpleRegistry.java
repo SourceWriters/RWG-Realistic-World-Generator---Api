@@ -35,27 +35,24 @@ public class SimpleRegistry<E extends IKeyed> implements IRegistry<E> {
         return false;
     }
 
-    @SuppressWarnings("unlikely-arg-type")
     @Override
     public boolean register(final E object) {
         final IKey key = object.getKey();
-        if (key == null || map.containsKey(key)) {
+        if (key == null || !has(key)) {
             return false;
         }
         map.put(new MapKey(key), object);
         return true;
     }
 
-    @SuppressWarnings("unlikely-arg-type")
     @Override
     public boolean has(final IKey key) {
-        return map.containsKey(key);
+        return map.containsKey(new MapKey(key));
     }
 
-    @SuppressWarnings("unlikely-arg-type")
     @Override
     public E get(final IKey key) {
-        return map.get(key);
+        return map.get(new MapKey(key));
     }
 
 }
