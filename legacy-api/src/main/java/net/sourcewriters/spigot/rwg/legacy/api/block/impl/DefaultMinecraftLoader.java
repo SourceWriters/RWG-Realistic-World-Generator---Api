@@ -1,6 +1,6 @@
 package net.sourcewriters.spigot.rwg.legacy.api.block.impl;
 
-import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.plugin.Plugin;
 
@@ -15,7 +15,7 @@ public final class DefaultMinecraftLoader extends BlockDataLoader {
     }
 
     @Override
-    public IBlockData load(final IBlockAccess access, final Block block, final BlockData blockData) {
+    public IBlockData load(final IBlockAccess access, final BlockState block, final BlockData blockData) {
         return access.dataOf(blockData).setConversionPossible(true);
     }
 

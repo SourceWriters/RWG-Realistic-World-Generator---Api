@@ -12,6 +12,10 @@ import net.sourcewriters.spigot.rwg.legacy.api.util.java.RandomAdapter;
 
 @Unsafe(status = UnsafeStatus.WORK_IN_PROGRESS, useable = true)
 public interface IChestStorage {
+    
+    String[] getNames();
+    
+    boolean has(String chest);
 
     void fillInventory(String chest, Inventory inventory);
 

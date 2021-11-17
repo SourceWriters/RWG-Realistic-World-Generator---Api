@@ -4,6 +4,7 @@ import java.util.function.Supplier;
 
 import org.bukkit.Location;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 
 import net.sourcewriters.spigot.rwg.legacy.api.util.annotation.source.NonNull;
 
@@ -29,5 +30,7 @@ public interface IBlockDataLoaderManager {
     IBlockData load(@NonNull Location location);
 
     IBlockData load(@NonNull Block block);
+    
+    IBlockData load(@NonNull BlockState state);
 
 }

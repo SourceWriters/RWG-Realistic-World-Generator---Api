@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.block.data.BlockData;
 
 import com.syntaxphoenix.syntaxapi.json.utils.Tracker;
@@ -75,6 +76,17 @@ public class BlockAccessImpl implements IBlockAccess {
                 "BlockDataLoader (" + clazz.get().getName() + ") is calling dataOf(Block), this could cause an infinite loop!");
         }
         return loaderManager.load(block);
+    }
+
+    @Override
+    public IBlockData dataOf(BlockState blockState) {
+        Objects.requireNonNull(blockState, "BlockState can't be null!");
+        final Optional<Class<?>> clazz = Tracker.getCallerClass();
+        if (clazz.isPresent() && BlockDataLoader.class.isAssignableFrom(clazz.get())) {
+            logger.log(LogTypeId.WARNING,
+                "BlockDataLoader (" + clazz.get().getName() + ") is calling dataOf(Block), this could cause an infinite loop!");
+        }
+        return loaderManager.load(blockState);
     }
 
     @CallerSensitive

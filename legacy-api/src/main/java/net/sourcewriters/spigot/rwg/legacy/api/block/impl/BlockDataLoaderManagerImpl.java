@@ -7,6 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.block.data.BlockData;
 
 import com.syntaxphoenix.syntaxapi.logging.ILogger;
@@ -68,7 +69,7 @@ public class BlockDataLoaderManagerImpl implements IBlockDataLoaderManager {
         Objects.requireNonNull(location, "Location can't be null!");
         if (Bukkit.isPrimaryThread()) {
             try {
-                return load(location.getBlock());
+                return load(location.getBlock().getState());
             } catch (final Exception exp) {
                 logger.log(LogTypeId.WARNING, "Failed to load block");
                 logger.log(LogTypeId.WARNING, exp);
@@ -76,7 +77,7 @@ public class BlockDataLoaderManagerImpl implements IBlockDataLoaderManager {
             }
         }
         try {
-            return load(location.getBlock());
+            return load(location.getBlock().getState());
         } catch (final Exception exp) {
             logger.log(LogTypeId.WARNING, "Failed to load block asynchronously to main thread");
             logger.log(LogTypeId.WARNING, exp);
@@ -87,14 +88,35 @@ public class BlockDataLoaderManagerImpl implements IBlockDataLoaderManager {
     @Override
     public IBlockData load(@NonNull final Block block) {
         Objects.requireNonNull(block, "Block can't be null!");
+        if (Bukkit.isPrimaryThread()) {
+            try {
+                return load(block.getState());
+            } catch (final Exception exp) {
+                logger.log(LogTypeId.WARNING, "Failed to load block");
+                logger.log(LogTypeId.WARNING, exp);
+                return null;
+            }
+        }
+        try {
+            return load(block.getState());
+        } catch (final Exception exp) {
+            logger.log(LogTypeId.WARNING, "Failed to load block asynchronously to main thread");
+            logger.log(LogTypeId.WARNING, exp);
+            return null;
+        }
+    }
+
+    @Override
+    public IBlockData load(@NonNull final BlockState blockState) {
+        Objects.requireNonNull(blockState, "BlockState can't be null!");
         if (loaders.isEmpty()) {
             logger.log(LogTypeId.ERROR, "Can't load blocks without BlockDataLoader's!");
             return null;
         }
-        final BlockData data = block.getBlockData();
+        final BlockData data = blockState.getBlockData();
         final int size = order.size();
         for (int index = size - 1; index >= 0; index--) {
-            final IBlockData output = loaders.get(order.get(index)).load(access, block, data);
+            final IBlockData output = loaders.get(order.get(index)).load(access, blockState, data);
             if (output != null) {
                 return output;
             }

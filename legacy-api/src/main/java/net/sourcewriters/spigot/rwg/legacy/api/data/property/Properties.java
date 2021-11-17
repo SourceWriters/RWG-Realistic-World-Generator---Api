@@ -3,8 +3,14 @@ package net.sourcewriters.spigot.rwg.legacy.api.data.property;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
 
 class Properties implements IProperties {
+    
+    private static final ConcurrentHashMap<String, VoidProperty> VOIDS = new ConcurrentHashMap<>();
+    private static final Function<String, VoidProperty> VOID_PROPERTY_BUILD = VoidProperty::new;
 
     private final List<IProperty<?>> properties = Collections.synchronizedList(new ArrayList<>());
 
@@ -99,7 +105,8 @@ class Properties implements IProperties {
 
     @Override
     public IProperty<?> find(final String key) {
-        return properties.stream().filter(property -> property.getKey().equals(key)).findFirst().orElse(new VoidProperty(key));
+        Optional<IProperty<?>> option = properties.stream().filter(property -> property.getKey().equals(key)).findFirst();
+        return option.isPresent() ? option.get() : VOIDS.computeIfAbsent(key, VOID_PROPERTY_BUILD);
     }
 
     @Override

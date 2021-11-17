@@ -3,6 +3,7 @@ package net.sourcewriters.spigot.rwg.legacy.api.schematic;
 import java.io.File;
 import java.util.function.Supplier;
 
+import net.sourcewriters.spigot.rwg.legacy.api.data.asset.IAsset;
 import net.sourcewriters.spigot.rwg.legacy.api.util.annotation.source.NonNull;
 
 public interface ISchematicLoader {
@@ -22,7 +23,7 @@ public interface ISchematicLoader {
      *                                      format
      */
     @NonNull
-    ISchematic load(@NonNull File file) throws Exception;
+    IAsset<ISchematic> load(@NonNull File file) throws Exception;
 
     boolean register(@NonNull SchematicConverter converter);
 

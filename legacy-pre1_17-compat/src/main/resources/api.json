@@ -1,6 +1,6 @@
 {
-	"api": 2,
-  "version": "${project.version}",
+  	"api": 3,
+  	"version": "${project.version}",
 	"minecraft": [
 		"1.13",
 		"1.13.1",

@@ -2,6 +2,7 @@ package net.sourcewriters.spigot.rwg.legacy.api.block;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.block.data.BlockData;
 
 import com.syntaxphoenix.syntaxapi.nbt.NbtCompound;
@@ -23,6 +24,9 @@ public interface IBlockAccess {
 
     @CallerSensitive
     IBlockData dataOf(@NonNull Block block);
+    
+    @CallerSensitive
+    IBlockData dataOf(@NonNull BlockState blockState);
 
     @CallerSensitive
     IBlockData dataOf(@NonNull String rawData);

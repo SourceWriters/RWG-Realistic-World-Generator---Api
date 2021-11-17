@@ -2,7 +2,7 @@ package net.sourcewriters.spigot.rwg.legacy.api.block;
 
 import java.util.Objects;
 
-import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.plugin.Plugin;
 
@@ -36,6 +36,6 @@ public abstract class BlockDataLoader {
         return name;
     }
 
-    public abstract IBlockData load(@NonNull IBlockAccess access, @NonNull Block block, @NonNull BlockData blockData);
+    public abstract IBlockData load(@NonNull IBlockAccess access, @NonNull BlockState blockState, @NonNull BlockData blockData);
 
 }

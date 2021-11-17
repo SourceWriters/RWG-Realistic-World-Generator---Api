@@ -10,7 +10,6 @@ import net.sourcewriters.spigot.rwg.legacy.api.block.IBlockAccess;
 import net.sourcewriters.spigot.rwg.legacy.api.block.IBlockDataLoaderManager;
 import net.sourcewriters.spigot.rwg.legacy.api.block.IBlockDataParserManager;
 import net.sourcewriters.spigot.rwg.legacy.api.block.IBlockDataPlacerManager;
-import net.sourcewriters.spigot.rwg.legacy.api.block.impl.BlockAccessImpl;
 import net.sourcewriters.spigot.rwg.legacy.api.block.impl.DefaultMinecraftLoader;
 import net.sourcewriters.spigot.rwg.legacy.api.block.impl.DefaultMinecraftParser;
 import net.sourcewriters.spigot.rwg.legacy.api.block.impl.DefaultMinecraftPlacer;
@@ -26,7 +25,6 @@ public class VersionCompatibilityProviderImpl extends VersionCompatibilityProvid
     public void provide(final ILogger logger, final IArgumentMap map) {
         final IDataFixHandler dataFixHandler = new DataFixHandlerImpl();
         final IVersionAccess versionAccess = new VersionAccessImpl(logger);
-        set(map, IBlockAccess.class, new BlockAccessImpl(logger, versionAccess.getConversionAccess(), dataFixHandler));
         set(map, IVersionAccess.class, versionAccess);
         set(map, IDataFixHandler.class, dataFixHandler);
     }
