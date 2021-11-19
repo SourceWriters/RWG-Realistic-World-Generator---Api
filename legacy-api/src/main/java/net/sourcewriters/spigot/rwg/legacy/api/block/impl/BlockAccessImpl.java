@@ -2,6 +2,7 @@ package net.sourcewriters.spigot.rwg.legacy.api.block.impl;
 
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.BiFunction;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -35,17 +36,20 @@ public class BlockAccessImpl implements IBlockAccess {
     private final IConversionAccess access;
     private final IDataFixHandler fixHandler;
 
-    private final BlockDataLoaderManagerImpl loaderManager;
-    private final BlockDataParserManagerImpl parserManager;
-    private final BlockDataPlacerManagerImpl placerManager;
+    private final IBlockDataLoaderManager loaderManager;
+    private final IBlockDataParserManager parserManager;
+    private final IBlockDataPlacerManager placerManager;
 
-    public BlockAccessImpl(final ILogger logger, final IConversionAccess access, final IDataFixHandler fixHandler) {
+    public BlockAccessImpl(final ILogger logger, final IConversionAccess access, final IDataFixHandler fixHandler,
+        final BiFunction<ILogger, IBlockAccess, IBlockDataLoaderManager> buildLoader,
+        final BiFunction<ILogger, IBlockAccess, IBlockDataParserManager> buildParser,
+        final BiFunction<ILogger, IBlockAccess, IBlockDataPlacerManager> buildPlacer) {
         this.logger = logger;
         this.access = access;
         this.fixHandler = fixHandler;
-        this.loaderManager = new BlockDataLoaderManagerImpl(logger, this);
-        this.parserManager = new BlockDataParserManagerImpl(logger, this);
-        this.placerManager = new BlockDataPlacerManagerImpl(logger);
+        this.loaderManager = buildLoader.apply(logger, this);
+        this.parserManager = buildParser.apply(logger, this);
+        this.placerManager = buildPlacer.apply(logger, this);
     }
 
     @NonNull
