@@ -59,7 +59,7 @@ public final class GlobalLookup {
         provider.createLookup("cb_itemstack", provider.getCBClass("inventory.CraftItemStack"))
             .searchMethod("nms", "asNMSCopy", ItemStack.class).searchMethod("bukkit", "asBukkitCopy", nmsItemStackClass);
 
-        provider.createLookup("cb_skull_meta", provider.getCBClass("inventory.CraftSkullMeta")).searchField("profile", "profile", GameProfile.class);
+        provider.createLookup("cb_skull_meta", provider.getCBClass("inventory.CraftMetaSkull")).searchField("profile", "profile", GameProfile.class);
 
         /*
          * Setup version related stuff
