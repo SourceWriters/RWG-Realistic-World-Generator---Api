@@ -20,7 +20,7 @@ public final class GlobalLookup {
 
         provider.createLookup("cb_block_entity_state", CraftBlockEntityState.class).searchMethod("entity", "getTileEntity");
 
-        provider.createLookup("cb_skull_meta", provider.getCBClass("inventory.CraftMetaSkull")).searchField("field", "field",
+        provider.createLookup("cb_skull_meta", provider.getCBClass("inventory.CraftMetaSkull")).searchField("profile", "profile",
             GameProfile.class);
 
     }

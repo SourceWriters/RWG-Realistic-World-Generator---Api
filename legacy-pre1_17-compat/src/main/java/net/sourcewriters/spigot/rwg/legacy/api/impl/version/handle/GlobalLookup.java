@@ -5,7 +5,6 @@ import java.io.DataOutput;
 
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.SkullMeta;
 
 import com.mojang.authlib.GameProfile;
 
@@ -60,7 +59,7 @@ public final class GlobalLookup {
         provider.createLookup("cb_itemstack", provider.getCBClass("inventory.CraftItemStack"))
             .searchMethod("nms", "asNMSCopy", ItemStack.class).searchMethod("bukkit", "asBukkitCopy", nmsItemStackClass);
 
-        provider.createLookup("bkt_skull_meta", SkullMeta.class).searchField("field", "field", GameProfile.class);
+        provider.createLookup("cb_skull_meta", provider.getCBClass("inventory.CraftSkullMeta")).searchField("profile", "profile", GameProfile.class);
 
         /*
          * Setup version related stuff

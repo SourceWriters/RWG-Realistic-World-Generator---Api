@@ -62,7 +62,7 @@ public final class ConversionAccessImpl implements IConversionAccess {
     public ItemStack asHeadItem(final GameProfile profile) {
         final ItemStack stack = new ItemStack(RWGMaterial.HEAD_ITEM.asBukkit(this));
         final SkullMeta meta = (SkullMeta) stack.getItemMeta();
-        provider.getLookup("bkt_skull_meta").setFieldValue(meta, "profile", profile);
+        provider.getLookup("cb_skull_meta").setFieldValue(meta, "profile", profile);
         stack.setItemMeta(meta);
         return stack;
     }

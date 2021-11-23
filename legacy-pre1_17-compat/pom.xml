@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>net.sourcewriters.spigot.rwg</groupId>
 	<artifactId>legacy-pre1_17-compat</artifactId>
-	<version>3.0.0</version>
+	<version>3.0.1</version>
 
 	<properties>
 		<api.version>3.0.0</api.version>
