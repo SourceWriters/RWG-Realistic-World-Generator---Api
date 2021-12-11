@@ -87,7 +87,7 @@ public final class InstanceBuilder {
             int tmpArgs = 0;
             for (int index = 0; index < count; index++) {
                 for (int idx = 0; idx < max; idx++) {
-                    if (!types[index].isAssignableFrom(classes[idx])) {
+                    if (!types[index].equals(classes[idx])) {
                         continue;
                     }
                     tmpIdx[idx] = index;
@@ -97,8 +97,8 @@ public final class InstanceBuilder {
             if (tmpArgs != count) {
                 continue;
             }
-            args = tmpArgs;
             argIdx = tmpIdx;
+            args = tmpArgs;
             builder = constructor;
         }
         if (builder == null) {
@@ -108,12 +108,11 @@ public final class InstanceBuilder {
             return clazz.cast(builder.newInstance());
         }
         final Object[] parameters = new Object[args];
-        final Class<?>[] types = builder.getParameterTypes();
         for (int idx = 0; idx < max; idx++) {
             if (argIdx[idx] == -1) {
                 continue;
             }
-            parameters[argIdx[idx]] = types[argIdx[idx]].cast(arguments[idx]);
+            parameters[argIdx[idx]] = arguments[idx];
         }
         return clazz.cast(builder.newInstance(parameters));
     }
