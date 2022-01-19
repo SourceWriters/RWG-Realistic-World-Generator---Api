@@ -2,9 +2,9 @@ package net.sourcewriters.spigot.rwg.legacy.api.impl.version.handle;
 
 import net.sourcewriters.spigot.rwg.legacy.api.version.handle.ClassLookupProvider;
 
-public final class Lookup1_15 extends VersionLookup {
+public final class VersionLookup1_14 extends VersionLookup {
 
-    Lookup1_15() {}
+    VersionLookup1_14() {}
 
     @Override
     public void setup(final ClassLookupProvider provider) {

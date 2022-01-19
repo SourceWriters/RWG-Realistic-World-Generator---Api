@@ -3,9 +3,9 @@ package net.sourcewriters.spigot.rwg.legacy.api.impl.version.handle;
 import net.sourcewriters.spigot.rwg.legacy.api.version.handle.ClassLookupProvider;
 import net.sourcewriters.spigot.rwg.legacy.api.version.util.Versions;
 
-public final class Lookup1_16 extends VersionLookup {
+public final class VersionLookup1_16 extends VersionLookup {
 
-    Lookup1_16() {}
+    VersionLookup1_16() {}
 
     @Override
     public void setup(final ClassLookupProvider provider) {
@@ -17,7 +17,6 @@ public final class Lookup1_16 extends VersionLookup {
         final Class<?> genLayerClass = provider.getNMSClass("GenLayer");
         final Class<?> areaLazyClass = provider.getNMSClass("AreaLazy");
         final Class<?> areaTransformer8Class = provider.getNMSClass("AreaTransformer8");
-
         provider.createLookup("nms_world_chunk_manager_overworld", provider.getNMSClass("WorldChunkManagerOverworld"))
             .searchField("genLayer", "f", genLayerClass);
         provider.createLookup("nms_gen_layer", genLayerClass).searchField("areaLazy", "b", areaLazyClass);
