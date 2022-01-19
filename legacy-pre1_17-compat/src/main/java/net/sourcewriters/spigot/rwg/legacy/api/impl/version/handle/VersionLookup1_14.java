@@ -4,7 +4,7 @@ import net.sourcewriters.spigot.rwg.legacy.api.version.handle.ClassLookupProvide
 
 public final class VersionLookup1_14 extends VersionLookup {
 
-    VersionLookup1_14() {}
+    public VersionLookup1_14() {}
 
     @Override
     public void setup(final ClassLookupProvider provider) {
