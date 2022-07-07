@@ -7,15 +7,15 @@ import org.bukkit.inventory.meta.SkullMeta;
 
 import com.mojang.authlib.GameProfile;
 
+import net.sourcewriters.spigot.rwg.legacy.api.util.java.reflect.AccessorProvider;
 import net.sourcewriters.spigot.rwg.legacy.api.util.rwg.RWGMaterial;
 import net.sourcewriters.spigot.rwg.legacy.api.version.IConversionAccess;
-import net.sourcewriters.spigot.rwg.legacy.api.version.handle.ClassLookupProvider;
 
 public final class ConversionAccessImpl implements IConversionAccess {
 
-    private final ClassLookupProvider provider;
+    private final AccessorProvider provider;
 
-    public ConversionAccessImpl(final ClassLookupProvider provider) {
+    public ConversionAccessImpl(final AccessorProvider provider) {
         this.provider = provider;
     }
 
@@ -62,7 +62,7 @@ public final class ConversionAccessImpl implements IConversionAccess {
     public ItemStack asHeadItem(final GameProfile profile) {
         final ItemStack stack = new ItemStack(RWGMaterial.HEAD_ITEM.asBukkit(this));
         final SkullMeta meta = (SkullMeta) stack.getItemMeta();
-        provider.getLookup("cb_skull_meta").setFieldValue(meta, "profile", profile);
+        provider.getOrNull("cb_skull_meta").setValue(meta, "profile", profile);
         stack.setItemMeta(meta);
         return stack;
     }

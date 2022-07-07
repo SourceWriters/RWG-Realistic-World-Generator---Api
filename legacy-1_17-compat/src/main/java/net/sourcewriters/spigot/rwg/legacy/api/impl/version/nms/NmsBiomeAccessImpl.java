@@ -10,12 +10,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeManager;
-import net.sourcewriters.spigot.rwg.legacy.api.version.handle.ClassLookupProvider;
 import net.sourcewriters.spigot.rwg.legacy.api.version.nms.INmsBiomeAccess;
 
 public final class NmsBiomeAccessImpl implements INmsBiomeAccess {
-
-    public NmsBiomeAccessImpl(final ClassLookupProvider _ignore) {}
 
     @Override
     public org.bukkit.block.Biome getBiomeAt(final World bukkitWorld, final int x, final int y, final int z) {

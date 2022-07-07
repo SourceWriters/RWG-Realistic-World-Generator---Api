@@ -2,6 +2,7 @@ package net.sourcewriters.spigot.rwg.legacy.api.generator.forward;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
 import org.bukkit.World;
@@ -9,13 +10,11 @@ import org.bukkit.generator.BlockPopulator;
 import org.bukkit.generator.ChunkGenerator;
 
 import net.sourcewriters.spigot.rwg.legacy.api.generator.IRwgGenerator;
-import net.sourcewriters.spigot.rwg.legacy.api.version.handle.ClassLookup;
-import net.sourcewriters.spigot.rwg.legacy.api.version.handle.ClassLookupCache;
-import net.sourcewriters.spigot.rwg.legacy.api.version.handle.ClassLookupProvider;
+import net.sourcewriters.spigot.rwg.legacy.api.util.java.reflect.Accessor;
 
 public final class ForwardHelper {
 
-    private static final ClassLookupCache CACHE = ClassLookupProvider.DEFAULT.getCache();
+    private static final ConcurrentHashMap<String, Accessor> ACCESSORS = new ConcurrentHashMap<>();
     private static final ArrayList<String> LIST = new ArrayList<>();
 
     private ForwardHelper() {}
@@ -27,17 +26,17 @@ public final class ForwardHelper {
         final Class<?> clazz = generator.getClass();
         final String name = clazz.getName();
         if (LIST.contains(name)) {
-            return CACHE.get(name).isPresent();
+            return ACCESSORS.containsKey(name);
         }
-        final ClassLookup lookup = CACHE.create(name, clazz);
-        final Object object = lookup.searchMethod("id", "getIdentifier").run(generator, "id");
+        final Accessor access = Accessor.of(clazz);
+        final Object object = access.findMethod("id", "getIdentifier").invoke(generator, "id");
         final boolean valid = object != null && (long) object == 345679324062398605L;
         LIST.add(name);
         if (!valid) {
-            CACHE.delete(name);
             return false;
         }
-        lookup.searchMethod("set", "setGenerator", ChunkGenerator.class).searchMethod("get", "getGenerator").searchMethod("populators",
+        ACCESSORS.put(name, access);
+        access.findMethod("set", "setGenerator", ChunkGenerator.class).findMethod("get", "getGenerator").findMethod("populators",
             "setPopulators", BlockPopulator[].class);
         return valid;
     }
@@ -50,7 +49,7 @@ public final class ForwardHelper {
         if (!isForward(generator)) {
             return null;
         }
-        final Object found = CACHE.get(generator.getClass().getName()).orElse(null).run(generator, "get");
+        final Object found = ACCESSORS.get(generator.getClass().getName()).invoke(generator, "get");
         return found instanceof IRwgGenerator ? (IRwgGenerator) found : null;
     }
 
@@ -63,10 +62,10 @@ public final class ForwardHelper {
             return false;
         }
         final ChunkGenerator generator = builder.apply(world);
-        final ClassLookup lookup = CACHE.get(current.getClass().getName()).orElse(null);
-        lookup.run(current, "set", generator);
+        final Accessor access = ACCESSORS.get(generator.getClass().getName());
+        access.invoke(current, "set", generator);
         final List<BlockPopulator> list = generator.getDefaultPopulators(world);
-        lookup.run(current, "populators",
+        access.invoke(current, "populators",
             (Object) (list == null ? new BlockPopulator[0] : list.stream().filter(obj -> obj != null).toArray(BlockPopulator[]::new)));
         return true;
     }

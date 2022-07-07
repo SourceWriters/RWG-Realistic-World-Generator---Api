@@ -1,11 +1,8 @@
-package net.sourcewriters.spigot.rwg.legacy.api.util.java;
+package net.sourcewriters.spigot.rwg.legacy.api.util.java.reflect;
 
 import java.lang.reflect.Constructor;
 import java.util.Optional;
 
-import com.syntaxphoenix.syntaxapi.utils.java.Arrays;
-
-import net.sourcewriters.spigot.rwg.legacy.api.version.handle.ClassLookup;
 import net.sourcewriters.spigot.rwg.legacy.api.version.util.ServerVersion;
 import net.sourcewriters.spigot.rwg.legacy.api.version.util.Versions;
 
@@ -13,7 +10,7 @@ public final class InstanceBuilder {
 
     private InstanceBuilder() {}
 
-    public static <A> Optional<A> buildBelow(final Class<A> abstraction) {
+    public static <A> Optional<A> buildBelow(final Class<A> abstraction, final Object... arguments) {
         final ServerVersion server = Versions.getServer();
         final int major = server.getMajor();
         Optional<Class<?>> optional = Optional.empty();
@@ -27,17 +24,14 @@ public final class InstanceBuilder {
         if (optional.isEmpty()) {
             return Optional.empty();
         }
-        final ClassLookup lookup = ClassLookup.of(optional.get());
-        final Object object = lookup.init();
+        final Object object = create(optional.get(), arguments);
         if (object == null) {
-            lookup.delete();
             return Optional.empty();
         }
-        lookup.delete();
         return Optional.of(abstraction.cast(object));
     }
 
-    public static <A> Optional<A> buildExact(final Class<A> abstraction) {
+    public static <A> Optional<A> buildExact(final Class<A> abstraction, final Object... arguments) {
         final ServerVersion server = Versions.getServer();
         final int major = server.getMajor();
         final int minor = server.getMinor();
@@ -46,13 +40,10 @@ public final class InstanceBuilder {
         if (optional.isEmpty()) {
             return Optional.empty();
         }
-        final ClassLookup lookup = ClassLookup.of(optional.get());
-        final Object object = lookup.init();
+        final Object object = create(optional.get(), arguments);
         if (object == null) {
-            lookup.delete();
             return Optional.empty();
         }
-        lookup.delete();
         return Optional.of(abstraction.cast(object));
     }
 
@@ -64,8 +55,11 @@ public final class InstanceBuilder {
         }
     }
 
-    public static <T> T create(final Class<T> clazz, final Object... arguments) throws Exception {
-        final Constructor<?>[] constructors = Arrays.merge(Constructor[]::new, clazz.getConstructors(), clazz.getDeclaredConstructors());
+    public static <T> T create(final Class<T> clazz, final Object... arguments) {
+        if (arguments.length == 0) {
+            return clazz.cast(JavaAccess.instance(clazz));
+        }
+        final Constructor<?>[] constructors = JavaAccess.getConstructors(clazz);
         final Class<?>[] classes = new Class<?>[arguments.length];
         for (int index = 0; index < arguments.length; index++) {
             classes[index] = arguments[index].getClass();
@@ -105,7 +99,7 @@ public final class InstanceBuilder {
             return null;
         }
         if (args == 0) {
-            return clazz.cast(builder.newInstance());
+            return clazz.cast(JavaAccess.instance(builder));
         }
         final Object[] parameters = new Object[args];
         for (int idx = 0; idx < max; idx++) {
@@ -114,7 +108,7 @@ public final class InstanceBuilder {
             }
             parameters[argIdx[idx]] = arguments[idx];
         }
-        return clazz.cast(builder.newInstance(parameters));
+        return clazz.cast(JavaAccess.instance(builder, parameters));
     }
 
 }

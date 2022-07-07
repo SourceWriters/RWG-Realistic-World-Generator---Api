@@ -1,27 +1,27 @@
 package net.sourcewriters.spigot.rwg.legacy.api.impl.version.handle;
 
-import net.sourcewriters.spigot.rwg.legacy.api.version.handle.ClassLookupProvider;
+import net.sourcewriters.spigot.rwg.legacy.api.util.java.reflect.AccessorProvider;
+import net.sourcewriters.spigot.rwg.legacy.api.version.provider.VersionProvider;
 
 public final class VersionLookup1_14 extends VersionLookup {
 
     public VersionLookup1_14() {}
 
     @Override
-    public void setup(final ClassLookupProvider provider) {
+    public void setup(final AccessorProvider provider, final VersionProvider version) {
 
-        final Class<?> iRegistryClass = provider.getNMSClass("IRegistry");
-        final Class<?> genLayerClass = provider.getNMSClass("GenLayer");
-        final Class<?> areaLazyClass = provider.getNMSClass("AreaLazy");
-        final Class<?> areaTransformer8Class = provider.getNMSClass("AreaTransformer8");
+        final Class<?> iRegistryClass = version.minecraftClass("IRegistry");
+        final Class<?> genLayerClass = version.minecraftClass("GenLayer");
+        final Class<?> areaLazyClass = version.minecraftClass("AreaLazy");
 
-        provider.createLookup("nms_world_chunk_manager_overworld", provider.getNMSClass("WorldChunkManagerOverworld"))
-            .searchField("genLayer", "d", genLayerClass);
-        provider.createLookup("nms_gen_layer", genLayerClass).searchField("areaLazy", "b", areaLazyClass);
-        provider.createLookup("nms_area_lazy", areaLazyClass).searchField("transformer", "a", areaTransformer8Class);
+        provider.create("nms_world_chunk_manager_overworld", version.minecraftClass("WorldChunkManagerOverworld")).findField("genLayer",
+            "d");
+        provider.create("nms_gen_layer", genLayerClass).findField("areaLazy", "b");
+        provider.create("nms_area_lazy", areaLazyClass).findField("transformer", "a");
 
-        provider.createLookup("nms_registry", iRegistryClass).searchField("biomeRegistry", "BIOME", iRegistryClass);
-        provider.createLookup("nms_registry_materials", provider.getNMSClass("RegistryMaterials")).searchMethod("id", "fromId", int.class)
-            .searchMethod("key", "getKey", Object.class);
+        provider.create("nms_registry", iRegistryClass).findField("biomeRegistry", "BIOME");
+        provider.create("nms_registry_materials", version.minecraftClass("RegistryMaterials")).findMethod("id", "fromId", int.class)
+            .findMethod("key", "getKey", Object.class);
 
     }
 

@@ -1,6 +1,6 @@
 package net.sourcewriters.spigot.rwg.legacy.api.compatibility;
 
-import net.sourcewriters.spigot.rwg.legacy.api.util.java.Tracker;
+import net.sourcewriters.spigot.rwg.legacy.api.util.java.reflect.JavaTracker;
 
 public class AddonIncompatibleException extends RuntimeException {
 
@@ -34,7 +34,7 @@ public class AddonIncompatibleException extends RuntimeException {
      * @param versions      the compatible versions of this plugin
      */
     public AddonIncompatibleException(final IPluginPackage pluginPackage, final String... versions) {
-        super(pluginPackage.getName() + " is not compatible with the " + Tracker.getClassFromStack(1).map(Class::getName).orElse(null)
+        super(pluginPackage.getName() + " is not compatible with the " + JavaTracker.getClassFromStack(1).map(Class::getName).orElse(null)
             + " addon. Please use one of the following versions instead: " + String.join(", ", versions));
     }
 

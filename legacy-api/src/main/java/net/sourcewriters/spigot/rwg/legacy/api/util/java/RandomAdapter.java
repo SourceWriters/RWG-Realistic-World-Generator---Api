@@ -1,15 +1,16 @@
 package net.sourcewriters.spigot.rwg.legacy.api.util.java;
 
+import java.lang.reflect.Field;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 
 import com.syntaxphoenix.syntaxapi.random.RandomNumberGenerator;
 
-import net.sourcewriters.spigot.rwg.legacy.api.version.handle.ClassLookup;
+import net.sourcewriters.spigot.rwg.legacy.api.util.java.reflect.JavaAccess;
 
 public final class RandomAdapter extends RandomNumberGenerator {
 
-    private static final ClassLookup LOOKUP = ClassLookup.of(Random.class).searchField("seed", "seed", AtomicLong.class);
+    private static final Field SEED_FIELD = JavaAccess.getField(Random.class, "seed");
 
     private final Random random;
     private final AtomicLong seedState;
@@ -18,7 +19,7 @@ public final class RandomAdapter extends RandomNumberGenerator {
 
     public RandomAdapter(final Random random) {
         this.random = random;
-        this.seedState = (AtomicLong) LOOKUP.getFieldValue(random, "seed");
+        this.seedState = (AtomicLong) JavaAccess.getValue(random, SEED_FIELD);
     }
 
     @Override

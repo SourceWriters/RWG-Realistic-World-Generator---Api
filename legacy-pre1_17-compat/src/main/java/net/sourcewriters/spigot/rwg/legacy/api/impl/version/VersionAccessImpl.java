@@ -15,7 +15,7 @@ public final class VersionAccessImpl implements IVersionAccess {
 
     public VersionAccessImpl(final ILogger logger) {
         nmsAccess = new NmsAccessImpl(logger);
-        conversionAccess = new ConversionAccessImpl(nmsAccess.getLookupProvider());
+        conversionAccess = new ConversionAccessImpl(nmsAccess.getProvider());
         biomeAccess = new BiomeAccessImpl();
     }
 
