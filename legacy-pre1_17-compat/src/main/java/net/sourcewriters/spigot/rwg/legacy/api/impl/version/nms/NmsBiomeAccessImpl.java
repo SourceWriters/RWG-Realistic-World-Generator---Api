@@ -8,36 +8,35 @@ import org.bukkit.block.Biome;
 
 import com.google.common.hash.Hashing;
 
-import net.sourcewriters.spigot.rwg.legacy.api.version.handle.ClassLookup;
-import net.sourcewriters.spigot.rwg.legacy.api.version.handle.ClassLookupCache;
-import net.sourcewriters.spigot.rwg.legacy.api.version.handle.ClassLookupProvider;
+import net.sourcewriters.spigot.rwg.legacy.api.util.java.reflect.Accessor;
+import net.sourcewriters.spigot.rwg.legacy.api.util.java.reflect.AccessorProvider;
 import net.sourcewriters.spigot.rwg.legacy.api.version.nms.INmsBiomeAccess;
 
 public final class NmsBiomeAccessImpl implements INmsBiomeAccess {
 
     private final ConcurrentHashMap<Long, Long> hashCache = new ConcurrentHashMap<>();
 
-    private final ClassLookupCache cache;
+    private final AccessorProvider provider;
 
-    public NmsBiomeAccessImpl(final ClassLookupProvider provider) {
-        this.cache = provider.getCache();
+    public NmsBiomeAccessImpl(final AccessorProvider provider) {
+        this.provider = provider;
     }
 
     @Override
     public Biome getBiomeAt(final World bukkitWorld, final int x, final int y, final int z) {
-        Optional<ClassLookup> option;
-        final ClassLookup refCbWorld = get("cb_world");
-        final ClassLookup refWorldServer = get("nms_world_server");
-        final ClassLookup refChunkProviderServer = get("nms_chunk_provider_server");
-        final ClassLookup refChunkGenerator = get("nms_chunk_generator");
-        final ClassLookup refWorldChunkManagerOverworld = get("nms_world_chunk_manager_overworld");
-        final ClassLookup refGenLayer = get("nms_gen_layer");
-        final ClassLookup refAreaLazy = get("nms_area_lazy");
-        final ClassLookup refTransformer = get("nms_area_transformer_8");
-        option = cache.get("nms_biome_registry");
-        ClassLookup refRegistryExt = null;
-        ClassLookup refRegistry;
-        ClassLookup refMinecraftKeyExt = null;
+        Optional<Accessor> option;
+        final Accessor refCbWorld = get("cb_world");
+        final Accessor refWorldServer = get("nms_world_server");
+        final Accessor refChunkProviderServer = get("nms_chunk_provider_server");
+        final Accessor refChunkGenerator = get("nms_chunk_generator");
+        final Accessor refWorldChunkManagerOverworld = get("nms_world_chunk_manager_overworld");
+        final Accessor refGenLayer = get("nms_gen_layer");
+        final Accessor refAreaLazy = get("nms_area_lazy");
+        final Accessor refTransformer = get("nms_area_transformer_8");
+        option = provider.get("nms_biome_registry");
+        Accessor refRegistryExt = null;
+        Accessor refRegistry;
+        Accessor refMinecraftKeyExt = null;
         if (option.isPresent()) {
             refRegistry = option.get();
             refMinecraftKeyExt = get("nms_resource_key");
@@ -45,31 +44,31 @@ public final class NmsBiomeAccessImpl implements INmsBiomeAccess {
             refRegistryExt = get("nms_i_registry");
             refRegistry = get("nms_registry_materials");
         }
-        final ClassLookup refMinecraftKey = get("nms_minecraft_key");
+        final Accessor refMinecraftKey = get("nms_minecraft_key");
 
-        final Object worldServer = refCbWorld.run(bukkitWorld, "handle");
-        final Object chunkProviderServer = refWorldServer.run(worldServer, "chunkProvider");
-        final Object generator = refChunkProviderServer.run(chunkProviderServer, "generator");
-        final Object chunkManager = refChunkGenerator.run(generator, "worldChunkManager");
-        final Object genLayer = refWorldChunkManagerOverworld.getFieldValue(chunkManager, "genLayer");
-        final Object areaLazy = refGenLayer.getFieldValue(genLayer, "areaLazy");
-        final Object transformer = refAreaLazy.getFieldValue(areaLazy, "transformer");
+        final Object worldServer = refCbWorld.invoke(bukkitWorld, "handle");
+        final Object chunkProviderServer = refWorldServer.invoke(worldServer, "chunkProvider");
+        final Object generator = refChunkProviderServer.invoke(chunkProviderServer, "generator");
+        final Object chunkManager = refChunkGenerator.invoke(generator, "worldChunkManager");
+        final Object genLayer = refWorldChunkManagerOverworld.getValue(chunkManager, "genLayer");
+        final Object areaLazy = refGenLayer.getValue(genLayer, "areaLazy");
+        final Object transformer = refAreaLazy.getValue(areaLazy, "transformer");
 
         final int[] coords = zoomInto(bukkitWorld.getSeed(), x, y, z);
 
-        final int biomeId = (int) refTransformer.run(transformer, "apply", coords[0], coords[2]);
+        final int biomeId = (int) refTransformer.invoke(transformer, "apply", coords[0], coords[2]);
 
         Object minecraftKey;
         if (refRegistryExt == null) {
-            final Object resourceKey = refRegistry.run("id", biomeId);
-            minecraftKey = refMinecraftKeyExt.run(resourceKey, "key");
+            final Object resourceKey = refRegistry.invoke("id", biomeId);
+            minecraftKey = refMinecraftKeyExt.invoke(resourceKey, "key");
         } else {
-            final Object registry = refRegistryExt.getFieldValue("biomeRegistry");
-            final Object object = refRegistry.run(registry, "id", biomeId);
-            minecraftKey = refRegistry.run(registry, "key", object);
+            final Object registry = refRegistryExt.getValue("biomeRegistry");
+            final Object object = refRegistry.invoke(registry, "id", biomeId);
+            minecraftKey = refRegistry.invoke(registry, "key", object);
         }
 
-        final String biomeName = (String) refMinecraftKey.run(minecraftKey, "key");
+        final String biomeName = (String) refMinecraftKey.invoke(minecraftKey, "key");
 
         return Biome.valueOf(biomeName.toUpperCase());
     }
@@ -78,8 +77,8 @@ public final class NmsBiomeAccessImpl implements INmsBiomeAccess {
         return hashCache.computeIfAbsent(seed, ignore -> Hashing.sha256().hashLong(seed).asLong());
     }
 
-    private ClassLookup get(final String name) {
-        return cache.get(name).orElseThrow(() -> new NullPointerException("Some reflections are not available!"));
+    private Accessor get(final String name) {
+        return provider.get(name).orElseThrow(() -> new NullPointerException("Some reflections are not available!"));
     }
 
     /*

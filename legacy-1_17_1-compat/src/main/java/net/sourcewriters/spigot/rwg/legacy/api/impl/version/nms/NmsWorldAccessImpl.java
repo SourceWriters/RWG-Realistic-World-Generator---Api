@@ -11,18 +11,12 @@ import com.mojang.authlib.GameProfile;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.SkullBlockEntity;
 import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
+import net.sourcewriters.spigot.rwg.legacy.api.impl.Accessors;
 import net.sourcewriters.spigot.rwg.legacy.api.util.minecraft.ProfileCache;
 import net.sourcewriters.spigot.rwg.legacy.api.util.rwg.RWGEntityType;
-import net.sourcewriters.spigot.rwg.legacy.api.version.handle.ClassLookupProvider;
 import net.sourcewriters.spigot.rwg.legacy.api.version.nms.INmsWorldAccess;
 
 public final class NmsWorldAccessImpl implements INmsWorldAccess {
-
-    private final ClassLookupProvider provider;
-
-    public NmsWorldAccessImpl(final ClassLookupProvider provider) {
-        this.provider = provider;
-    }
 
     @Override
     public void setSpawner(final Block block, final EntityType type, final short spawnCount, final short spawnRange, final short delay,
@@ -31,7 +25,7 @@ public final class NmsWorldAccessImpl implements INmsWorldAccess {
         if (!(blockState instanceof CreatureSpawner)) {
             return;
         }
-        final SpawnerBlockEntity entity = (SpawnerBlockEntity) provider.getLookup("cb_block_entity_state").run(blockState, "entity");
+        final SpawnerBlockEntity entity = (SpawnerBlockEntity) Accessors.CRAFT_BLOCK_ENTITY_STATE.invoke(blockState, "entity");
         final CompoundTag tag = entity.getUpdateTag();
         tag.putShort("SpawnCount", spawnCount);
         tag.putShort("SpawnRange", spawnRange);
@@ -53,7 +47,7 @@ public final class NmsWorldAccessImpl implements INmsWorldAccess {
             return;
         }
         final GameProfile gameProfile = ProfileCache.asProfile(texture);
-        final SkullBlockEntity entity = (SkullBlockEntity) provider.getLookup("cb_block_entity_state").run(blockState, "entity");
+        final SkullBlockEntity entity = (SkullBlockEntity) Accessors.CRAFT_BLOCK_ENTITY_STATE.invoke(blockState, "entity");
         entity.setOwner(gameProfile);
     }
 
@@ -64,7 +58,7 @@ public final class NmsWorldAccessImpl implements INmsWorldAccess {
             return null;
         }
         return ProfileCache
-            .asTexture(((SkullBlockEntity) provider.getLookup("cb_block_entity_state").run(blockState, "entity")).getOwnerProfile());
+            .asTexture(((SkullBlockEntity) Accessors.CRAFT_BLOCK_ENTITY_STATE.invoke(blockState, "entity")).getOwnerProfile());
     }
 
 }

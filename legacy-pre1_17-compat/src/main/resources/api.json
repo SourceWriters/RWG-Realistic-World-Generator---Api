@@ -1,5 +1,5 @@
 {
-  	"api": 3,
+  	"api": 4,
   	"version": "${project.version}",
 	"minecraft": [
 		"1.13",

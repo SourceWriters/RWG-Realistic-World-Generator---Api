@@ -11,11 +11,10 @@ import org.bukkit.entity.EntityType;
 import com.mojang.authlib.GameProfile;
 import com.syntaxphoenix.syntaxapi.nbt.NbtCompound;
 
+import net.sourcewriters.spigot.rwg.legacy.api.util.java.reflect.Accessor;
+import net.sourcewriters.spigot.rwg.legacy.api.util.java.reflect.AccessorProvider;
 import net.sourcewriters.spigot.rwg.legacy.api.util.minecraft.ProfileCache;
 import net.sourcewriters.spigot.rwg.legacy.api.util.rwg.RWGEntityType;
-import net.sourcewriters.spigot.rwg.legacy.api.version.handle.ClassLookup;
-import net.sourcewriters.spigot.rwg.legacy.api.version.handle.ClassLookupCache;
-import net.sourcewriters.spigot.rwg.legacy.api.version.handle.ClassLookupProvider;
 import net.sourcewriters.spigot.rwg.legacy.api.version.nms.INmsNbtAccess;
 import net.sourcewriters.spigot.rwg.legacy.api.version.nms.INmsWorldAccess;
 import net.sourcewriters.spigot.rwg.legacy.api.version.util.ServerVersion;
@@ -23,11 +22,11 @@ import net.sourcewriters.spigot.rwg.legacy.api.version.util.Versions;
 
 public final class NmsWorldAccessImpl implements INmsWorldAccess {
 
-    private final ClassLookupCache cache;
+    private final AccessorProvider provider;
     private final INmsNbtAccess access;
 
-    public NmsWorldAccessImpl(final ClassLookupProvider provider, final INmsNbtAccess access) {
-        this.cache = provider.getCache();
+    public NmsWorldAccessImpl(final AccessorProvider provider, final INmsNbtAccess access) {
+        this.provider = provider;
         this.access = access;
     }
 
@@ -37,28 +36,28 @@ public final class NmsWorldAccessImpl implements INmsWorldAccess {
 
         final ServerVersion version = Versions.getServer();
 
-        final Optional<ClassLookup> option0 = cache.get("cb_block_entityState");
-        final Optional<ClassLookup> option1 = cache.get("nms_entity_spawner");
-        final Optional<ClassLookup> option2 = cache.get("nms_nbt_compound");
-        final Optional<ClassLookup> option3 = cache.get("nms_blockdata");
+        final Optional<Accessor> option0 = provider.get("cb_block_entityState");
+        final Optional<Accessor> option1 = provider.get("nms_entity_spawner");
+        final Optional<Accessor> option2 = provider.get("nms_nbt_compound");
+        final Optional<Accessor> option3 = provider.get("nms_blockdata");
         if (!option0.isPresent() || !option1.isPresent() || !option2.isPresent() || version.getMinor() >= 16 && !option3.isPresent()) {
             return;
         }
 
-        final ClassLookup state = option0.get();
-        final ClassLookup spawner = option1.get();
-        final ClassLookup nbt = option2.get();
-        final ClassLookup blockData = option3.orElse(null);
+        final Accessor state = option0.get();
+        final Accessor spawner = option1.get();
+        final Accessor nbt = option2.get();
+        final Accessor blockData = option3.orElse(null);
 
         final BlockState blockState = block.getState();
         if (!(blockState instanceof CreatureSpawner)) {
             return;
         }
 
-        final Object spawnerObject = state.run(blockState, "entity");
+        final Object spawnerObject = state.invoke(blockState, "entity");
 
-        Object nbtCompound = nbt.init();
-        nbtCompound = spawner.run(spawnerObject, "save", nbtCompound);
+        Object nbtCompound = nbt.initialize();
+        nbtCompound = spawner.invoke(spawnerObject, "save", nbtCompound);
 
         final NbtCompound compound = (NbtCompound) access.fromMinecraftTag(nbtCompound);
 
@@ -80,9 +79,9 @@ public final class NmsWorldAccessImpl implements INmsWorldAccess {
         final Object spawnerCompound = access.toMinecraftTag(compound);
 
         if (version.getMinor() >= 16) {
-            spawner.execute(spawnerObject, "load", blockData.getOwner().cast(null), spawnerCompound);
+            spawner.invoke(spawnerObject, "load", blockData.getOwner().cast(null), spawnerCompound);
         } else {
-            spawner.execute(spawnerObject, "load", spawnerCompound);
+            spawner.invoke(spawnerObject, "load", spawnerCompound);
         }
 
     }
@@ -94,14 +93,14 @@ public final class NmsWorldAccessImpl implements INmsWorldAccess {
             return;
         }
 
-        final Optional<ClassLookup> option0 = cache.get("nms_entity_skull");
-        final Optional<ClassLookup> option1 = cache.get("cb_block_entityState");
+        final Optional<Accessor> option0 = provider.get("nms_entity_skull");
+        final Optional<Accessor> option1 = provider.get("cb_block_entityState");
         if (!option0.isPresent() || !option1.isPresent()) {
             return;
         }
 
-        final ClassLookup nmsSkull = option0.get();
-        final ClassLookup cbEntityState = option1.get();
+        final Accessor nmsSkull = option0.get();
+        final Accessor cbEntityState = option1.get();
 
         final BlockState state = block.getState();
         if (!(state instanceof Skull)) {
@@ -110,27 +109,27 @@ public final class NmsWorldAccessImpl implements INmsWorldAccess {
 
         final GameProfile gameProfile = ProfileCache.asProfile(texture);
 
-        final Object tileEntity = cbEntityState.run(state, "entity");
-        nmsSkull.execute(tileEntity, "profile", gameProfile);
+        final Object tileEntity = cbEntityState.invoke(state, "entity");
+        nmsSkull.invoke(tileEntity, "profile", gameProfile);
 
     }
 
     @Override
     public String getHeadTexture(final Block block) {
 
-        final Optional<ClassLookup> option0 = cache.get("cb_block_skull");
+        final Optional<Accessor> option0 = provider.get("cb_block_skull");
         if (!option0.isPresent()) {
             return null;
         }
 
-        final ClassLookup skull = option0.get();
+        final Accessor skull = option0.get();
 
         final BlockState state = block.getState();
         if (!(state instanceof Skull)) {
             return null;
         }
 
-        return ProfileCache.asTexture((GameProfile) skull.getFieldValue(state, "profile"));
+        return ProfileCache.asTexture((GameProfile) skull.getValue(state, "profile"));
     }
 
 }

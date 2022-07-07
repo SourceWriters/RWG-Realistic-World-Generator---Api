@@ -5,7 +5,7 @@ import org.bukkit.block.Biome;
 import org.bukkit.generator.ChunkGenerator.BiomeGrid;
 
 import net.sourcewriters.spigot.rwg.legacy.api.impl.version.biome.BiomeProvider;
-import net.sourcewriters.spigot.rwg.legacy.api.util.java.InstanceBuilder;
+import net.sourcewriters.spigot.rwg.legacy.api.util.java.reflect.InstanceBuilder;
 import net.sourcewriters.spigot.rwg.legacy.api.version.IBiomeAccess;
 
 public final class BiomeAccessImpl implements IBiomeAccess {
