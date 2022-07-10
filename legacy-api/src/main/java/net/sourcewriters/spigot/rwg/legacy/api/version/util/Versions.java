@@ -128,7 +128,7 @@ public final class Versions {
     }
 
     public static boolean isCompatibleEx(final int major, final int minor) {
-        return isCompatible(major, minor, 0);
+        return isCompatibleEx(major, minor, 0);
     }
 
     public static boolean isCompatibleEx(final int major, final int minor, final int patch) {
@@ -136,7 +136,7 @@ public final class Versions {
     }
 
     public static boolean isServerCompat(final int major, final int minor) {
-        return isServerCompat(major, minor);
+        return isServerCompat(major, minor, 0);
     }
 
     public static boolean isServerCompat(final int major, final int minor, final int refaction) {
@@ -144,7 +144,7 @@ public final class Versions {
     }
 
     public static boolean isServerCompatEx(final int major, final int minor) {
-        return isServerCompat(major, minor);
+        return isServerCompatEx(major, minor, 0);
     }
 
     public static boolean isServerCompatEx(final int major, final int minor, final int refaction) {
