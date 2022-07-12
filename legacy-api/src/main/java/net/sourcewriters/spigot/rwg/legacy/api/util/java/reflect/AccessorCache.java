@@ -19,7 +19,16 @@ final class AccessorCache {
     }
 
     public final Accessor get(Class<?> owner) {
-        return accessors.computeIfAbsent(owner, Accessor::new);
+        if (owner == null) {
+            return null;
+        }
+        Accessor access = accessors.get(owner);
+        if (access != null) {
+            return access;
+        }
+        access = new Accessor(owner);
+        accessors.put(owner, access);
+        return access;
     }
 
     public final void delete(Class<?> owner) {

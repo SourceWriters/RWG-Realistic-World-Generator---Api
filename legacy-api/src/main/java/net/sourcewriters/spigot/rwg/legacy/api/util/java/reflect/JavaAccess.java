@@ -96,6 +96,13 @@ public final class JavaAccess {
         }
     }
 
+    public Object initThrows(final Constructor<?> constructor, final Object... arguments) throws Throwable {
+        if (constructor == null || constructor.getParameterCount() != arguments.length) {
+            return null;
+        }
+        return lookup().unreflectConstructor(constructor).invokeWithArguments(arguments);
+    }
+
     /*
      * Safe Accessors
      */
@@ -362,6 +369,14 @@ public final class JavaAccess {
     }
 
     public static Object instance(final Constructor<?> constructor, final Object... arguments) {
+        return INSTANCE.init(constructor, arguments);
+    }
+
+    public static Object instanceThrows(final Class<?> clazz) throws Throwable {
+        return INSTANCE.init(getConstructor(clazz));
+    }
+
+    public static Object instanceThrows(final Constructor<?> constructor, final Object... arguments) throws Throwable {
         return INSTANCE.init(constructor, arguments);
     }
 
