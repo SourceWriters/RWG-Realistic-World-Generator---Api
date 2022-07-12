@@ -50,7 +50,7 @@ public abstract class CompatibilityAddon {
         try {
             onEnable(realisticApi, plugin);
             return true;
-        } catch (final Exception exception) {
+        } catch (final Throwable exception) {
             realisticApi.getLogger().log(LogTypeId.ERROR,
                 "Failed to enable CompatibilityAddon of '" + owner.getName() + "' for '" + plugin.getName() + "'!");
             realisticApi.getLogger().log(LogTypeId.ERROR, exception);
@@ -62,7 +62,7 @@ public abstract class CompatibilityAddon {
         try {
             onDisable(realisticApi, plugin);
             return true;
-        } catch (final Exception exception) {
+        } catch (final Throwable exception) {
             realisticApi.getLogger().log(LogTypeId.ERROR,
                 "Failed to disable CompatibilityAddon of '" + owner.getName() + "' for '" + plugin.getName() + "'!");
             realisticApi.getLogger().log(LogTypeId.ERROR, exception);
