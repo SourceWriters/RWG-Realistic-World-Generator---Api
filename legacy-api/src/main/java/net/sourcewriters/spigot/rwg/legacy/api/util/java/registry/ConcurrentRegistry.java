@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 import com.syntaxphoenix.syntaxapi.utils.key.IKey;
 import com.syntaxphoenix.syntaxapi.utils.key.IKeyed;
@@ -27,7 +28,7 @@ public class ConcurrentRegistry<E extends IKeyed> implements IRegistry<E> {
 
     @Override
     public List<IKey> getKeys() {
-        return map.keySet().stream().map(MapKey::getKey).toList();
+        return map.keySet().stream().map(MapKey::getKey).collect(Collectors.toList());
     }
 
     @Override
