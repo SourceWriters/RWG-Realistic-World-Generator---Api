@@ -13,7 +13,7 @@ public final class Accessors {
 
     public static final Accessor CUSTOM_CHUNK_GENERATOR = Accessor.of(CustomChunkGenerator.class).findField("generator", "generator");
     public static final Accessor CRAFT_WORLD = Accessor.of(CraftWorld.class).findField("generator", "generator");
-    public static final Accessor CRAFT_BLOCK_ENTITY_STATE = Accessor.of(CraftBlockEntityState.class).findField("entity", "getTileEntity");
+    public static final Accessor CRAFT_BLOCK_ENTITY_STATE = Accessor.of(CraftBlockEntityState.class).findField("entity", "getTileEntityFromWorld");
     public static final Accessor CRAFT_META_SKULL = PROVIDER.craftBukkitAccess("inventory.CraftMetaSkull").findField("profile", "profile");
 
 }
