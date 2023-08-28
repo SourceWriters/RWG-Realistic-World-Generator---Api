@@ -16,18 +16,17 @@ import net.sourcewriters.spigot.rwg.legacy.api.block.impl.DefaultMinecraftPlacer
 import net.sourcewriters.spigot.rwg.legacy.api.data.argument.IArgumentMap;
 import net.sourcewriters.spigot.rwg.legacy.api.data.fix.IDataFixHandler;
 import net.sourcewriters.spigot.rwg.legacy.api.data.fix.impl.DataFixHandlerImpl;
-import net.sourcewriters.spigot.rwg.legacy.api.impl.trade.TradeListingManagerImpl;
 import net.sourcewriters.spigot.rwg.legacy.api.impl.version.VersionAccessImpl;
-import net.sourcewriters.spigot.rwg.legacy.api.trade.ITradeListingManager;
 import net.sourcewriters.spigot.rwg.legacy.api.version.IVersionAccess;
 
 public class VersionCompatibilityProviderImpl extends VersionCompatibilityProvider {
 
     @Override
     public void provide(final ILogger logger, final IArgumentMap map) {
-        set(map, IDataFixHandler.class, new DataFixHandlerImpl());
-        set(map, IVersionAccess.class, new VersionAccessImpl(logger));
-        set(map, ITradeListingManager.class, new TradeListingManagerImpl(logger));
+        final IDataFixHandler dataFixHandler = new DataFixHandlerImpl();
+        final IVersionAccess versionAccess = new VersionAccessImpl(logger);
+        set(map, IVersionAccess.class, versionAccess);
+        set(map, IDataFixHandler.class, dataFixHandler);
     }
 
     @Override
@@ -43,12 +42,7 @@ public class VersionCompatibilityProviderImpl extends VersionCompatibilityProvid
 
         final IBlockDataPlacerManager placerManager = blockAccess.getPlacerManager();
         placerManager.register(new DefaultMinecraftPlacer(plugin));
-        
-    }
-    
-    @Override
-    public void shutdown(RealisticWorldGenerator api, ILogger logger) {
-        ((TradeListingManagerImpl) api.getTradeListingManager()).uninject();
+
     }
 
 }
