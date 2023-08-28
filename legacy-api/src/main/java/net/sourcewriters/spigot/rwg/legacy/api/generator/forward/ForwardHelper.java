@@ -18,6 +18,10 @@ public final class ForwardHelper {
     private static final ArrayList<String> LIST = new ArrayList<>();
 
     private ForwardHelper() {}
+    
+    public static boolean isForward(final World world) {
+        return world == null ? false : isForward(world.getGenerator());
+    }
 
     public static boolean isForward(final ChunkGenerator generator) {
         if (generator == null) {

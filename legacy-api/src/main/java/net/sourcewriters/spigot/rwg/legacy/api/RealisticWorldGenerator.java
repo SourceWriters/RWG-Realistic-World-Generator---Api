@@ -14,7 +14,10 @@ import net.sourcewriters.spigot.rwg.legacy.api.data.asset.AssetManager;
 import net.sourcewriters.spigot.rwg.legacy.api.data.fix.IDataFixHandler;
 import net.sourcewriters.spigot.rwg.legacy.api.regeneration.IRegenerationHelper;
 import net.sourcewriters.spigot.rwg.legacy.api.schematic.ISchematicStorage;
+import net.sourcewriters.spigot.rwg.legacy.api.trade.ITradeListingManager;
 import net.sourcewriters.spigot.rwg.legacy.api.util.annotation.source.NonNull;
+import net.sourcewriters.spigot.rwg.legacy.api.util.annotation.unsafe.Unsafe;
+import net.sourcewriters.spigot.rwg.legacy.api.util.annotation.unsafe.UnsafeStatus;
 import net.sourcewriters.spigot.rwg.legacy.api.version.IVersionAccess;
 
 public abstract class RealisticWorldGenerator {
@@ -49,6 +52,16 @@ public abstract class RealisticWorldGenerator {
 
     @NonNull
     public abstract IRegenerationHelper getRegenerationHelper();
+    
+    /**
+     * As of right now this method might return null on different versions.
+     * 
+     * This might change in the future but for now we only support 1.17.1 for this feature.
+     * 
+     * @return a {@link ITradeListingManager} implementation or {@code null}
+     */
+    @Unsafe(status = UnsafeStatus.WORK_IN_PROGRESS)
+    public abstract ITradeListingManager getTradeListingManager();
 
     @NonNull
     public abstract ICompatibilityManager getCompatibilityManager();
