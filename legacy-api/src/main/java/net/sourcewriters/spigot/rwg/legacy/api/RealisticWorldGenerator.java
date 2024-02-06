@@ -56,7 +56,7 @@ public abstract class RealisticWorldGenerator {
     /**
      * As of right now this method might return null on different versions.
      * 
-     * This might change in the future but for now we only support 1.17.1 for this feature.
+     * This might change in the future but for now we only support 1.17 and 1.17.1 for this feature.
      * 
      * @return a {@link ITradeListingManager} implementation or {@code null}
      */
