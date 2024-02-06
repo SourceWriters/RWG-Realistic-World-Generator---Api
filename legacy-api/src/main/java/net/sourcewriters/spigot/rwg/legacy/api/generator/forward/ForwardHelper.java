@@ -57,17 +57,17 @@ public final class ForwardHelper {
         return found instanceof IRwgGenerator ? (IRwgGenerator) found : null;
     }
 
-    public static boolean set(final World world, final Function<World, ChunkGenerator> builder) {
+    public static ForwardState set(final World world, final Function<World, ChunkGenerator> builder) {
         if (world == null || world.getGenerator() == null) {
-            return false;
+            return ForwardState.UNKNOWN;
         }
         final ChunkGenerator current = world.getGenerator();
         if (current == null || !isForward(current)) {
-            return false;
+            return ForwardState.UNKNOWN;
         }
         String genName = current.getClass().getName();
         if (!ACCESSORS.contains(genName)) {
-            return false;
+            return ForwardState.FAILED;
         }
         final ChunkGenerator generator = builder.apply(world);
         final Accessor access = ACCESSORS.get(generator.getClass().getName());
@@ -75,7 +75,7 @@ public final class ForwardHelper {
         final List<BlockPopulator> list = generator.getDefaultPopulators(world);
         access.invoke(current, "populators",
             (Object) (list == null ? new BlockPopulator[0] : list.stream().filter(obj -> obj != null).toArray(BlockPopulator[]::new)));
-        return true;
+        return ForwardState.FINE;
     }
 
     public static void clear() {
