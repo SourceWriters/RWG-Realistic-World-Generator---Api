@@ -62,7 +62,11 @@ public final class ForwardHelper {
             return false;
         }
         final ChunkGenerator current = world.getGenerator();
-        if (!isForward(current)) {
+        if (current == null || !isForward(current)) {
+            return false;
+        }
+        String genName = current.getClass().getName();
+        if (!ACCESSORS.contains(genName)) {
             return false;
         }
         final ChunkGenerator generator = builder.apply(world);
