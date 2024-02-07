@@ -66,11 +66,11 @@ public final class ForwardHelper {
             return ForwardState.UNKNOWN;
         }
         String genName = current.getClass().getName();
-        if (!ACCESSORS.contains(genName)) {
+        if (!ACCESSORS.containsKey(genName)) {
             return ForwardState.FAILED;
         }
         final ChunkGenerator generator = builder.apply(world);
-        final Accessor access = ACCESSORS.get(generator.getClass().getName());
+        final Accessor access = ACCESSORS.get(genName);
         access.invoke(current, "set", generator);
         final List<BlockPopulator> list = generator.getDefaultPopulators(world);
         access.invoke(current, "populators",
